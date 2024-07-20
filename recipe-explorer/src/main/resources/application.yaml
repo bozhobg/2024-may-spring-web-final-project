@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: recipe-explorer
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/recipe_explorer?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
+    username: root
+    password: ${DB_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 5MB
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  sql:
+    init:
+      mode: never
+  jpa:
+    # Choose either MySQL 8 or MySQL 5 below
+    # For MySQL 8
+    #    auto-detected this is default option
+    #    database-platform: org.hibernate.dialect.MySQLDialect
+    #For MySQL 5
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    defer-datasource-initialization: true # to allow hibernate table definition first, than populate tables script based
+  #Cloudinary Properties
+  #cloudinary:
+  #api-key:
+  #api-secret:
+  #cloud-name:
+logging:
+  level:
+    web: debug
+#
+#open-meteo:
+#  api:
+#    url: "https://api.open-meteo.com/v1/forecast"
+#    query: "current"
+#    forecast: "temperature_2m"
+#    weatherCode: "weather_code"
+#  varna:
+#    latitude: 43.2166
+#    longitude: 27.9166
+#  sofia:
+#    latitude: 42.6975
+#    longitude: 23.3241
+
+
