@@ -2,8 +2,10 @@ package bg.softuni.recipe.explorer.model.entity;
 
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +13,6 @@ import java.util.Set;
 @Entity
 @Table(name = "recipes")
 public class Recipe {
-//    TODO:
-//    TODO: how to make relation ingredient-recipe-amount(units) for amount of servings
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +34,18 @@ public class Recipe {
     @Column(name = "modified_on")
     private Instant modifiedOn;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User author;
+
+//    TODO: how to make relation ingredient-recipe-amount(units) for amount of servings
+//    TODO: How to use @Embeddable and @Embed to add extra column for quantities
+    @ManyToMany
+    @JoinTable(
+            name = "recipe_ingredient",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    private Set<Ingredient> ingredients;
 
     @ManyToMany
     @JoinTable(
@@ -45,14 +55,17 @@ public class Recipe {
     )
     private Set<Diet> diets;
 
-//    private Set<Comments> comments;
-//
-//    private Set<Rating> ratings;
-//
-//    private BigDecimal avgerageRating;
+    @OneToMany(mappedBy = "recipe")
+    private Set<Rating> ratings;
+
+//  TODO: private Set<Comments> comments;
+
+    private BigDecimal averageRating;
 
     public Recipe() {
+        this.ingredients = new HashSet<>();
         this.diets = new HashSet<>();
+        this.ratings = new HashSet<>();
     }
 
     public Long getId() {
@@ -118,12 +131,52 @@ public class Recipe {
         return this;
     }
 
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public Recipe setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+        return this;
+    }
+
     public Set<Diet> getDiets() {
         return diets;
     }
 
     public Recipe setDiets(Set<Diet> diets) {
         this.diets = diets;
+        return this;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public Recipe setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+        return this;
+    }
+
+    public BigDecimal getAverageRating() {
+        return averageRating;
+    }
+
+    public Recipe updateAverageRating() {
+
+        int sum = this.ratings.stream()
+                .mapToInt(r -> r.getRating().getAsInt())
+                .sum();
+
+        int size = this.ratings.size();
+
+        if (size == 0) {
+            this.averageRating = BigDecimal.ZERO;
+        } else {
+            this.averageRating = BigDecimal.valueOf(sum)
+                    .divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_UP);
+        }
+
         return this;
     }
 }
