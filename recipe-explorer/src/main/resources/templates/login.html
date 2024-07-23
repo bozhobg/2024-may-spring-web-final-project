@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<head th:replace="~{fragments/commons::head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<header th:replace="~{fragments/commons::header-nav}">
+</header>
+
+<div class="form-container container bg-white-opacity-90 p-5 rounded-4">
+    <form th:action="@{/users/login}"
+          th:method="POST"
+    >
+        <div class="mb-3">
+            <label for="inputUsername"
+                   class="form-label"
+            >
+                Username
+            </label>
+            <input id="inputUsername"
+                   name="username"
+                   required minlength="5" maxlength="20"
+                   type="text"
+                   class="form-control"
+            >
+        </div>
+        <div class="mb-3">
+            <label for="inputPassword">
+                Password
+            </label>
+            <input id="inputPassword"
+                   name="password"
+                   type="password"
+                   class="form-control"
+            >
+        </div>
+        <div class="mb-auto">
+            <button type="submit"
+                    class="btn btn-primary w-100 fw-bold text-uppercase"
+
+            >
+                Login
+            </button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

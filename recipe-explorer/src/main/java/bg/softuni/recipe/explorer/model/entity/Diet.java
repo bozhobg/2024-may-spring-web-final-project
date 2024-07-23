@@ -14,7 +14,7 @@ public class Diet {
     @Enumerated(EnumType.STRING)
     private DietaryType type;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
     public Diet() {}

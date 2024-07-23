@@ -4,7 +4,6 @@ public enum DietaryType {
     VEGETARIAN,
     VEGAN,
     GLUTEN_FREE,
-    GLUTEN_INTOLERANT,
     KOSHER,
     KETO,
     DIABETES,
