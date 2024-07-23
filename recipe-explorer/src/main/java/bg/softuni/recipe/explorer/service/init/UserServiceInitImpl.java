@@ -6,6 +6,7 @@ import bg.softuni.recipe.explorer.model.enums.RoleEnum;
 import bg.softuni.recipe.explorer.repository.RoleRepository;
 import bg.softuni.recipe.explorer.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,14 +23,17 @@ public class UserServiceInitImpl {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceInitImpl(
             UserRepository userRepository,
-            RoleRepository roleRepository
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void init() {
@@ -48,7 +52,7 @@ public class UserServiceInitImpl {
     }
 
     // user[1...] userov, moderator[1...] moderatorov, admin[1...] adminov
-    private static User mapToUserFromRoles(Role role, int seq) {
+    private User mapToUserFromRoles(Role role, int seq) {
         String roleNameBase = role.getName().name().toLowerCase();
         String nameBase = roleNameBase + seq;
 
@@ -59,7 +63,7 @@ public class UserServiceInitImpl {
                 .setFirstName(nameBase)
                 .setLastName(roleNameBase + LASTNAME_SUFFIX)
                 .setEmail(nameBase + "@" + roleNameBase)
-                .setPassword(nameBase)
+                .setPassword(passwordEncoder.encode(nameBase))
                 .setRoles(Set.of(role))
                 ;
     }

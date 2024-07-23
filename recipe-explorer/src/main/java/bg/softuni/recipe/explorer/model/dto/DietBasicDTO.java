@@ -1,7 +1,5 @@
 package bg.softuni.recipe.explorer.model.dto;
 
-import bg.softuni.recipe.explorer.model.enums.DietaryType;
-
 public class DietBasicDTO {
 
     private Long id;

@@ -1,9 +1,9 @@
 package bg.softuni.recipe.explorer.web;
 
-import bg.softuni.recipe.explorer.model.dto.DietBasicDTO;
-import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
-import bg.softuni.recipe.explorer.model.enums.MealType;
-import bg.softuni.recipe.explorer.service.DietService;
+import bg.softuni.recipe.explorer.model.dto.IngredientAddDTO;
+import bg.softuni.recipe.explorer.model.enums.IngredientType;
+import bg.softuni.recipe.explorer.model.enums.UnitEnum;
+import bg.softuni.recipe.explorer.service.IngredientService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,56 +15,54 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/recipes")
-public class RecipeController {
+@RequestMapping("/ingredients")
+public class IngredientController {
 
-    private final static String ADD_ATTR = "recipeAddData";
+    private final static String ADD_ATTR = "ingredientAddData";
 
-    private final DietService dietService;
+    private final IngredientService ingredientService;
 
     @Autowired
-    public RecipeController(
-            DietService dietService
+    public IngredientController(
+            IngredientService ingredientService
     ) {
-        this.dietService = dietService;
+        this.ingredientService = ingredientService;
     }
-
 
     @ModelAttribute(ADD_ATTR)
-    public RecipeAddDTO recipeAddData() {
-        return new RecipeAddDTO();
+    public IngredientAddDTO addData() {
+        return new IngredientAddDTO();
     }
 
-    @ModelAttribute("mealTypes")
-    public MealType[] mealTypes() {
-        return MealType.values();
+    @ModelAttribute("ingredientTypes")
+    public Map<IngredientType, String> ingredientTypes() {
+        return this.ingredientService.getMapTypeString();
     }
 
-    @ModelAttribute("dietsData")
-    public List<DietBasicDTO> dietsData() {
-        return this.dietService.getBasicDTOs();
+    @ModelAttribute("unitTypes")
+    public UnitEnum[] unitTypes() {
+        return UnitEnum.values();
     }
 
     @GetMapping("/add")
     public String getAdd() {
 
-        return "recipe-add";
+        return "ingredient-add";
     }
 
     @PostMapping("/add")
     public String postAdd(
-            @Valid RecipeAddDTO bindingModel,
+            @Valid IngredientAddDTO bindingModel,
             BindingResult bindingResult,
             RedirectAttributes rAttrs
     ) {
-
         if (bindingResult.hasErrors()) {
             RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, ADD_ATTR);
 
-            return "redirect:/recipes/add";
+            return "redirect:/ingredients/add";
         }
 
         return "redirect:/";

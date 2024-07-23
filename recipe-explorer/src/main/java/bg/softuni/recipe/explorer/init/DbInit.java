@@ -1,4 +1,4 @@
-package bg.softuni.recipe.explorer.model.init;
+package bg.softuni.recipe.explorer.init;
 
 import bg.softuni.recipe.explorer.repository.DietRepository;
 import bg.softuni.recipe.explorer.service.init.DietServiceInitImpl;

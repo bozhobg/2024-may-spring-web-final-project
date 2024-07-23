@@ -18,22 +18,22 @@
           th:object="${recipeAddData}"
     >
         <div class="mb-3">
-            <label for="inputName"
+            <label for="name"
                    class="form-label h5"
             >
                 Name
             </label>
+<!--            required minlength="5" maxlength="30"   -->
             <input th:field="*{name}"
-                   name="username"
-                   required minlength="5" maxlength="30"
+                   name="name"
                    type="text"
-                   id="inputName"
+                   id="name"
                    class="form-control"
-                   th:errorclass="'bg-danger is-invalid'"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
             <small th:errors="*{name}"
                    id="nameError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 Name must be between 5 and 30 characters!
             </small>
@@ -45,14 +45,15 @@
             >
                 Meal Type
             </label>
+
+<!--            required    -->
             <select th:field="*{mealType}"
                     name="mealType"
-                    required
                     id="mealType"
                     class="form-select"
-                    th:errorclass="'bg-danger is-invalid'"
+                    th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
-                <option value="" selected>Select type</option>
+                <option value="" selected>Select meal type</option>
                 <option th:each="type : ${mealTypes}"
                         th:value="${type.name()}"
                         th:text="${#strings.capitalize(#strings.toLowerCase(type))}"
@@ -63,7 +64,7 @@
             </select>
             <small th:errors="*{mealType}"
                    id="mealTypeError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 Must select a valid meal type!
             </small>
@@ -76,12 +77,14 @@
             >
                 Ingredients
             </label>
+
+<!--            required    -->
             <select th:field="*{mealType}"
                     name="ingredients"
-                    required
+
                     id="ingredients"
                     class="form-select"
-                    th:errorclass="'bg-danger is-invalid'"
+                    th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
                 <option value="" selected>Select type</option>
                 <option th:each="type : ${mealTypes}"
@@ -94,31 +97,33 @@
             </select>
             <small th:errors="*{mealType}"
                    id="ingredientsError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 Must select a valid meal type!
             </small>
         </div>
 
         <div class="mb-3">
-            <label for="inputInstructions"
+            <label for="instructions"
                    class="form-label h5"
             >
-                Instructions:
+                Instructions
             </label>
+
+<!--            required minlength="50"     -->
             <textarea th:field="*{instructions}"
                       name="instructions"
-                      required minlength="50"
+
                       rows="6"
                       type="textarea"
-                      id="inputInstructions"
+                      id="instructions"
                       class="form-control"
-                      th:errorclass="'bg-danger is-invalid'"
+                      th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
             </textarea>
             <small th:errors="*{instructions}"
                    id="instructionsError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 Instructions should be at least 50 characters long!
             </small>
@@ -128,7 +133,7 @@
             <label for="diets"
                    class="form-label h5"
             >
-                Dietary Types
+                Dietary Types <small>(optional)</small>
             </label>
             <br>
             <div class="me-3 form-check-inline" th:each="diet : ${dietsData}">
@@ -144,9 +149,9 @@
             </div>
             <small th:errors="*{mealType}"
                    id="dietsError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
-                Invalid dietary type or types!
+                Invalid dietary type/types!
             </small>
         </div>
 

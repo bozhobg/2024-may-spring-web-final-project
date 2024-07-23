@@ -9,30 +9,30 @@ import jakarta.validation.constraints.Size;
 
 public class UserRegisterDTO {
 
-    @NotBlank(message = ErrorMessages.FIELD_NOT_BLANK)
-    @Size(min = 2, message = ErrorMessages.LENGTH_MIN_TWO)
-    @UsernameValid(message = ErrorMessages.USERNAME_INVALID)
+    @NotBlank
+    @Size(min = 3, max = 15)
+    @UsernameValid
     private String username;
 
-    @NotBlank(message = ErrorMessages.FIELD_NOT_BLANK)
-    @Size(min = 2, message = ErrorMessages.LENGTH_MIN_TWO)
+    @NotBlank
+    @Size(min = 2)
     private String firstName;
 
-    @NotBlank(message = ErrorMessages.FIELD_NOT_BLANK)
-    @Size(min = 2, message = ErrorMessages.LENGTH_MIN_TWO)
+    @NotBlank
+    @Size(min = 2)
     private String lastName;
 
-    @NotBlank(message = ErrorMessages.FIELD_NOT_BLANK)
-    @Email(message = ErrorMessages.EMAIL_FORMAT)
-    @EmailValid(message = ErrorMessages.EMAIL_INVALID)
+    @NotBlank
+    @Email
+    @EmailValid
     private String email;
 
-    @NotBlank(message = ErrorMessages.FIELD_NOT_BLANK)
-    @Size(min = 2, message = ErrorMessages.LENGTH_MIN_TWO)
+    @NotBlank
+    @Size(min = 2, max = 20)
     private String password;
 
-    @NotBlank(message = ErrorMessages.FIELD_NOT_BLANK)
-    @Size(min = 2, message = ErrorMessages.LENGTH_MIN_TWO)
+    @NotBlank
+    @Size(min = 2, max = 20)
     private String confirmPassword;
 
     public UserRegisterDTO() {}

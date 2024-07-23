@@ -12,28 +12,32 @@
 <header th:replace="~{fragments/commons::header-nav}">
 </header>
 
-<div class="form-container container bg-white-opacity-90 p-5 rounded-4">
+<div class="form-container container bg-white-opacity-90 px-5 py-4 rounded-4">
+
+    <h3 class="text-center mb-4">Registration:</h3>
+
     <form th:action="@{/users/register}"
           th:method="post"
           th:object="${registerData}"
     >
         <div class="mb-3">
             <label for="inputUsername"
-                   class="form-label"
+                   class="form-label h5"
             >
                 Username
             </label>
+
+<!--            required minlength="3" maxlength="15"   -->
             <input th:field="*{username}"
                    name="username"
-                   required minlength="5" maxlength="20"
                    type="text"
                    id="inputUsername"
                    class="form-control"
-                   th:errorclass="'bg-danger is-invalid'"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
             <small th:errors="*{username}"
                    id="usernameError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 Username length must be more than 3 characters
             </small>
@@ -41,107 +45,113 @@
         <!--                        <small id="usernameUniqueError"-->
         <!--                               class=" bg-danger rounded">Username is already occupied</small>-->
         <div class="mb-3">
-            <label for="inputFirstName"
-                   class="form-label"
+            <label for="firstName"
+                   class="form-label h5"
             >
                 First Name
             </label>
+
+<!--            required minlength="2" maxlength="20"   -->
             <input th:field="*{firstName}"
                    name="firstName"
-                   required minlength="5" maxlength="20"
                    type="text"
-                   id="inputFirstName"
+                   id="firstName"
                    class="form-control"
-                   th:errorclass="'bg-danger is-invalid'"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
             <small th:errors="*{firstName}"
                    id="firstNameError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 First name length must be more than 3 characters
             </small>
         </div>
 
         <div class="mb-3">
-            <label for="inputLastName"
-                   class="form-label"
+            <label for="lastName"
+                   class="form-label h5"
             >
                 Last Name
             </label>
+
+            <!--            required minlength="2" maxlength="20"-->
             <input th:field="*{lastName}"
                    name="lastName"
-                   required minlength="5" maxlength="20"
                    type="text"
-                   id="inputLastName"
+                   id="lastName"
                    class="form-control"
-                   th:errorclass="'bg-danger is-invalid'"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
             <small th:errors="*{lastName}"
                    id="lastNameError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 First name length must be more than 3 characters
             </small>
         </div>
 
         <div class="mb-3">
-            <label for="inputEmail"
-                   class="form-label"
+            <label for="email"
+                   class="form-label h5"
             >
                 Email
             </label>
+
+<!--            required-->
             <input th:field="*{email}"
                    name="email"
-                   required
                    type="email"
-                   id="inputEmail"
+                   id="email"
                    class="form-control"
-                   th:errorclass="'bg-danger is-invalid'"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
             <small th:errors="*{email}"
                    id="emailError"
-                   class="invalid-feedback bg-danger rounded text-dark"
+                   class="invalid-feedback text-danger"
             >
                 Must be valid email
             </small>
         </div>
 
         <div class="mb-3">
-            <label for="inputPassword"
-                   class="form-label"
+            <label for="password"
+                   class="form-label h5"
             >
                 Password
             </label>
+
+<!--            required minlength="5" maxlength="20"-->
             <input th:field="*{password}"
                    name="password"
-                   required minlength="5" maxlength="20"
                    type="password"
-                   id="inputPassword"
+                   id="password"
                    class="form-control"
-                   th:errorclass="'bg-danger is-invalid'"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
-            <small th:errors="*{password}"
-                   id="passwordError"
-                   class="invalid-feedback bg-danger rounded text-dark"
-            >
-                Password length must be between 5 and 20 characters and passwords should match.
-            </small>
         </div>
 
         <div class="mb-4">
-            <label for="inputConfirmPassword"
-                   class="form-label"
+            <label for="confirmPassword"
+                   class="form-label h5"
             >
                 Confirm Password
             </label>
+
+<!--            required minlength="5" maxlength="20"   -->
             <input th:field="*{confirmPassword}"
                    name="confirmPassword"
-                   required minlength="5" maxlength="20"
                    type="password"
-                   id="inputConfirmPassword"
+                   id="confirmPassword"
                    class="form-control"
-                   th:errorclass="is-invalid"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
+            <!--            TODO: here or after confirmPassword, handling of mismatch -->
+            <small th:errors="*{password}"
+                   id="passwordError"
+                   class="invalid-feedback text-danger"
+            >
+                Password length must be between 5 and 20 characters and passwords should match.
+            </small>
         </div>
 
         <div class=" text-center">

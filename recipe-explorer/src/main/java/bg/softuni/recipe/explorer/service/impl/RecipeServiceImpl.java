@@ -16,7 +16,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public boolean isUnique(String name) {
+    public boolean isNameUnique(String name) {
         return !this.recipeRepository.existsByName(name);
     }
 }
