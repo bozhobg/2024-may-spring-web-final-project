@@ -60,9 +60,9 @@ public class UserServiceInitImpl {
 
         return new User()
                 .setUsername(nameBase)
-                .setFirstName(nameBase)
-                .setLastName(roleNameBase + LASTNAME_SUFFIX)
-                .setEmail(nameBase + "@" + roleNameBase)
+                .setFirstName(nameBase + "name")
+                .setLastName(roleNameBase + LASTNAME_SUFFIX + seq)
+                .setEmail(nameBase + "@" + roleNameBase + ".com")
                 .setPassword(passwordEncoder.encode(nameBase))
                 .setRoles(Set.of(role))
                 ;

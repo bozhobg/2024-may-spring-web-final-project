@@ -152,6 +152,12 @@
             >
                 Password length must be between 5 and 20 characters and passwords should match.
             </small>
+            <small th:if="${#fields.hasGlobalErrors()}"
+                   class="text-danger"
+                   th:text="#{user.register.password.mismatch}"
+            >
+                Password length must be between 5 and 20 characters and passwords should match.
+            </small>
         </div>
 
         <div class=" text-center">

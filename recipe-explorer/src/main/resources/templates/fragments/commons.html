@@ -19,21 +19,29 @@
 
 <header th:fragment="header-nav">
     <nav class="navbar bg-light text-center text-uppercase fw-bold fs-5 mb-5">
-        <div class="container-fluid row">
-            <div class="col-sm">
-                <a class="nav-item" th:href="@{/}">Home</a>
-            </div>
-            <div class="col-sm">
-                <a class="nav-item" th:href="@{/users/login}">Login</a>
-            </div>
-            <div class="col-sm">
-                <a class="nav-item" th:href="@{/users/register}">Register</a>
-            </div>
-            <div class="col-sm">
-                <a class="nav-item" th:href="@{/about}">About</a>
-            </div>
-        </div>
+        <ul class="container-fluid row justify-content-around mb-0">
+            <li class="nav-item col-sm">
+                <a class="nav-link " th:href="@{/}">Home</a>
+            </li>
+            <th:block sec:authorize="!isAuthenticated()">
+                <li class="nav-item col-sm">
+                    <a class="nav-link " th:href="@{/users/login}">Login</a>
+                </li>
+                <li class="nav-item col-sm">
+                    <a class="nav-link " th:href="@{/users/register}">Register</a>
+                </li>
+                <li class="nav-item col-sm">
+                    <a class="nav-link " th:href="@{/about}">About</a>
+                </li>
+            </th:block>
+            <th:block>
+                <li class="nav-item drop-down col-sm">
+                    <a th:href="@{/recipe}" class="nav-link"></a>
+                </li>
+            </th:block>
+        </ul>
     </nav>
+    
 </header>
 
 </body>

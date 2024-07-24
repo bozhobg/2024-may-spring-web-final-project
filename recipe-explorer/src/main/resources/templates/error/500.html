@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head th:replace="~{fragments/commons::head}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+
+<header th:replace="~{fragments/commons::header-nav}">
+</header>
+
+<div class="container bg-white-opacity-90 p-5 rounded-4 text-center max-width-600">
+    <img src="/images/error2.gif" alt="Error Gif" class="img-fluid rounded-4 d-block mx-auto mb-5">
+    <h3>Something went wrong on our side...</h3>
+    <h5>Please do get in touch <a href="mailto:dev@recipe-explorer">with us</a>, so that we can fix it!</h5>
+</div>
 
 </body>
 </html>

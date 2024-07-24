@@ -45,7 +45,7 @@ public class WebSecurityConfig {
                                 .loginPage("/users/login")
                                 .usernameParameter("username")
                                 .passwordParameter("password")
-                                .successForwardUrl("/home")
+                                .defaultSuccessUrl("/home", true) // TODO: after login /login?continue ->  404 error page?
                                 .failureUrl("/users/login")
                 )
                 .logout(

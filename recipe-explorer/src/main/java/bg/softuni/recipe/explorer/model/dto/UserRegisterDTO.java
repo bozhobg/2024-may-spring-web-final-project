@@ -1,6 +1,6 @@
 package bg.softuni.recipe.explorer.model.dto;
 
-import bg.softuni.recipe.explorer.constants.ErrorMessages;
+import bg.softuni.recipe.explorer.constants.RegexPatterns;
 import bg.softuni.recipe.explorer.validation.EmailValid;
 import bg.softuni.recipe.explorer.validation.UsernameValid;
 import jakarta.validation.constraints.Email;
@@ -9,30 +9,30 @@ import jakarta.validation.constraints.Size;
 
 public class UserRegisterDTO {
 
-    @NotBlank
-    @Size(min = 3, max = 15)
-    @UsernameValid
+    @NotBlank(message = "{user.register.username.not.blank}")
+    @Size(min = 3, max = 15, message = "{user.register.username.size}")
+    @UsernameValid(message = "{user.register.username.invalid}")
     private String username;
 
-    @NotBlank
-    @Size(min = 2)
+    @NotBlank(message = "{user.register.first.name.not.blank}")
+    @Size(min = 2, max = 20, message = "{user.register.first.name.size}")
     private String firstName;
 
-    @NotBlank
-    @Size(min = 2)
+    @NotBlank(message = "{user.register.last.name.not.blank}")
+    @Size(min = 2, max = 20, message = "{user.register.last.name.size}")
     private String lastName;
 
-    @NotBlank
-    @Email
-    @EmailValid
+    @NotBlank(message = "{user.register.email.not.blank}")
+    @Email(regexp = RegexPatterns.EMAIL_REGEX, message = "{user.register.email.format}")
+    @EmailValid(message = "{user.register.email.invalid}")
     private String email;
 
-    @NotBlank
-    @Size(min = 2, max = 20)
+    @NotBlank(message = "{user.register.password.not.blank}")
+    @Size(min = 5, max = 20, message = "{user.register.password.size}")
     private String password;
 
-    @NotBlank
-    @Size(min = 2, max = 20)
+    @NotBlank(message = "{user.register.password.not.blank}")
+    @Size(min = 5, max = 20, message = "{user.register.password.size}")
     private String confirmPassword;
 
     public UserRegisterDTO() {}
