@@ -45,7 +45,7 @@ public class IngredientInitServiceImpl {
 
                 newIngredients.add(new Ingredient()
                         .setName(name)
-                        .setDescription(i + " " + LOREM_IPSUM)
+                        .setDescription(name + " " + LOREM_IPSUM)
                         .setAddedBy(userInitService.getRandomUser())
                         .setType(value)
                         .setUnit(UnitEnum.values()[random.nextInt(2)]));

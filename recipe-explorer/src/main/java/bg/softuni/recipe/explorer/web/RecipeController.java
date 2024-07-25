@@ -4,10 +4,12 @@ import bg.softuni.recipe.explorer.model.dto.DietBasicDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import bg.softuni.recipe.explorer.service.DietService;
+import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,12 +25,15 @@ public class RecipeController {
 
     private final static String ADD_ATTR = "recipeAddData";
 
+    private final RecipeService recipeService;
     private final DietService dietService;
 
     @Autowired
     public RecipeController(
+            RecipeService recipeService,
             DietService dietService
     ) {
+        this.recipeService = recipeService;
         this.dietService = dietService;
     }
 
@@ -68,5 +73,14 @@ public class RecipeController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/all")
+    public String getAll(
+            Model model
+    ) {
+        model.addAttribute("all", this.recipeService.getAllShort());
+
+        return "recipes-all";
     }
 }

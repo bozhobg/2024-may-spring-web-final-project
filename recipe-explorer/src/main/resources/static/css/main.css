@@ -28,3 +28,12 @@ a.nav-link, button.nav-link {
 .max-width-600 {
     max-width: 600px;
 }
+
+div.card-width {
+    width: 18rem;
+}
+
+p.card-text-improved {
+    height: 8rem;
+    overflow: hidden;
+}

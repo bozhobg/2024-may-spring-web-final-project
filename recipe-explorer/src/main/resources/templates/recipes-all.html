@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        >
+        <head th:replace="~{fragments/commons::head}">
+        <meta charset="UTF-8">
+        <title>Title</title>
+</head>
+<body>
+
+<header th:replace="~{fragments/commons::header-nav}"></header>
+
+<main class="container-md">
+    <!--    Cards    -->
+    <div class="row row-gap-3 ">
+        <div class="card card-width mx-auto p-1"
+             th:each="rec : ${all}"
+             th:object="${rec}"
+        >
+            <img src="/images/default-image.jpg" class="card-img-top" alt="ingredient image">
+            <div class="card-body">
+                <h5 th:text="*{name}"
+                    class="card-title"
+                >
+                    Card title
+                </h5>
+                <h6>
+                    Ingredients
+                </h6>
+                <p th:text="${#strings.listJoin(rec.ingredientNames, ', ')}"
+                   class="card-text"
+                >
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                </p>
+                <h6>Diets</h6>
+                <p th:text="${#strings.listJoin(rec.dietTypes, ', ')}"
+                   class="card-text"
+                >
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                </p>
+                <a th:href="@{/ingredients/{id}(id=*{id})}" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
