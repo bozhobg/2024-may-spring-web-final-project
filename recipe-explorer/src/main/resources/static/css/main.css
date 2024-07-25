@@ -6,13 +6,11 @@ body {
     /*background-color: #464646;*/
 }
 
-a.nav-link {
+a.nav-link, button.nav-link {
     color: var(--bs-green);
     text-decoration: none;
-}
-
-a.nav-item:hover {
-    color: rgba(25, 135, 84, 0.77);
+    text-transform: uppercase;
+    font-weight: 700;
 }
 
 .form-container {

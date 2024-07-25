@@ -6,17 +6,16 @@ import bg.softuni.recipe.explorer.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class RoleServiceInitImpl {
+public class RoleInitServiceImpl {
 
     private final RoleRepository roleRepository;
 
     @Autowired
-    public RoleServiceInitImpl(RoleRepository roleRepository) {
+    public RoleInitServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
 
@@ -24,7 +23,7 @@ public class RoleServiceInitImpl {
         if (roleRepository.count() > 0) return;
 
         List<Role> newRoles = Arrays.stream(RoleEnum.values())
-                .map(RoleServiceInitImpl::mapEnumToNewEntity)
+                .map(RoleInitServiceImpl::mapEnumToNewEntity)
                 .toList();
 
         this.roleRepository.saveAll(newRoles);

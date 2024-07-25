@@ -4,7 +4,7 @@ public enum IngredientType {
     POULTRY,
     RED_MEAT,
     FISH,
-//    EGG,
+    EGG,
     VEGETABLE,
     FRUIT,
     MUSHROOM,

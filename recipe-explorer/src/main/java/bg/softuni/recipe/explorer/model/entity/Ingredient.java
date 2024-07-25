@@ -24,6 +24,12 @@ public class Ingredient {
     @Enumerated(EnumType.STRING)
     private IngredientType type;
 
+//    TODO: added by, modified by, created on, modified on
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "added_by_id")
+    private User addedBy;
+
     public Ingredient(){}
 
     public Long getId() {
@@ -68,6 +74,15 @@ public class Ingredient {
 
     public Ingredient setType(IngredientType type) {
         this.type = type;
+        return this;
+    }
+
+    public User getAddedBy() {
+        return addedBy;
+    }
+
+    public Ingredient setAddedBy(User addedBy) {
+        this.addedBy = addedBy;
         return this;
     }
 }
