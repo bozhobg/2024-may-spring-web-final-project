@@ -1,5 +1,7 @@
 package bg.softuni.recipe.explorer.service.impl;
 
+import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
+import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Diet;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
@@ -47,34 +49,24 @@ public class RecipeServiceImpl implements RecipeService {
         return allShort;
     }
 
+    @Override
+    public RecipeDetailsDTO getDetailsById(Long id) {
+
+        RecipeDetailsDTO dto = mapToDetails(this.recipeRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Recipe not found!")));
+
+        return dto;
+    }
+
+
+
     private RecipeShortInfoDTO mapToShort(Recipe entity) {
-
-
-
         RecipeShortInfoDTO map = modelMapper.map(entity, RecipeShortInfoDTO.class);
-
         return map;
     }
 
-    private static class IngredientToNameListConverter extends AbstractConverter<Set<Ingredient>, List<String>> {
-
-        @Override
-        protected List<String> convert(Set<Ingredient> src) {
-
-            return src.stream()
-                    .map(Ingredient::getName)
-                    .toList();
-        }
-    }
-
-    private static class DietToTypeListConverter extends AbstractConverter<Set<Diet>, List<DietaryType>> {
-
-        @Override
-        protected List<DietaryType> convert(Set<Diet> source) {
-
-            return source.stream()
-                    .map(Diet::getType)
-                    .toList();
-        }
+    private RecipeDetailsDTO mapToDetails(Recipe entity) {
+        RecipeDetailsDTO map = modelMapper.map(entity, RecipeDetailsDTO.class);
+        return map;
     }
 }

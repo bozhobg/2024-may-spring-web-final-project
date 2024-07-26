@@ -1,9 +1,6 @@
 package bg.softuni.recipe.explorer.model.dto;
 
-import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.model.enums.IngredientType;
-import bg.softuni.recipe.explorer.model.enums.UnitEnum;
-import jakarta.persistence.*;
 
 public class IngredientShortInfoDTO {
 

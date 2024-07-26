@@ -1,5 +1,7 @@
 package bg.softuni.recipe.explorer.service.impl;
 
+import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
+import bg.softuni.recipe.explorer.model.dto.IngredientDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.enums.IngredientType;
@@ -57,7 +59,19 @@ public class IngredientServiceImpl implements IngredientService {
         return allShort;
     }
 
+    @Override
+    public IngredientDetailsDTO getDetailsById(Long id) {
+        IngredientDetailsDTO map = mapToIngredientDetailsDTO(this.ingredientRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Ingredient not found!")));
+
+        return map;
+    }
+
     private IngredientShortInfoDTO mapToShort(Ingredient entity) {
         return modelMapper.map(entity, IngredientShortInfoDTO.class);
+    }
+
+    private IngredientDetailsDTO mapToIngredientDetailsDTO(Ingredient entity) {
+        return modelMapper.map(entity, IngredientDetailsDTO.class);
     }
 }

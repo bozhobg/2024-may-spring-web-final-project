@@ -1,13 +1,10 @@
 package bg.softuni.recipe.explorer.model.dto;
 
-import bg.softuni.recipe.explorer.model.entity.Diet;
-import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class RecipeShortInfoDTO {
 
@@ -68,7 +65,7 @@ public class RecipeShortInfoDTO {
         return dietTypes;
     }
 
-    public RecipeShortInfoDTO setDietTypes(List<DietaryType> dietTypes) {
+    public RecipeShortInfoDTO setDietaryTypes(List<DietaryType> dietTypes) {
         this.dietTypes = dietTypes;
         return this;
     }

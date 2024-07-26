@@ -1,5 +1,6 @@
 package bg.softuni.recipe.explorer.service;
 
+import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,4 +12,7 @@ public interface RecipeService {
 
     @Transactional
     List<RecipeShortInfoDTO> getAllShort();
+
+    @Transactional
+    RecipeDetailsDTO getDetailsById(Long id);
 }

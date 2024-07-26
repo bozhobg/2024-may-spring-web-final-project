@@ -1,10 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head th:replace="~{fragments/commons::head}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+
+<header th:replace="~{fragments/commons::header-nav}"></header>
+
+<div class="container"
+     th:object="${recipe}"
+>
+    <div class="container-lg">
+        <div class="row">
+            <div class="col-xl-7 mb-3 align-content-center">
+                <!--                Carousel    -->
+                <img th:src="@{/images/default-image.jpg}"
+                     alt="Recipe Image"
+                     class="img-fluid d-block mx-auto rounded-4"
+                >
+            </div>
+            <div class="col-xl-5 flex-column align-content-center">
+                <!--                General info    -->
+                <div class="bg-light rounded-4 p-3 mb-3">
+                    <h5 th:text="*{name}"
+                        class="mb-3"
+                    >
+                        Recipe name
+                    </h5>
+                    <p>Added by: <span th:text="*{authorUsername}"></span></p>
+                    <p>Created on:
+                        <span th:text="${#temporals.format(recipe.createdOn, 'dd MMM yyyy HH:mm')}">
+                            dd MMM yyyy HH:mm
+                        </span>
+                    </p>
+                    <p class="mb-0"
+                    >Modified on:
+                        <span th:text="${#temporals.format(recipe.modifiedOn, 'dd MMM yyyy HH:mm')}">
+                            dd MMM yyyy HH:mm
+                        </span>
+                    </p>
+                </div>
+                <div class="bg-light rounded-4 p-3 mb-3">
+                    <h5 class="mb-3">
+                        Rating: <span th:text="*{averageRating != null} ? *{averageRating} : _">N/A</span>
+                    </h5>
+                    <h6>Meal type: </h6>
+                    <p th:text="*{mealType}"></p>
+                    <h6>Dietary preferences:</h6>
+                    <p th:text="${#strings.listJoin(recipe.dietaryTypes, ', ')}"
+                       class="mb-0"
+                    >
+                        Diets....
+                    </p>
+                </div>
+                <div class="bg-light rounded-4 p-3 mb-3">
+                    <h5 class="mb-3">Ingredients:</h5>
+                    <p th:text="${#strings.listJoin(recipe.ingredientNames, ', ')}"
+                       class="mb-0"
+                    >
+                        Ingredients....
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!--            Instructions -->
+            <div class="col-12">
+                <div class="bg-light rounded-4 p-3 mb-3">
+                    <h5 class="mb-3">Instructions:</h5>
+                    <p th:text="*{instructions}">
+                        Instructions here...
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--    TODO: buttons edit/delete/approve-->
+</div>
 
 </body>
 </html>

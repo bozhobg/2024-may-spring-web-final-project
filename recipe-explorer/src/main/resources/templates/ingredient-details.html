@@ -1,10 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head th:replace="~{fragments/commons::head}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+
+<header th:replace="~{fragments/commons::header-nav}"></header>
+
+<div class="container-md"
+     th:object="${ingredient}"
+>
+    <div class="row g-3 ">
+        <div class="col-xl-6 mb-3 align-content-center">
+            <!--                Carousel    -->
+            <img th:src="@{/images/default-image.jpg}"
+                 alt="Recipe Image"
+                 class="img-fluid d-block mx-auto rounded-4"
+            >
+        </div>
+        <div class="col-xl-6 flex-column align-content-center">
+            <div class="bg-light rounded-4 p-3 mb-3">
+                <h5 th:text="*{name}"
+                    class="mb-3"
+                >
+                    Name
+                </h5>
+                <p th:text="|Units: *{unit}|"
+                >
+                    Units:
+                </p>
+                <p th:text="|Type: ${ingredientTypes.get(ingredient.type)}|"
+                >
+                    Type:
+                </p>
+                <p th:text="|Added By: *{addedByUsername}|"
+                   class="mb-0" 
+                >
+                    Added By:
+                </p>
+            </div>
+            <div class="bg-light rounded-4 p-3">
+                <h5 class="mb-3"
+                >
+                    Description:
+                </h5>
+                <p th:text="*{description}"
+                   class="mb-0"
+                >
+                    desc....
+                </p>
+            </div>
+        </div>
+    </div>
+    <!--    TODO: buttons edit/delete/approve-->
+</div>
 
 </body>
 </html>

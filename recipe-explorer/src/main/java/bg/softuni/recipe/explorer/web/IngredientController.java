@@ -78,9 +78,10 @@ public class IngredientController {
 
     @GetMapping("/{id}")
     public String getDetails(
-            @PathVariable Long id
+            @PathVariable Long id,
+            Model model
     ) {
-
+        model.addAttribute("ingredient", this.ingredientService.getDetailsById(id));
         return "ingredient-details";
     }
 }
