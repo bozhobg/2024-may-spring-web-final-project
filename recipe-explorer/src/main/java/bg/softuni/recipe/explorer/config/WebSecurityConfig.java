@@ -33,7 +33,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers
-                                        ("/", "/users/login", "/users/register", "/about", "/error"
+                                        ("/", "/users/login", "/users/register", "/about", "/error",
+//                                                TODO: secure:
+                                                "/api/ingredients/short"
                                         ).permitAll()
                                 .requestMatchers(
                                         PathRequest.toStaticResources().atCommonLocations()

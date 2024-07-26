@@ -23,7 +23,7 @@
             >
                 Name
             </label>
-<!--            required minlength="5" maxlength="30"   -->
+            <!--            required minlength="5" maxlength="30"   -->
             <input th:field="*{name}"
                    name="name"
                    type="text"
@@ -46,7 +46,7 @@
                 Meal Type
             </label>
 
-<!--            required    -->
+            <!--            required    -->
             <select th:field="*{mealType}"
                     name="mealType"
                     id="mealType"
@@ -78,28 +78,78 @@
                 Ingredients
             </label>
 
-<!--            required    -->
-            <select th:field="*{mealType}"
-                    name="ingredients"
+            <div class="container">
+                <div class="row align-items-end">
+                    <div class="col-md-6 text-center available-container">
+                        <div >
+                            <input type="text"
+                                   id="ingInputFilter"
+                                   class="form-control-sm m-2"
+                            >
+                            <!--                                   class="rounded-1 border-1 p-1 me-2"-->
+                            <button type="button"
+                                    id="filterBtn"
+                                    class="btn btn-sm btn-outline-info align-top m-2"
+                            >
+                                Filter
+                            </button>
+                        </div>
+                        <select name=available""
+                                id="availableIngredients"
+                                multiple
+                                size="4"
+                                class="form-select-sm w-100 m-2"
+                        >
+                            <!--                                class="w-75 mb-3 rounded-1 border-1 p-1"-->
+                            <option value="">Available Ing 1</option>
+                            <option value="">Available Ing 2</option>
+                            <option value="">Available Ing 3</option>
+                        </select>
+                        <br>
+                        <button type="button"
+                                id="addBtn"
+                                class="btn btn-sm btn-outline-success m-2"
+                        >
+                            Add
+                        </button>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <select th:field="*{ingredients}"
+                                name="selected"
+                                id="ingredients"
+                                size="4"
+                                multiple
+                                class="form-select-sm w-100 m-2"
+                        >
+                            <option value="">Selected Ing 1</option>
+                            <option value="">Selected Ing 2</option>
+                            <option value="">Selected Ing 3</option>
+                        </select>
+                        <br>
+                        <button type="button"
+                                id="removeBtn"
+                                class="btn btn-sm btn-outline-danger m-2"
+                        >
+                            Remove
+                        </button>
+<!--                        TODO: transform to input=hidden, or select all chosen before submit-->
+                        <button type="button"
+                                id="confirmBtn"
+                                class="btn btn-sm btn-outline-success m-2"
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                    id="ingredients"
-                    class="form-select"
-                    th:errorclass="'bg-danger is-invalid bg-opacity-50'"
-            >
-                <option value="" selected>Select type</option>
-                <option th:each="type : ${mealTypes}"
-                        th:value="${type.name()}"
-                        th:text="${#strings.capitalize(#strings.toLowerCase(type))}"
-                >
-                    Please select:
-                </option>
+            <!--            required    -->
 
-            </select>
             <small th:errors="*{mealType}"
                    id="ingredientsError"
                    class="invalid-feedback text-danger"
             >
-                Must select a valid meal type!
+                Must select a valid ingredients!
             </small>
         </div>
 
@@ -110,7 +160,7 @@
                 Instructions
             </label>
 
-<!--            required minlength="50"     -->
+            <!--            required minlength="50"     -->
             <textarea th:field="*{instructions}"
                       name="instructions"
 
@@ -164,6 +214,7 @@
         </div>
 
     </form>
+    <script th:src="@{/js/ingredients-selector.js}"></script>
 </div>
 
 </body>
