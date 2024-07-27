@@ -1,5 +1,6 @@
 package bg.softuni.recipe.explorer.service;
 
+import bg.softuni.recipe.explorer.model.dto.IngredientAddDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientBasicDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientShortInfoDTO;
@@ -25,4 +26,6 @@ public interface IngredientService {
     boolean areIdsValid(List<Long> listIds);
 
     Set<Ingredient> getAllByIds(List<Long> listIds);
+
+    Long add(IngredientAddDTO dto, Long userId);
 }

@@ -6,6 +6,7 @@ import bg.softuni.recipe.explorer.model.entity.Diet;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
 import bg.softuni.recipe.explorer.model.enums.DietaryType;
+import bg.softuni.recipe.explorer.utils.StringFormatter;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -25,7 +26,7 @@ public class ModelMapperConfig {
         ModelMapper modelMapper = new ModelMapper();
 
         Converter<Set<Ingredient>, List<String>> ingredientToNameListConverter = new IngredientToNameListConverter();
-        Converter<Set<Diet>, List<DietaryType>> dietToTypeListConverter = new DietToTypeListConverter();
+        Converter<Set<Diet>, List<String>> dietToTypeListConverter = new DietToTypeListConverter();
 
 //        TypeMap Recipe -> RecipeShortDTO
         TypeMap<Recipe, RecipeShortInfoDTO> typeMapToRecipeShort =
@@ -60,13 +61,13 @@ public class ModelMapperConfig {
         }
     }
 
-    private static class DietToTypeListConverter extends AbstractConverter<Set<Diet>, List<DietaryType>> {
+    private static class DietToTypeListConverter extends AbstractConverter<Set<Diet>, List<String>> {
 
         @Override
-        protected List<DietaryType> convert(Set<Diet> source) {
+        protected List<String> convert(Set<Diet> source) {
 
             return source.stream()
-                    .map(Diet::getType)
+                    .map(e -> StringFormatter.mapConstantCaseToUpperCase(e.getType().name()))
                     .toList();
         }
     }

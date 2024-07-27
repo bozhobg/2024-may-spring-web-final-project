@@ -1,13 +1,17 @@
 package bg.softuni.recipe.explorer.service.impl;
 
 import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
+import bg.softuni.recipe.explorer.model.dto.IngredientAddDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientBasicDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
+import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.model.enums.IngredientType;
+import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.repository.IngredientRepository;
 import bg.softuni.recipe.explorer.service.IngredientService;
+import bg.softuni.recipe.explorer.service.UserService;
 import bg.softuni.recipe.explorer.utils.StringFormatter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +23,17 @@ import java.util.*;
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public IngredientServiceImpl(
             IngredientRepository ingredientRepository,
+            UserService userService,
             ModelMapper modelMapper
     ) {
         this.ingredientRepository = ingredientRepository;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -95,6 +102,23 @@ public class IngredientServiceImpl implements IngredientService {
         List<Ingredient> allById = this.ingredientRepository.findAllById(listIds);
 
         return new HashSet<>(allById);
+    }
+
+    @Override
+    public Long add(IngredientAddDTO dto, Long userId) {
+        Ingredient newIngredient = mapToEntity(dto, userId);
+
+        return this.ingredientRepository
+                .save(newIngredient)
+                .getId();
+    }
+
+    private Ingredient mapToEntity(IngredientAddDTO dto, Long userId) {
+        Ingredient map = modelMapper.map(dto, Ingredient.class);
+        User user = this.userService.getUserById(userId);
+        map.setAddedBy(user);
+
+        return map;
     }
 
     private IngredientShortInfoDTO mapToShort(Ingredient entity) {

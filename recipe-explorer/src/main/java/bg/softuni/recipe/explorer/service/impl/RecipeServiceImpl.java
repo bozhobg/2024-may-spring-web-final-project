@@ -74,7 +74,9 @@ public class RecipeServiceImpl implements RecipeService {
     public Long add(RecipeAddDTO dto, Long userId) {
         Recipe newRecipe = mapToEntity(dto, userId);
 
-        return this.recipeRepository.save(newRecipe).getId();
+        return this.recipeRepository
+                .save(newRecipe)
+                .getId();
     }
 
     private Recipe mapToEntity(RecipeAddDTO dto, Long userId) {
