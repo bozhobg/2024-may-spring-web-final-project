@@ -5,7 +5,7 @@ async function loadSelector() {
     const BASE_URL = 'http://localhost:8080/api/ingredients/short';
 
     const availableIngSelect = document.getElementById('availableIngredients');
-    const chosenIngSelect = document.getElementById('ingredients')
+    const chosenIngSelect = document.getElementById('ingredientIds')
     const filterInput = document.getElementById('ingInputFilter')
     const filterBtn = document.getElementById('filterBtn');
     const addBtn = document.getElementById('addBtn');
@@ -46,8 +46,10 @@ async function loadSelector() {
         e.preventDefault();
 
         chosenIngSelect.querySelectorAll('option')
-            .forEach(opt => opt.selected = true);
-        chosenIngSelect.setAttribute('disabled', 'true');
+            .forEach(opt => {
+                opt.selected = true;
+                // opt.disabled = true; TODO: how to send data over POST even if select/options disabled
+            });
 
         document.querySelector('div.available-container').remove();
         removeBtn.remove();

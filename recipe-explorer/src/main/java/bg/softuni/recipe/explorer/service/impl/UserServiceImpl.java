@@ -55,6 +55,12 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(newUser);
     }
 
+    @Override
+    public User getUserById(Long id) {
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found!"));
+    }
+
     private User mapRegisterDataToEntity(UserRegisterDTO dto) {
 
         User map = this.modelMapper.map(dto, User.class);

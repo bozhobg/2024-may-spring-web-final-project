@@ -1,6 +1,5 @@
 package bg.softuni.recipe.explorer.validation;
 
-import bg.softuni.recipe.explorer.constants.ErrorMessages;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -11,14 +10,12 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = FileNotEmptyValidator.class)
-public @interface FileNotEmpty {
+@Constraint(validatedBy = IngredientIdsValidor.class)
+public @interface IngredientIdsValid {
 
-//    TODO:
-    String message() default ErrorMessages.FILE_EMPTY;
+    String message() default "{recipe.add.ingredient.ids.valid}";
 
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
-
+    Class<? extends Payload>[] payload() default {};
 }

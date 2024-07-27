@@ -4,13 +4,10 @@ import bg.softuni.recipe.explorer.model.entity.Role;
 import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.repository.UserRepository;
-import bg.softuni.recipe.explorer.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -42,6 +39,7 @@ public class AppUserDetailsServiceImpl implements UserDetailsService {
                 user.getUsername(),
                 user.getPassword(),
                 mapAuthorities(user.getRoles()),
+                user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail()

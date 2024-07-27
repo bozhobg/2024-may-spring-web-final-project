@@ -3,11 +3,13 @@ package bg.softuni.recipe.explorer.web;
 import bg.softuni.recipe.explorer.model.dto.DietBasicDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.enums.MealType;
+import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.DietService;
 import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,8 +62,9 @@ public class RecipeController {
     public String postAdd(
             @Valid RecipeAddDTO bindingModel,
             BindingResult bindingResult,
-            RedirectAttributes rAttrs
-    ) {
+            RedirectAttributes rAttrs,
+            @AuthenticationPrincipal AppUserDetails userDetails
+            ) {
 
         if (bindingResult.hasErrors()) {
             RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, ADD_ATTR);
@@ -69,7 +72,9 @@ public class RecipeController {
             return "redirect:/recipes/add";
         }
 
-        return "redirect:/";
+        Long newId = this.recipeService.add(bindingModel, userDetails.getId());
+
+        return "redirect:/recipes/" + newId;
     }
 
     @GetMapping("/all")

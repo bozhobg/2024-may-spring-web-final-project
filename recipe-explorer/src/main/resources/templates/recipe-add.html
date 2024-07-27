@@ -17,6 +17,9 @@
           th:method="post"
           th:object="${recipeAddData}"
     >
+
+        <!--        Name    -->
+
         <div class="mb-3">
             <label for="name"
                    class="form-label h5"
@@ -38,6 +41,8 @@
                 Name must be between 5 and 30 characters!
             </small>
         </div>
+
+        <!--    Meal Type   -->
 
         <div class="mb-3">
             <label for="mealType"
@@ -70,9 +75,10 @@
             </small>
         </div>
 
+        <!--        Ingredient Ids  -->
         <!--        TODO: ingredients: use js for selection and adding   -->
         <div class="mb-3">
-            <label for="ingredients"
+            <label for="ingredientIds"
                    class="form-label h5"
             >
                 Ingredients
@@ -81,7 +87,8 @@
             <div class="container">
                 <div class="row align-items-end">
                     <div class="col-md-6 text-center available-container">
-                        <div >
+                        <div>
+                            <label for="ingInputFilter" class="d-none"></label>
                             <input type="text"
                                    id="ingInputFilter"
                                    class="form-control-sm m-2"
@@ -94,6 +101,7 @@
                                 Filter
                             </button>
                         </div>
+                        <label for="availableIngredients" class="d-none"></label>
                         <select name=available""
                                 id="availableIngredients"
                                 multiple
@@ -114,12 +122,13 @@
                         </button>
                     </div>
                     <div class="col-md-6 text-center">
-                        <select th:field="*{ingredients}"
-                                name="selected"
-                                id="ingredients"
+                        <select th:field="*{ingredientIds}"
+                                name="ingredientIds"
+                                id="ingredientIds"
                                 size="4"
                                 multiple
                                 class="form-select-sm w-100 m-2"
+                                th:errorclass="'bg-danger is-invalid bg-opacity-50'"
                         >
                             <option value="">Selected Ing 1</option>
                             <option value="">Selected Ing 2</option>
@@ -132,7 +141,7 @@
                         >
                             Remove
                         </button>
-<!--                        TODO: transform to input=hidden, or select all chosen before submit-->
+                        <!--                        TODO: add edit button after confirmation -->
                         <button type="button"
                                 id="confirmBtn"
                                 class="btn btn-sm btn-outline-success m-2"
@@ -145,13 +154,19 @@
 
             <!--            required    -->
 
-            <small th:errors="*{mealType}"
-                   id="ingredientsError"
-                   class="invalid-feedback text-danger"
+            <small th:if="${#fields.hasErrors('ingredientIds')}"
+                   id="ingredientIdsError"
+                   class="text-danger "
             >
-                Must select a valid ingredients!
+                <th:block th:each="err :${#fields.errors('ingredientIds')}">
+                    <span th:text="${err}"></span>
+                    <br>
+                </th:block>
+                <!--                Must select valid ingredients!-->
             </small>
         </div>
+
+        <!--        Instructions    -->
 
         <div class="mb-3">
             <label for="instructions"
@@ -179,31 +194,43 @@
             </small>
         </div>
 
+        <!--        Diet Ids    -->
+
         <div class="mb-3">
-            <label for="diets"
+            <label for="dietIds"
                    class="form-label h5"
             >
                 Dietary Types <small>(optional)</small>
             </label>
             <br>
             <div class="me-3 form-check-inline" th:each="diet : ${dietsData}">
-                <input name="diets"
-                       id="diets"
+                <input name="dietIds"
+                       id="dietIds"
                        class="form-check-inline me-2"
                        type="checkbox"
-                       th:field="*{diets}"
+                       th:field="*{dietIds}"
                        th:value="${diet.id}"
                        th:text="${diet.type}"
                        th:errorclass="'bg-danger is-invalid'"
                 >
             </div>
-            <small th:errors="*{mealType}"
-                   id="dietsError"
-                   class="invalid-feedback text-danger"
+            <br>
+            <small th:if="${#fields.hasErrors('dietIds')}"
+                   id="dietIdsError"
+                   class="text-danger"
             >
-                Invalid dietary type/types!
+                <th:block th:each="err : ${#fields.errors('dietIds')}">
+                    <span th:text="${err}"></span>
+                    <br>
+                </th:block>
+
+                    <!--                    Invalid dietary type/types!-->
             </small>
+
+
         </div>
+
+        <!--        Add Button  -->
 
         <div class="d-flex mt-5 justify-content-center">
             <button type="submit"

@@ -17,6 +17,6 @@ public class RecipeNameValidator implements ConstraintValidator<RecipeNameValid,
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return false;
+        return recipeService.isNameUnique(s);
     }
 }

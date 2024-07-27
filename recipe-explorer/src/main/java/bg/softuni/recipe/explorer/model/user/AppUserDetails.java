@@ -7,6 +7,7 @@ import java.util.Collection;
 
 public class AppUserDetails extends User {
 
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -15,41 +16,32 @@ public class AppUserDetails extends User {
             String username,
             String password,
             Collection<? extends GrantedAuthority> authorities,
+            Long id,
             String firstName,
             String lastName,
             String email
     ) {
         super(username, password, authorities);
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public AppUserDetails setFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-
     public String getLastName() {
         return lastName;
     }
 
-    public AppUserDetails setLastName(String lastName) {
-        this.lastName = lastName;
-        return this;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public AppUserDetails setEmail(String email) {
-        this.email = email;
-        return this;
     }
 
     public String getFullName() {

@@ -1,21 +1,23 @@
 package bg.softuni.recipe.explorer.service.impl;
 
 import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
+import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Diet;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
-import bg.softuni.recipe.explorer.model.enums.DietaryType;
+import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.repository.RecipeRepository;
+import bg.softuni.recipe.explorer.service.DietService;
+import bg.softuni.recipe.explorer.service.IngredientService;
 import bg.softuni.recipe.explorer.service.RecipeService;
-import org.modelmapper.AbstractConverter;
-import org.modelmapper.Converter;
+import bg.softuni.recipe.explorer.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -23,13 +25,23 @@ import java.util.Set;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final IngredientService ingredientService;
+    private final DietService dietService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public RecipeServiceImpl(
-            RecipeRepository recipeRepository, ModelMapper modelMapper
+            RecipeRepository recipeRepository,
+            IngredientService ingredientService,
+            DietService dietService,
+            UserService userService,
+            ModelMapper modelMapper
     ) {
         this.recipeRepository = recipeRepository;
+        this.ingredientService = ingredientService;
+        this.dietService = dietService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -58,7 +70,28 @@ public class RecipeServiceImpl implements RecipeService {
         return dto;
     }
 
+    @Override
+    public Long add(RecipeAddDTO dto, Long userId) {
+        Recipe newRecipe = mapToEntity(dto, userId);
 
+        return this.recipeRepository.save(newRecipe).getId();
+    }
+
+    private Recipe mapToEntity(RecipeAddDTO dto, Long userId) {
+        Recipe map = modelMapper.map(dto, Recipe.class);
+
+        Set<Diet> diets = dietService.getAllByIds(dto.getDietIds());
+        Set<Ingredient> ingredients = ingredientService.getAllByIds(dto.getIngredientIds());
+        User author = this.userService.getUserById(userId);
+
+        map.setCreatedOn(Instant.now())
+                .setModifiedOn(Instant.now())
+                .setAuthor(this.userService.getUserById(userId))
+                .setIngredients(ingredients)
+                .setDiets(diets);
+
+        return map;
+    }
 
     private RecipeShortInfoDTO mapToShort(Recipe entity) {
         RecipeShortInfoDTO map = modelMapper.map(entity, RecipeShortInfoDTO.class);

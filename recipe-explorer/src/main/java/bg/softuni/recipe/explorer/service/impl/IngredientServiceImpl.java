@@ -13,9 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
@@ -76,6 +74,27 @@ public class IngredientServiceImpl implements IngredientService {
                 .toList();
 
         return allBasic;
+    }
+
+    @Override
+    public boolean areIdsValid(List<Long> listIds) {
+
+        boolean exist = false;
+
+        for (Long id : listIds) {
+            exist = this.ingredientRepository.existsById(id);
+
+            if (!exist) return exist;
+        }
+
+        return exist;
+    }
+
+    @Override
+    public Set<Ingredient> getAllByIds(List<Long> listIds) {
+        List<Ingredient> allById = this.ingredientRepository.findAllById(listIds);
+
+        return new HashSet<>(allById);
     }
 
     private IngredientShortInfoDTO mapToShort(Ingredient entity) {
