@@ -29,22 +29,19 @@
                 >
                     Name
                 </h5>
-                <p th:text="|Units: *{unit}|"
-                >
-                    Units:
+                <p>
+                    <span th:text="#{common_unit}"></span>: <span th:text="*{unit}"></span>
                 </p>
-                <p th:text="|Type: ${ingredientTypes.get(ingredient.type)}|"
-                >
-                    Type:
+                <p>
+                    <span th:text="#{common_ingredient_type}"></span>: <span th:text="*{type}"></span>
                 </p>
-                <p th:text="|Added By: *{addedByUsername}|"
-                   class="mb-0"
-                >
-                    Added By:
+                <p class="mb-0">
+                    <span th:text="#{common_added_by}"></span>: <span th:text="*{addedByUsername}"></span>
                 </p>
             </div>
             <div class="bg-light rounded-4 p-3">
                 <h5 class="mb-3"
+                    th:text="#{common_description}"
                 >
                     Description:
                 </h5>

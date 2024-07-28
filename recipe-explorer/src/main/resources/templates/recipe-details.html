@@ -31,14 +31,16 @@
                     >
                         Recipe name
                     </h5>
-                    <p>Added by: <span th:text="*{authorUsername}"></span></p>
-                    <p>Created on:
+                    <p><span th:text="#{common_added_by}"></span>: <span th:text="*{authorUsername}"></span></p>
+                    <p>
+                        <span th:text="#{common_created_on}"></span>:
                         <span th:text="${#temporals.format(recipe.createdOn, 'dd MMM yyyy HH:mm')}">
                             dd MMM yyyy HH:mm
                         </span>
                     </p>
                     <p class="mb-0"
-                    >Modified on:
+                    >
+                        <span th:text="#{common_modified_on}"></span>:
                         <span th:text="${#temporals.format(recipe.modifiedOn, 'dd MMM yyyy HH:mm')}">
                             dd MMM yyyy HH:mm
                         </span>
@@ -46,11 +48,16 @@
                 </div>
                 <div class="bg-light rounded-4 p-3 mb-3">
                     <h5 class="mb-3">
-                        Rating: <span th:text="*{averageRating != null} ? *{averageRating} : _">N/A</span>
+                        <span th:text="#{common_rating}"></span>:
+                        <span th:text="*{averageRating != null} ? *{averageRating} : _">N/A</span>
                     </h5>
-                    <h6>Meal type: </h6>
+                    <h6 th:text="#{common_meal_type}">
+                        Meal type:
+                    </h6>
                     <p th:text="*{mealType}"></p>
-                    <h6>Dietary preferences:</h6>
+                    <h6 th:text="#{common_dietary_preferences}">
+                        Dietary preferences:
+                    </h6>
                     <p th:text="${#strings.listJoin(recipe.dietaryTypes, ', ')}"
                        class="mb-0"
                     >
@@ -58,7 +65,11 @@
                     </p>
                 </div>
                 <div class="bg-light rounded-4 p-3 mb-3">
-                    <h5 class="mb-3">Ingredients:</h5>
+                    <h5 class="mb-3"
+                        th:text="#{common_ingredients}"
+                    >
+                        Ingredients:
+                    </h5>
                     <p th:text="${#strings.listJoin(recipe.ingredientNames, ', ')}"
                        class="mb-0"
                     >
@@ -71,7 +82,10 @@
             <!--            Instructions -->
             <div class="col-12">
                 <div class="bg-light rounded-4 p-3 mb-3">
-                    <h5 class="mb-3">Instructions:</h5>
+                    <h5 class="mb-3"
+                        th:text="#{common_instructions}">
+                        Instructions:
+                    </h5>
                     <p th:text="*{instructions}">
                         Instructions here...
                     </p>
