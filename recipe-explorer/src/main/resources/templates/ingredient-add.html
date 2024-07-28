@@ -13,7 +13,11 @@
 
 <div class="container bg-white-opacity-90 p-5 rounded-4">
 
-    <h3 class="text-center">Add Ingredient:</h3>
+    <h3 class="text-center"
+        th:text="#{ingredient_add_form_title}"
+    >
+        Add Ingredient:
+    </h3>
 
     <form th:action="@{/ingredients/add}"
           th:method="post"
@@ -22,6 +26,7 @@
         <div class="mb-3">
             <label for="name"
                    class="form-label h5"
+                   th:text="#{ingredient_add_form_label_name}"
             >
                 Name
             </label>
@@ -45,6 +50,7 @@
         <div class="mb-3">
             <label for="type"
                    class="form-label h5"
+                   th:text="#{ingredient_add_form_label_ingredient_type}"
             >
                 Ingredient Type
             </label>
@@ -77,6 +83,7 @@
         <div class="mb-3">
             <label for="unit"
                    class="form-label h5"
+                   th:text="#{ingredient_add_form_label_unit_type}"
             >
                 Unit
             </label>
@@ -109,6 +116,7 @@
         <div class="mb-3">
             <label for="description"
                    class="form-label h5"
+                   th:text="#{ingredient_add_form_label_description}"
             >
                 Description
             </label>
@@ -137,7 +145,8 @@
 
         <div class="d-flex mt-5 justify-content-center">
             <button type="submit"
-                    class="btn btn-primary w-50"
+                    class="btn btn-primary w-50 text-uppercase fw-bold"
+                    th:text="#{ingredient_add_form_submit}"
             >
                 Add Ingredient
             </button>

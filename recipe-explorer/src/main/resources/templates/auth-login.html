@@ -15,7 +15,11 @@
 
 <div class="form-container container bg-white-opacity-90 px-5 py-4 rounded-4">
 
-    <h3 class="text-center">Login:</h3>
+    <h3 class="text-center"
+        th:text="#{user_login_form_title}"
+    >
+        Login:
+    </h3>
 
     <form th:action="@{/users/login}"
           th:method="POST"
@@ -23,6 +27,7 @@
         <div class="mb-3">
             <label for="username"
                    class="form-label h5"
+                   th:text="#{user_login_form_label_username}"
             >
                 Username
             </label>
@@ -37,6 +42,7 @@
         <div class="mb-4">
             <label for="password"
                    class="form-label h5"
+                   th:text="#{user_login_form_label_password}"
             >
                 Password
             </label>
@@ -52,7 +58,7 @@
         <div class="mb-auto">
             <button type="submit"
                     class="btn btn-primary w-100 fw-bold text-uppercase"
-
+                    th:text="#{user_login_form_submit}"
             >
                 Login
             </button>

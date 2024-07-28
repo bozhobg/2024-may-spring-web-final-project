@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
     <!--    <script src="/js/jquery-3.5.1.slim.min.js"></script>-->
     <script src="/js/bootstrap.bundle.js"></script>
-<!--    <script src="/js/bootstrap.js"></script>-->
+    <!--    <script src="/js/bootstrap.js"></script>-->
 
 </head>
 <body>
@@ -23,36 +23,53 @@
     <nav class="bg-light text-center fs-5 mb-5 p-2">
         <ul class="container-fluid row justify-content-around mb-0">
 
-<!--            Home    -->
-            <li class="nav-item col-md">
-                <a class="nav-link d-inline" th:href="@{/}">Home</a>
+            <!--            Home    -->
+            <li class="nav-item col-lg">
+                <a class="nav-link d-inline" th:href="@{/}"
+                   th:text="#{nav_bar_home}"
+                >
+                    Home
+                </a>
             </li>
             <th:block sec:authorize="!isAuthenticated()">
 
-<!--                Login   -->
-                <li class="nav-item col-md">
-                    <a class="nav-link d-inline" th:href="@{/users/login}">Login</a>
+                <!--                Login   -->
+                <li class="nav-item col-lg">
+                    <a class="nav-link d-inline" th:href="@{/users/login}"
+                       th:text="#{nav_bar_login}"
+                    >
+                        Login
+                    </a>
                 </li>
 
-<!--                Register    -->
-                <li class="nav-item col-md">
-                    <a class="nav-link d-inline" th:href="@{/users/register}">Register</a>
+                <!--                Register    -->
+                <li class="nav-item col-lg">
+                    <a class="nav-link d-inline" th:href="@{/users/register}"
+                       th:text="#{nav_bar_register}"
+                    >
+                        Register
+                    </a>
                 </li>
 
-<!--                About   -->
-                <li class="nav-item col-md">
-                    <a class="nav-link d-inline" th:href="@{/about}">About</a>
+                <!--                About   -->
+                <li class="nav-item col-lg">
+                    <a class="nav-link d-inline" th:href="@{/about}"
+                       th:text="#{nav_bar_about}"
+                    >
+                        About
+                    </a>
                 </li>
             </th:block>
             <th:block sec:authorize="isAuthenticated()">
 
-<!--                Recipes dropdown    -->
-<!--                TODO: at sm breakpoint show dropdown as rows    -->
-                <li class="nav-item drop-down col-md">
+                <!--                Recipes dropdown    -->
+                <!--                TODO: at sm breakpoint show dropdown as rows    -->
+                <li class="nav-item drop-down col-lg">
                     <a href="#"
                        id="recipesDropdown"
                        class="nav-link dropdown-toggle d-inline"
                        data-bs-toggle="dropdown"
+                       th:text="#{nav_bar_recipes}"
                     >
                         Recipes
                     </a>
@@ -61,22 +78,31 @@
                         aria-expanded="false"
                     >
                         <li>
-                            <a th:href="@{/recipes/add}" class="dropdown-item">Add</a>
+                            <a th:href="@{/recipes/add}" class="dropdown-item"
+                               th:text="#{nav_bar_add}"
+                            >
+                                Add
+                            </a>
                         </li>
                         <li>
-                            <a th:href="@{/recipes/all}" class="dropdown-item">Browse</a>
+                            <a th:href="@{/recipes/all}" class="dropdown-item"
+                               th:text="#{nav_bar_browse}"
+                            >
+                                Browse
+                            </a>
                         </li>
                     </ul>
                 </li>
 
-<!--                Ingredients dropdown    -->
-<!--                TODO: at sm breakpoint show dropdown as rows    -->
+                <!--                Ingredients dropdown    -->
+                <!--                TODO: at sm breakpoint show dropdown as rows    -->
 
-                <li class="nav-item drop-down col-md">
+                <li class="nav-item drop-down col-lg">
                     <a href="#"
                        id="ingredientsDropdown"
                        class="nav-link dropdown-toggle d-inline"
                        data-bs-toggle="dropdown"
+                       th:text="#{nav_bar_ingredients}"
                     >
                         Ingredients
                     </a>
@@ -85,30 +111,41 @@
                         aria-expanded="false"
                     >
                         <li>
-                            <a th:href="@{/ingredients/add}" class="dropdown-item">Add</a>
+                            <a th:href="@{/ingredients/add}" class="dropdown-item"
+                               th:text="#{nav_bar_add}"
+                            >
+                                Add
+                            </a>
                         </li>
                         <li>
-                            <a th:href="@{/ingredients/all}" class="dropdown-item">Browse</a>
+                            <a th:href="@{/ingredients/all}" class="dropdown-item"
+                               th:text="#{nav_bar_browse}"
+                            >
+                                Browse
+                            </a>
                         </li>
                     </ul>
                 </li>
 
-<!--                Profile -->
+                <!--                Profile -->
 
-                <li class="nav-item col-md">
-                    <a th:href="@{/users/profile}" class="nav-link d-inline">
+                <li class="nav-item col-lg">
+                    <a th:href="@{/users/profile}" class="nav-link d-inline"
+                       th:text="#{nav_bar_profile}"
+                    >
                         Profile
                     </a>
                 </li>
 
-<!--                Admin dropdown   -->
-<!--                TODO: at sm breakpoint show dropdown as rows    -->
+                <!--                Admin dropdown   -->
+                <!--                TODO: at sm breakpoint show dropdown as rows    -->
                 <li sec:authorize="hasRole('ROLE_ADMIN')"
-                        class="nav-item drop-down col-md">
+                    class="nav-item drop-down col-lg">
                     <a href="#"
                        id="adminDropdown"
                        class="nav-link dropdown-toggle d-inline"
                        data-bs-toggle="dropdown"
+                       th:text="#{nav_bar_admin}"
                     >
                         Admin
                     </a>
@@ -117,25 +154,67 @@
                         aria-expanded="false"
                     >
                         <li>
-                            <a th:href="@{/admin/action}" class="dropdown-item">Action</a>
+                            <a th:href="@{/admin/action}" class="dropdown-item"
+                               th:text="#{nav_bar_admin_action}"
+                            >
+                                Action
+                            </a>
                         </li>
                         <li>
-                            <a th:href="@{/admin/another-action}" class="dropdown-item">Another action</a>
+                            <a th:href="@{/admin/another-action}" class="dropdown-item"
+                               th:text="#{nav_bar_admin_other_action}"
+                            >
+                                Another action
+                            </a>
                         </li>
                     </ul>
                 </li>
 
-<!--                Logout  -->
-                <li class="nav-item col-md">
+                <!--                Logout  -->
+                <li class="nav-item col-lg order-last">
                     <form th:action="@{/users/logout}"
                           th:method="POST"
                     >
-                        <button type="submit" class="nav-link btn  d-inline">Logout</button>
+                        <button type="submit" class="nav-link btn  d-inline"
+                                th:text="#{nav_bar_logout}"
+                        >
+                            Logout
+                        </button>
                     </form>
 
                 </li>
 
             </th:block>
+
+            <!--            Locale change   -->
+            <li class="nav-item col-lg">
+                <form th:method="GET" class="d-inline-block">
+                    <input type="hidden"
+                           name="lang"
+                           value="en_US"
+                    >
+                    <button type="submit"
+                            class="nav-link btn d-inline-block"
+                            th:classappend="${#locale.toString() == 'en_US'} ? 'text-decoration-underline'"
+                    >
+                        EN
+                    </button>
+                </form>
+                |
+                <form th:method="GET" class="d-inline-block">
+                    <input type="hidden"
+                           name="lang"
+                           value="bg_BG"
+                    >
+                    <button type="submit"
+                            class="nav-link btn d-inline-block"
+                            th:classappend="${#locale.toString() == 'bg_BG'} ? 'text-decoration-underline'"
+                    >
+                        BG
+                    </button>
+                </form>
+            </li>
+
         </ul>
     </nav>
 

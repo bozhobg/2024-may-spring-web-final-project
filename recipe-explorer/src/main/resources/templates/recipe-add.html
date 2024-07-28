@@ -12,7 +12,13 @@
 <header th:replace="~{fragments/commons::header-nav}"></header>
 
 <div class="container bg-white-opacity-90 p-5 rounded-4">
-    <h3 class="text-center">Add Recipe:</h3>
+
+    <h3 class="text-center"
+        th:text="#{recipe_add_form_title}"
+    >
+        Add Recipe:
+    </h3>
+
     <form th:action="@{/recipes/add}"
           th:method="post"
           th:object="${recipeAddData}"
@@ -23,6 +29,7 @@
         <div class="mb-3">
             <label for="name"
                    class="form-label h5"
+                   th:text="#{recipe_add_form_label_name}"
             >
                 Name
             </label>
@@ -47,6 +54,7 @@
         <div class="mb-3">
             <label for="mealType"
                    class="form-label h5"
+                   th:text="#{recipe_add_form_label_meal_type}"
             >
                 Meal Type
             </label>
@@ -80,6 +88,7 @@
         <div class="mb-3">
             <label for="ingredientIds"
                    class="form-label h5"
+                   th:text="#{recipe_add_form_label_ingredients}"
             >
                 Ingredients
             </label>
@@ -97,6 +106,7 @@
                             <button type="button"
                                     id="filterBtn"
                                     class="btn btn-sm btn-outline-info align-top m-2"
+                                    th:text="#{recipe_add_form_ingredients_filter}"
                             >
                                 Filter
                             </button>
@@ -117,6 +127,7 @@
                         <button type="button"
                                 id="addBtn"
                                 class="btn btn-sm btn-outline-success m-2"
+                                th:text="#{recipe_add_form_ingredients_add}"
                         >
                             Add
                         </button>
@@ -129,6 +140,7 @@
                                 multiple
                                 class="form-select-sm w-100 m-2"
                                 th:errorclass="'bg-danger is-invalid bg-opacity-50'"
+                                th:text="#{recipe_add_form_ingredients_confirm}"
                         >
                             <option value="">Selected Ing 1</option>
                             <option value="">Selected Ing 2</option>
@@ -138,6 +150,7 @@
                         <button type="button"
                                 id="removeBtn"
                                 class="btn btn-sm btn-outline-danger m-2"
+                                th:text="#{recipe_add_form_ingredients_remove}"
                         >
                             Remove
                         </button>
@@ -171,6 +184,7 @@
         <div class="mb-3">
             <label for="instructions"
                    class="form-label h5"
+                   th:text="#{recipe_add_form_label_instructions}"
             >
                 Instructions
             </label>
@@ -199,8 +213,16 @@
         <div class="mb-3">
             <label for="dietIds"
                    class="form-label h5"
+
             >
-                Dietary Types <small>(optional)</small>
+                <span th:text="#{recipe_add_form_label_dietary_types}">
+                    Dietary Types
+                </span>
+                <small
+                    th:text="#{recipe_add_form_label_dietary_types_optional}"
+            >
+                (optional)
+            </small>
             </label>
             <br>
             <div class="me-3 form-check-inline" th:each="diet : ${dietsData}">
@@ -224,7 +246,7 @@
                     <br>
                 </th:block>
 
-                    <!--                    Invalid dietary type/types!-->
+                <!--                    Invalid dietary type/types!-->
             </small>
 
 
@@ -234,7 +256,8 @@
 
         <div class="d-flex mt-5 justify-content-center">
             <button type="submit"
-                    class="btn btn-primary w-50"
+                    class="btn btn-primary w-50 fw-bold text-uppercase"
+                    th:text="#{recipe_add_form_submit}"
             >
                 Add Recipe
             </button>

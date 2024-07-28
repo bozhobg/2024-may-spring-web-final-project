@@ -40,18 +40,4 @@ spring:
 logging:
   level:
     web: debug
-#
-#open-meteo:
-#  api:
-#    url: "https://api.open-meteo.com/v1/forecast"
-#    query: "current"
-#    forecast: "temperature_2m"
-#    weatherCode: "weather_code"
-#  varna:
-#    latitude: 43.2166
-#    longitude: 27.9166
-#  sofia:
-#    latitude: 42.6975
-#    longitude: 23.3241
-
 
