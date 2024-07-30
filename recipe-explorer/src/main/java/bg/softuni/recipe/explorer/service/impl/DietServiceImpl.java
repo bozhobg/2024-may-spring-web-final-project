@@ -30,9 +30,7 @@ public class DietServiceImpl implements DietService {
 
         return this.dietRepository.findAll()
                 .stream()
-                .map(e -> new DietBasicDTO()
-                        .setId(e.getId())
-                        .setType(StringFormatter.mapConstantCaseToUpperCase(e.getType().name())))
+                .map(this::mapToBasic)
                 .toList();
     }
 
@@ -54,5 +52,13 @@ public class DietServiceImpl implements DietService {
         List<Diet> allById = this.dietRepository.findAllById(listIds);
 
         return new HashSet<>(allById);
+    }
+
+    private DietBasicDTO mapToBasic(Diet entity) {
+        return new DietBasicDTO()
+                .setId(entity.getId())
+                .setType(
+                        StringFormatter.mapConstantCaseToUpperCase(entity.getType().name())
+                );
     }
 }

@@ -31,11 +31,14 @@ public class DbInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        roleInitService.init();
-        userInitService.init();
-        dietInitService.init();
-        ingredientInitService.init();
-        recipeInitService.init();
+//        TODO: Disable for testing services, Enable to populate DB
+
+//        roleInitService.init();
+//        dietInitService.init();
+
+//        userInitService.init();
+//        ingredientInitService.init();
+//        recipeInitService.init();
     }
 
 }

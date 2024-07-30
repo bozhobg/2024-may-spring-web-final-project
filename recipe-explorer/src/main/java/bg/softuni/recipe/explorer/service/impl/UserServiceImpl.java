@@ -11,6 +11,7 @@ import bg.softuni.recipe.explorer.repository.UserRepository;
 import bg.softuni.recipe.explorer.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -20,16 +21,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
             ModelMapper modelMapper
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
     }
 
@@ -64,6 +68,7 @@ public class UserServiceImpl implements UserService {
     private User mapRegisterDataToEntity(UserRegisterDTO dto) {
 
         User map = this.modelMapper.map(dto, User.class);
+        map.setPassword(passwordEncoder.encode(dto.getPassword()));
         map.setRoles(Set.of(
                 this.roleRepository.findByName(RoleEnum.USER)
                         .orElseThrow(() -> new PersistenceException("Invalid default role!"))
