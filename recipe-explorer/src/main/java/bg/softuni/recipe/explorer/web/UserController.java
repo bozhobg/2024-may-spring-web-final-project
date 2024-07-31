@@ -76,7 +76,7 @@ public class UserController {
         try {
             this.userService.doRegister(bindingModel);
         } catch (UserRegisterPasswordsConfirmationMismatch exc) {
-//            TODO: cleaner approach
+//            TODO: cleaner approach -> with custom Type @nno! workshop
 //            TODO: i18n for mismatch!
 
             bindingResult.addError(new FieldError(REGISTER_ATTR, "password", exc.getMessage()));

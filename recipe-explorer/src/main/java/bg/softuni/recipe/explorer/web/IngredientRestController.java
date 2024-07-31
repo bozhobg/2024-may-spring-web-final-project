@@ -31,4 +31,6 @@ public class IngredientRestController {
         List<IngredientBasicDTO> allBasicDTOs = this.ingredientService.getAllBasic();
         return ResponseEntity.ok(allBasicDTOs);
     }
+
+//    TODO: put/patch, delete functionality
 }

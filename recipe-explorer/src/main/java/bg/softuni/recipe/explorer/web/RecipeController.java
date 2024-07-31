@@ -3,8 +3,10 @@ package bg.softuni.recipe.explorer.web;
 import bg.softuni.recipe.explorer.model.dto.DietBasicDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.enums.MealType;
+import bg.softuni.recipe.explorer.model.enums.RatingEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.DietService;
+import bg.softuni.recipe.explorer.service.RatingService;
 import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.validation.Valid;
@@ -26,14 +28,17 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final DietService dietService;
+    private final RatingService ratingService;
 
     @Autowired
     public RecipeController(
             RecipeService recipeService,
-            DietService dietService
+            DietService dietService,
+            RatingService ratingService
     ) {
         this.recipeService = recipeService;
         this.dietService = dietService;
+        this.ratingService = ratingService;
     }
 
 
@@ -64,7 +69,7 @@ public class RecipeController {
             BindingResult bindingResult,
             RedirectAttributes rAttrs,
             @AuthenticationPrincipal AppUserDetails userDetails
-            ) {
+    ) {
 
         if (bindingResult.hasErrors()) {
             RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, ADD_ATTR);
@@ -89,10 +94,19 @@ public class RecipeController {
     @GetMapping("/{id}")
     public String getDetails(
             @PathVariable Long id,
-            Model model
+            Model model,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
         model.addAttribute("recipe", this.recipeService.getDetailsById(id));
+        model.addAttribute("ratings", RatingEnum.values());
+
+        if (!model.containsAttribute("userRating")) {
+            model.addAttribute("userRating",
+                    this.ratingService.getDTOByRecipeIdAndUserId(id, appUserDetails.getId()));
+        }
 
         return "recipe-details";
     }
+
+//    TODO: put/patch, delete functionality
 }

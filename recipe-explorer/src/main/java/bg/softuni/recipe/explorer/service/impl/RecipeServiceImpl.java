@@ -46,8 +46,18 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public boolean isIdValid(Long id) {
+        return this.recipeRepository.existsById(id);
+    }
+
+    @Override
     public boolean isNameUnique(String name) {
         return !this.recipeRepository.existsByName(name);
+    }
+
+    @Override
+    public Recipe getById(Long id) {
+        return this.recipeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Recipe not found"));
     }
 
     @Override

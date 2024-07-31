@@ -33,9 +33,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers
-                                        ("/", "/users/login", "/users/register", "/about", "/error",
-//                                                TODO: secure:
-                                                "/api/ingredients/short"
+                                        ("/", "/users/login", "/users/register", "/about", "/error"
+//                                                "/api/ingredients/short" // -> how is it secured?
                                         ).permitAll()
                                 .requestMatchers(
                                         PathRequest.toStaticResources().atCommonLocations()

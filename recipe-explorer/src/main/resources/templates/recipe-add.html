@@ -140,7 +140,6 @@
                                 multiple
                                 class="form-select-sm w-100 m-2"
                                 th:errorclass="'bg-danger is-invalid bg-opacity-50'"
-                                th:text="#{recipe_add_form_ingredients_confirm}"
                         >
                             <option value="">Selected Ing 1</option>
                             <option value="">Selected Ing 2</option>
@@ -158,6 +157,7 @@
                         <button type="button"
                                 id="confirmBtn"
                                 class="btn btn-sm btn-outline-success m-2"
+                                th:text="#{recipe_add_form_ingredients_confirm}"
                         >
                             Confirm
                         </button>
