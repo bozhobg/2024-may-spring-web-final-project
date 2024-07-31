@@ -25,7 +25,7 @@ public class Recipe {
     private String instructions;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "meal")
+    @Column(name = "meal_type")
     private MealType mealType;
 
     @Column(name = "crated_on")

@@ -22,7 +22,8 @@ public class Ingredient {
     private UnitEnum unit;
 
     @Enumerated(EnumType.STRING)
-    private IngredientType type;
+    @Column(name = "ingredient_type")
+    private IngredientType ingredientType;
 
 //    TODO: added by, modified by, created on, modified on
 
@@ -68,12 +69,12 @@ public class Ingredient {
         return this;
     }
 
-    public IngredientType getType() {
-        return type;
+    public IngredientType getIngredientType() {
+        return ingredientType;
     }
 
-    public Ingredient setType(IngredientType type) {
-        this.type = type;
+    public Ingredient setIngredientType(IngredientType type) {
+        this.ingredientType = type;
         return this;
     }
 

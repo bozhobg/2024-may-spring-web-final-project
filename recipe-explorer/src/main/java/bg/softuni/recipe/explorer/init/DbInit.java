@@ -35,7 +35,6 @@ public class DbInit implements CommandLineRunner {
 
 //        roleInitService.init();
 //        dietInitService.init();
-
 //        userInitService.init();
 //        ingredientInitService.init();
 //        recipeInitService.init();

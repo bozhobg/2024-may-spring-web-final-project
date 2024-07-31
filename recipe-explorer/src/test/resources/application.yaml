@@ -1,19 +1,24 @@
 spring:
   application:
     name: recipe-explorer
+  datasource: # additional props
+        url: jdbc:hsqldb:mem:recipe_explorer_test;DB_CLOSE_DELAY=-1;sql.syntax_mys=true
+        username: sa
+        password:
+        driverClassName: org.hsqldb.jdbc.JDBCDriver
   jpa:
     defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
   sql:
     init:
       mode: never
 
 
-  #spring:
+#  spring:
 #  application:
 #    name: recipe-explorer
 #  sql:

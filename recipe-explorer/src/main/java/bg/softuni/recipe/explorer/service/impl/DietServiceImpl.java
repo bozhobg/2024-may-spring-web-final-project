@@ -58,7 +58,7 @@ public class DietServiceImpl implements DietService {
         return new DietBasicDTO()
                 .setId(entity.getId())
                 .setType(
-                        StringFormatter.mapConstantCaseToUpperCase(entity.getType().name())
+                        StringFormatter.mapConstantCaseToUpperCase(entity.getDietaryType().name())
                 );
     }
 }

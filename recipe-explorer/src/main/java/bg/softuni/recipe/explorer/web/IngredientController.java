@@ -59,7 +59,7 @@ public class IngredientController {
             BindingResult bindingResult,
             RedirectAttributes rAttrs,
             @AuthenticationPrincipal AppUserDetails userDetails
-            ) {
+    ) {
         if (bindingResult.hasErrors()) {
             RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, ADD_ATTR);
 

@@ -30,7 +30,7 @@ public class DietInitServiceImpl {
         List<Diet> newDiets = new ArrayList<>();
 
         for (DietaryType type : DietaryType.values()) {
-            newDiets.add(new Diet().setType(type)
+            newDiets.add(new Diet().setDietaryType(type)
                     .setDescription(type + "\n" + LOREM_IPSUM));
         }
 

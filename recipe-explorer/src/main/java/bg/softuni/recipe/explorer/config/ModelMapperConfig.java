@@ -5,7 +5,6 @@ import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Diet;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
-import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.utils.StringFormatter;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
@@ -67,7 +66,7 @@ public class ModelMapperConfig {
         protected List<String> convert(Set<Diet> source) {
 
             return source.stream()
-                    .map(e -> StringFormatter.mapConstantCaseToUpperCase(e.getType().name()))
+                    .map(e -> StringFormatter.mapConstantCaseToUpperCase(e.getDietaryType().name()))
                     .toList();
         }
     }

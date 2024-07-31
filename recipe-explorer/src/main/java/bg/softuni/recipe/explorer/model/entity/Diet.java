@@ -12,7 +12,8 @@ public class Diet {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private DietaryType type;
+    @Column(name = "dietary_type")
+    private DietaryType dietaryType;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
@@ -28,12 +29,12 @@ public class Diet {
         return this;
     }
 
-    public DietaryType getType() {
-        return type;
+    public DietaryType getDietaryType() {
+        return dietaryType;
     }
 
-    public Diet setType(DietaryType type) {
-        this.type = type;
+    public Diet setDietaryType(DietaryType dietaryType) {
+        this.dietaryType = dietaryType;
         return this;
     }
 

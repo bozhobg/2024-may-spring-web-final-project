@@ -2,11 +2,9 @@ package bg.softuni.recipe.explorer.web;
 
 import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.model.enums.RoleEnum;
-import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.repository.RoleRepository;
 import bg.softuni.recipe.explorer.repository.UserRepository;
 import bg.softuni.recipe.explorer.service.init.RoleInitServiceImpl;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,16 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.*;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -86,7 +81,7 @@ public class UserControllerIT {
             value = "existing",
             userDetailsServiceBeanName = "userDetailsService",
             setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void testForLoggedUser() throws Exception {
+    void testGetLoginAndRegisterRedirects_ForLoggedUser() throws Exception {
 
         mockMvc.perform(get("/users/login"))
                 .andExpect(status().is3xxRedirection())
@@ -95,6 +90,15 @@ public class UserControllerIT {
         mockMvc.perform(get("/users/register"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"));
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testGetsLoginAndRegister_ForAnonymous() throws Exception {
+        mockMvc.perform(get("/users/login"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/users/register"))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -150,7 +154,7 @@ public class UserControllerIT {
                         .param("firstName", USER_TEST.getFirstName())
                         .param("lastName", USER_TEST.getLastName())
                         .param("password", "xxxxx")
-                        .param("password", "yyyyy")
+                        .param("confirmPassword", "yyyyy")
                         .with(csrf())
                 ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/users/register"));
