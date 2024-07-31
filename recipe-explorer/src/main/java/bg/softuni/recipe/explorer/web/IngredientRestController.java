@@ -3,6 +3,7 @@ package bg.softuni.recipe.explorer.web;
 import bg.softuni.recipe.explorer.model.dto.IngredientBasicDTO;
 import bg.softuni.recipe.explorer.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +26,9 @@ public class IngredientRestController {
 //    TODO: secure rest controller endpoints
 
     @GetMapping("/short")
-    public List<IngredientBasicDTO> getAllBasic() {
+    public ResponseEntity<List<IngredientBasicDTO>> getAllBasic() {
 
-        return this.ingredientService.getAllBasic();
+        List<IngredientBasicDTO> allBasicDTOs = this.ingredientService.getAllBasic();
+        return ResponseEntity.ok(allBasicDTOs);
     }
 }
