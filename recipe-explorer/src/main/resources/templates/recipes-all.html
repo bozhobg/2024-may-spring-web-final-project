@@ -20,11 +20,21 @@
         >
             <img src="/images/default-image.jpg" class="card-img-top" alt="ingredient image">
             <div class="card-body">
-                <h5 th:text="*{name}"
-                    class="card-title"
+                <div class="card-title h5 justify-content-between d-flex"
                 >
-                    Card title
-                </h5>
+                    <div th:text="*{name}"
+                         class="d-inline-block"
+                    >
+                        Name
+                    </div>
+                    <div th:text="*{averageRating != null || averageRating == 0}
+                            ? ${#numbers.formatDecimal(rec.averageRating, 1, 1, 'POINT')} : #{common_ratings_na}"
+                         class="d-inline-block mx-3"
+
+                    >
+                        N/A
+                    </div>
+                </div>
                 <h6 th:text="#{common_ingredients}">
                     Ingredients
                 </h6>

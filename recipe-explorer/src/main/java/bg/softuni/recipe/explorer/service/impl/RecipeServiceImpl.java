@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Set;
@@ -87,6 +88,15 @@ public class RecipeServiceImpl implements RecipeService {
         return this.recipeRepository
                 .save(newRecipe)
                 .getId();
+    }
+
+    @Override
+    public void updateAvgRating(Long recipeId, BigDecimal averageRating) {
+
+        Recipe recipe = this.recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ObjectNotFoundException("Recipe not found!"));
+        recipe.setAverageRating(averageRating);
+        this.recipeRepository.save(recipe);
     }
 
     private Recipe mapToEntity(RecipeAddDTO dto, Long userId) {

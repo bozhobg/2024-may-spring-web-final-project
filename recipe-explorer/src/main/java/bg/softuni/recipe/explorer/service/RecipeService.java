@@ -6,6 +6,7 @@ import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface RecipeService {
@@ -24,4 +25,6 @@ public interface RecipeService {
 
     @Transactional
     Long add(RecipeAddDTO dto, Long userId);
+
+    void updateAvgRating(Long recipeId, BigDecimal averageRating);
 }

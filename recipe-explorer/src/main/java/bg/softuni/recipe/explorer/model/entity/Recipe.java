@@ -162,21 +162,8 @@ public class Recipe {
         return averageRating;
     }
 
-    public Recipe updateAverageRating() {
-
-        int sum = this.ratings.stream()
-                .mapToInt(r -> r.getRating().getAsInt())
-                .sum();
-
-        int size = this.ratings.size();
-
-        if (size == 0) {
-            this.averageRating = BigDecimal.ZERO;
-        } else {
-            this.averageRating = BigDecimal.valueOf(sum)
-                    .divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_UP);
-        }
-
+    public Recipe setAverageRating(BigDecimal averageRating) {
+        this.averageRating = averageRating;
         return this;
     }
 }

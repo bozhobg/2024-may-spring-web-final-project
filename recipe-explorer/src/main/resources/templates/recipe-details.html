@@ -50,7 +50,10 @@
                     <div class="h5 mb-3">
                         <div class="mb-2">
                             <span th:text="#{common_rating}"></span>:
-                            <span th:text="*{averageRating != null} ? *{averageRating} : _">N/A</span>
+                            <span th:text="*{averageRating != null || averageRating == 0}
+                            ? ${#numbers.formatDecimal(recipe.averageRating, 1, 1, 'POINT')} : #{common_ratings_na}">
+                                N/A
+                            </span>
                         </div>
                         <form th:action="@{/ratings/add}"
                               th:method="PUT"

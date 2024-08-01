@@ -3,6 +3,7 @@ package bg.softuni.recipe.explorer.model.dto;
 import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class RecipeShortInfoDTO {
 
     private List<DietaryType> dietTypes;
 
-//    private BigDecimal averageRating;
+    private BigDecimal averageRating;
 
     public RecipeShortInfoDTO() {
         this.ingredientNames = new ArrayList<>();
@@ -67,6 +68,15 @@ public class RecipeShortInfoDTO {
 
     public RecipeShortInfoDTO setDietaryTypes(List<DietaryType> dietTypes) {
         this.dietTypes = dietTypes;
+        return this;
+    }
+
+    public BigDecimal getAverageRating() {
+        return averageRating;
+    }
+
+    public RecipeShortInfoDTO setAverageRating(BigDecimal averageRating) {
+        this.averageRating = averageRating;
         return this;
     }
 }

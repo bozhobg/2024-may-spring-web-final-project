@@ -20,11 +20,11 @@
         >
             <img src="/images/default-image.jpg" class="card-img-top" alt="ingredient image">
             <div class="card-body">
-                <h5 th:text="*{name}"
-                    class="card-title"
+                <div th:text="*{name}"
+                    class="card-title h5 d-inline-block"
                 >
-                    Card title
-                </h5>
+                    Ingredient name
+                </div>
                 <p th:text="*{description}"
                    class="card-text card-text-improved overflow-hidden"
                 >
