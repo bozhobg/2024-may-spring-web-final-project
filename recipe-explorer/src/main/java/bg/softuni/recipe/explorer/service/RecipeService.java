@@ -2,6 +2,7 @@ package bg.softuni.recipe.explorer.service;
 
 import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
+import bg.softuni.recipe.explorer.model.dto.RecipeEditDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +27,14 @@ public interface RecipeService {
     @Transactional
     Long add(RecipeAddDTO dto, Long userId);
 
+    @Transactional
+    RecipeEditDTO getEditDTO(Long id);
+
+    void put(Long recipeId, RecipeEditDTO dto);
+
+    @Transactional
+    void delete(Long id);
+
     void updateAvgRating(Long recipeId, BigDecimal averageRating);
+
 }

@@ -4,6 +4,9 @@ async function loadSelector() {
 
     const BASE_URL = 'http://localhost:8080/api/ingredients/short';
 
+    if (!window.location) { return;}
+    const currentPath = window.location.pathname;
+
     const availableIngSelect = document.getElementById('availableIngredients');
     const chosenIngSelect = document.getElementById('ingredientIds')
     const filterInput = document.getElementById('ingInputFilter')
@@ -13,7 +16,7 @@ async function loadSelector() {
     const confirmBtn = document.getElementById('confirmBtn')
 
     clearChosen();
-    let available = await loadAvailableIngredients();
+    let available = await loadIngredients();
 
     filterBtn.addEventListener('click', handleFilter);
     addBtn.addEventListener('click', handleAdd);
@@ -34,7 +37,7 @@ async function loadSelector() {
     function handleRemove(e) {
         e.preventDefault();
 
-        let selected = document.querySelectorAll('#ingredients option:checked');
+        let selected = document.querySelectorAll('#ingredientIds option:checked');
         selected.forEach(opt => {
             opt.remove();
             availableIngSelect.appendChild(opt);
@@ -77,17 +80,33 @@ async function loadSelector() {
         result.forEach(i => availableIngSelect.appendChild(createOption(i)));
     }
 
-    async function loadAvailableIngredients() {
+    async function loadIngredients() {
         availableIngSelect.innerHTML = '';
+        clearChosen();
 
-        const res = await fetch(BASE_URL);
-        const data = await res.json();
+        let recIngs = [];
+        let recIngIds = [];
+
+        let pathSegments = currentPath.split('/');
+
+        if (pathSegments[pathSegments.length - 1] === 'edit') {
+            let resRec = await fetch(BASE_URL + '/recipe/' + pathSegments[pathSegments.length - 2]);
+            recIng = await resRec.json()
+            recIngIds = recIng.map(ri => ri.id);
+        }
+
+        const resAll = await fetch(BASE_URL);
+        const allIngs = await resAll.json();
 
         let available = [];
 
-        data.forEach(i => {
-            available.push(i);
-            availableIngSelect.appendChild(createOption(i));
+        allIngs.forEach(i => {
+            if (recIngIds.includes(i.id)) {
+                chosenIngSelect.appendChild(createOption(i));
+            } else {
+                available.push(i);
+                availableIngSelect.appendChild(createOption(i));
+            }
         });
 
         return available;

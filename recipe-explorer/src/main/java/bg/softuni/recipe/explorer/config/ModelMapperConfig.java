@@ -1,5 +1,6 @@
 package bg.softuni.recipe.explorer.config;
 
+import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Diet;
@@ -25,7 +26,9 @@ public class ModelMapperConfig {
         ModelMapper modelMapper = new ModelMapper();
 
         Converter<Set<Ingredient>, List<String>> ingredientToNameListConverter = new IngredientToNameListConverter();
-        Converter<Set<Diet>, List<String>> dietToTypeListConverter = new DietToTypeListConverter();
+        Converter<Set<Diet>, List<String>> dietToNameListConverter = new DietToTypeListConverter();
+        Converter<Set<Diet>, List<Long>> dietToIdListConverter = new DietToIdListConverter();
+
 
 //        TypeMap Recipe -> RecipeShortDTO
         TypeMap<Recipe, RecipeShortInfoDTO> typeMapToRecipeShort =
@@ -34,7 +37,7 @@ public class ModelMapperConfig {
 
         typeMapToRecipeShort.addMappings(mapper -> mapper.using(ingredientToNameListConverter)
                         .map(Recipe::getIngredients, RecipeShortInfoDTO::setIngredientNames))
-                .addMappings(mapper -> mapper.using(dietToTypeListConverter)
+                .addMappings(mapper -> mapper.using(dietToNameListConverter)
                         .map(Recipe::getDiets, RecipeShortInfoDTO::setDietaryTypes));
 
 //        TypeMap Recipe -> RecipeDetailsDTO
@@ -43,8 +46,15 @@ public class ModelMapperConfig {
 
         typeMapToRecipeDetails.addMappings(mapper -> mapper.using(ingredientToNameListConverter)
                         .map(Recipe::getIngredients, RecipeDetailsDTO::setIngredientNames))
-                .addMappings(mapper -> mapper.using(dietToTypeListConverter)
+                .addMappings(mapper -> mapper.using(dietToNameListConverter)
                         .map(Recipe::getDiets, RecipeDetailsDTO::setDietaryTypes));
+
+//        TypeMap Recipe -> RecipeAddEditDTO
+        TypeMap<Recipe, RecipeAddDTO> typeMapToRecipeAddEdit =
+                modelMapper.typeMap(Recipe.class, RecipeAddDTO.class);
+
+        typeMapToRecipeAddEdit.addMappings(mapper -> mapper.using(dietToIdListConverter)
+                .map(Recipe::getDiets, RecipeAddDTO::setDietIds));
 
         return modelMapper;
     }
@@ -67,6 +77,17 @@ public class ModelMapperConfig {
 
             return source.stream()
                     .map(e -> StringFormatter.mapConstantCaseToUpperCase(e.getDietaryType().name()))
+                    .toList();
+        }
+    }
+
+    private static class DietToIdListConverter extends AbstractConverter<Set<Diet>, List<Long>> {
+
+        @Override
+        protected List<Long> convert(Set<Diet> diets) {
+
+            return diets.stream()
+                    .map(Diet::getId)
                     .toList();
         }
     }

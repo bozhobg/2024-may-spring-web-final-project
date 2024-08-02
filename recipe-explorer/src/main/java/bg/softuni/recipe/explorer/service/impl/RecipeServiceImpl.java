@@ -1,13 +1,12 @@
 package bg.softuni.recipe.explorer.service.impl;
 
+import bg.softuni.recipe.explorer.constants.ExceptionMessages;
 import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
 import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
+import bg.softuni.recipe.explorer.model.dto.RecipeEditDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
-import bg.softuni.recipe.explorer.model.entity.Diet;
-import bg.softuni.recipe.explorer.model.entity.Ingredient;
-import bg.softuni.recipe.explorer.model.entity.Recipe;
-import bg.softuni.recipe.explorer.model.entity.User;
+import bg.softuni.recipe.explorer.model.entity.*;
 import bg.softuni.recipe.explorer.repository.RecipeRepository;
 import bg.softuni.recipe.explorer.service.DietService;
 import bg.softuni.recipe.explorer.service.IngredientService;
@@ -76,14 +75,14 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeDetailsDTO getDetailsById(Long id) {
 
         RecipeDetailsDTO dto = mapToDetails(this.recipeRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Recipe not found!")));
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND)));
 
         return dto;
     }
 
     @Override
     public Long add(RecipeAddDTO dto, Long userId) {
-        Recipe newRecipe = mapToEntity(dto, userId);
+        Recipe newRecipe = mapAddToEntity(dto, userId);
 
         return this.recipeRepository
                 .save(newRecipe)
@@ -91,15 +90,47 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public RecipeEditDTO getEditDTO(Long id) {
+        Recipe recipe = this.recipeRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
+
+        RecipeEditDTO map = modelMapper.map(recipe, RecipeEditDTO.class);
+
+        return map;
+    }
+
+    @Override
+    public void put(Long recipeId, RecipeEditDTO dto) {
+        Recipe updated = mapEditToEntity(dto, recipeId);
+
+        this.recipeRepository.save(updated);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (id == null) {
+//            TODO: invalid Long value
+            throw new ObjectNotFoundException("Recipe id invalid!");
+        }
+
+        // ratings clean up
+        Recipe recipe = this.recipeRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
+
+        this.recipeRepository.delete(recipe);
+    }
+
+    @Override
     public void updateAvgRating(Long recipeId, BigDecimal averageRating) {
 
         Recipe recipe = this.recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ObjectNotFoundException("Recipe not found!"));
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
         recipe.setAverageRating(averageRating);
         this.recipeRepository.save(recipe);
     }
 
-    private Recipe mapToEntity(RecipeAddDTO dto, Long userId) {
+
+    private Recipe mapAddToEntity(RecipeAddDTO dto, Long userId) {
         Recipe map = modelMapper.map(dto, Recipe.class);
 
         Set<Diet> diets = dietService.getAllByIds(dto.getDietIds());
@@ -108,11 +139,29 @@ public class RecipeServiceImpl implements RecipeService {
 
         map.setCreatedOn(Instant.now())
                 .setModifiedOn(Instant.now())
-                .setAuthor(this.userService.getUserById(userId))
+                .setAuthor(author)
                 .setIngredients(ingredients)
                 .setDiets(diets);
 
         return map;
+    }
+
+
+    private Recipe mapEditToEntity(RecipeEditDTO dto, Long recipeId) {
+
+        Recipe recipe = this.recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
+
+        Set<Diet> diets = dietService.getAllByIds(dto.getDietIds());
+        Set<Ingredient> ingredients = ingredientService.getAllByIds(dto.getIngredientIds());
+
+//        setting only editable fields
+
+        return recipe.setName(dto.getName())
+                .setModifiedOn(Instant.now())
+                .setInstructions(dto.getInstructions())
+                .setIngredients(ingredients)
+                .setDiets(diets);
     }
 
     private RecipeShortInfoDTO mapToShort(Recipe entity) {

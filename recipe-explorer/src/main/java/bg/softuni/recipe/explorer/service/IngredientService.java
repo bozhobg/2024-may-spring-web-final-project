@@ -6,6 +6,7 @@ import bg.softuni.recipe.explorer.model.dto.IngredientDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.enums.IngredientType;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +29,7 @@ public interface IngredientService {
     Set<Ingredient> getAllByIds(List<Long> listIds);
 
     Long add(IngredientAddDTO dto, Long userId);
+
+    @Transactional
+    List<IngredientBasicDTO> getAllBasicForRecipeId(Long recipeId);
 }

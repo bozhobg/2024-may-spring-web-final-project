@@ -1,15 +1,18 @@
 package bg.softuni.recipe.explorer.service.impl;
 
+import bg.softuni.recipe.explorer.constants.ExceptionMessages;
 import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
 import bg.softuni.recipe.explorer.model.dto.IngredientAddDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientBasicDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientDetailsDTO;
 import bg.softuni.recipe.explorer.model.dto.IngredientShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
+import bg.softuni.recipe.explorer.model.entity.Recipe;
 import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.model.enums.IngredientType;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.repository.IngredientRepository;
+import bg.softuni.recipe.explorer.repository.RecipeRepository;
 import bg.softuni.recipe.explorer.service.IngredientService;
 import bg.softuni.recipe.explorer.service.UserService;
 import bg.softuni.recipe.explorer.utils.StringFormatter;
@@ -23,16 +26,19 @@ import java.util.*;
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
+    private final RecipeRepository recipeRepository;
     private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public IngredientServiceImpl(
             IngredientRepository ingredientRepository,
+            RecipeRepository recipeRepository,
             UserService userService,
             ModelMapper modelMapper
     ) {
         this.ingredientRepository = ingredientRepository;
+        this.recipeRepository = recipeRepository;
         this.userService = userService;
         this.modelMapper = modelMapper;
     }
@@ -111,6 +117,17 @@ public class IngredientServiceImpl implements IngredientService {
         return this.ingredientRepository
                 .save(newIngredient)
                 .getId();
+    }
+
+    @Override
+    public List<IngredientBasicDTO> getAllBasicForRecipeId(Long recipeId) {
+
+        return this.recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND))
+                .getIngredients()
+                .stream()
+                .map(this::mapToBasic)
+                .toList();
     }
 
     private Ingredient mapToEntity(IngredientAddDTO dto, Long userId) {

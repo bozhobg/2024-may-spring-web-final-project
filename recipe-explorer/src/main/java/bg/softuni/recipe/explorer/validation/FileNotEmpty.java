@@ -1,6 +1,5 @@
 package bg.softuni.recipe.explorer.validation;
 
-import bg.softuni.recipe.explorer.constants.ErrorMessages;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -15,7 +14,7 @@ import java.lang.annotation.Target;
 public @interface FileNotEmpty {
 
 //    TODO:
-    String message() default ErrorMessages.FILE_EMPTY;
+    String message();
 
     Class<?>[] groups() default { };
 

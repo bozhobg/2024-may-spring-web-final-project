@@ -55,7 +55,7 @@ public class Recipe {
     )
     private Set<Diet> diets;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = {CascadeType.ALL})
     private Set<Rating> ratings;
 
 //  TODO: private Set<Comments> comments;

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head th:replace="~{fragments/commons::head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<header th:replace="~{fragments/commons::header-nav}"></header>
+
+<div class="container bg-white-opacity-90 p-5 rounded-4">
+
+    <h3 class="text-center"
+        th:text="#{recipe_edit_form_title}"
+    >
+        Add Recipe:
+    </h3>
+
+    <form th:action="@{/recipes/{id}/edit(id=${recipeId})}"
+          th:method="PUT"
+          th:object="${recipeEditData}"
+    >
+
+        <!--        Name    -->
+
+        <div class="mb-3">
+            <label for="name"
+                   class="form-label h5"
+                   th:text="#{recipe_add_form_label_name}"
+            >
+                Name
+            </label>
+            <!--            required minlength="5" maxlength="30"   -->
+            <input th:field="*{name}"
+                   name="name"
+                   type="text"
+                   id="name"
+                   class="form-control"
+                   th:errorclass="'bg-danger is-invalid bg-opacity-50'"
+            >
+            <small th:errors="*{name}"
+                   id="nameError"
+                   class="invalid-feedback text-danger"
+            >
+                Name must be between 5 and 30 characters!
+            </small>
+        </div>
+
+        <!--    Meal Type   -->
+
+        <div class="mb-3">
+            <label for="mealType"
+                   class="form-label h5"
+                   th:text="#{recipe_add_form_label_meal_type}"
+            >
+                Meal Type
+            </label>
+
+            <!--            required    -->
+            <select th:field="*{mealType}"
+                    name="mealType"
+                    id="mealType"
+                    class="form-select"
+                    th:errorclass="'bg-danger is-invalid bg-opacity-50'"
+            >
+                <option value="" selected>Select meal type</option>
+                <option th:each="type : ${mealTypes}"
+                        th:value="${type.name()}"
+                        th:text="${#strings.capitalize(#strings.toLowerCase(type))}"
+                >
+                    Please select:
+                </option>
+
+            </select>
+            <small th:errors="*{mealType}"
+                   id="mealTypeError"
+                   class="invalid-feedback text-danger"
+            >
+                Must select a valid meal type!
+            </small>
+        </div>
+
+        <!--        Ingredient Ids  -->
+        <!--        TODO: ingredients: use js for selection and adding   -->
+        <div class="mb-3">
+            <label for="ingredientIds"
+                   class="form-label h5"
+                   th:text="#{recipe_add_form_label_ingredients}"
+            >
+                Ingredients
+            </label>
+
+            <div class="container">
+                <div class="row align-items-end">
+                    <div class="col-md-6 text-center available-container">
+                        <div>
+                            <label for="ingInputFilter" class="d-none"></label>
+                            <input type="text"
+                                   id="ingInputFilter"
+                                   class="form-control-sm m-2"
+                            >
+                            <!--                                   class="rounded-1 border-1 p-1 me-2"-->
+                            <button type="button"
+                                    id="filterBtn"
+                                    class="btn btn-sm btn-outline-info align-top m-2"
+                                    th:text="#{recipe_add_form_ingredients_filter}"
+                            >
+                                Filter
+                            </button>
+                        </div>
+                        <label for="availableIngredients" class="d-none"></label>
+                        <select name=available""
+                                id="availableIngredients"
+                                multiple
+                                size="4"
+                                class="form-select-sm w-100 m-2"
+                        >
+                            <!--                                class="w-75 mb-3 rounded-1 border-1 p-1"-->
+                            <option value="">Available Ing 1</option>
+                            <option value="">Available Ing 2</option>
+                            <option value="">Available Ing 3</option>
+                        </select>
+                        <br>
+                        <button type="button"
+                                id="addBtn"
+                                class="btn btn-sm btn-outline-success m-2"
+                                th:text="#{recipe_add_form_ingredients_add}"
+                        >
+                            Add
+                        </button>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <select th:field="*{ingredientIds}"
+                                name="ingredientIds"
+                                id="ingredientIds"
+                                size="4"
+                                multiple
+                                class="form-select-sm w-100 m-2"
+                                th:errorclass="'bg-danger is-invalid bg-opacity-50'"
+                        >
+                            <option value="">Selected Ing 1</option>
+                            <option value="">Selected Ing 2</option>
+                            <option value="">Selected Ing 3</option>
+                        </select>
+                        <br>
+                        <button type="button"
+                                id="removeBtn"
+                                class="btn btn-sm btn-outline-danger m-2"
+                                th:text="#{recipe_add_form_ingredients_remove}"
+                        >
+                            Remove
+                        </button>
+                        <!--                        TODO: add edit button after confirmation -->
+                        <button type="button"
+                                id="confirmBtn"
+                                class="btn btn-sm btn-outline-success m-2"
+                                th:text="#{recipe_add_form_ingredients_confirm}"
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--            required    -->
+
+            <small th:if="${#fields.hasErrors('ingredientIds')}"
+                   id="ingredientIdsError"
+                   class="text-danger "
+            >
+                <th:block th:each="err :${#fields.errors('ingredientIds')}">
+                    <span th:text="${err}"></span>
+                    <br>
+                </th:block>
+                <!--                Must select valid ingredients!-->
+            </small>
+        </div>
+
+        <!--        Instructions    -->
+
+        <div class="mb-3">
+            <label for="instructions"
+                   class="form-label h5"
+                   th:text="#{recipe_add_form_label_instructions}"
+            >
+                Instructions
+            </label>
+
+            <!--            required minlength="50"     -->
+            <textarea th:field="*{instructions}"
+                      name="instructions"
+
+                      rows="6"
+                      type="textarea"
+                      id="instructions"
+                      class="form-control"
+                      th:errorclass="'bg-danger is-invalid bg-opacity-50'"
+            >
+            </textarea>
+            <small th:errors="*{instructions}"
+                   id="instructionsError"
+                   class="invalid-feedback text-danger"
+            >
+                Instructions should be at least 50 characters long!
+            </small>
+        </div>
+
+        <!--        Diet Ids    -->
+
+        <div class="mb-3">
+            <label for="dietIds"
+                   class="form-label h5"
+
+            >
+                <span th:text="#{recipe_add_form_label_dietary_types}">
+                    Dietary Types
+                </span>
+                <small
+                    th:text="#{recipe_add_form_label_dietary_types_optional}"
+            >
+                (optional)
+            </small>
+            </label>
+            <br>
+            <div class="me-3 form-check-inline" th:each="diet : ${dietsData}">
+                <input name="dietIds"
+                       id="dietIds"
+                       class="form-check-inline me-2"
+                       type="checkbox"
+                       th:field="*{dietIds}"
+                       th:value="${diet.id}"
+                       th:text="${diet.type}"
+                       th:errorclass="'bg-danger is-invalid'"
+                >
+            </div>
+            <br>
+            <small th:if="${#fields.hasErrors('dietIds')}"
+                   id="dietIdsError"
+                   class="text-danger"
+            >
+                <th:block th:each="err : ${#fields.errors('dietIds')}">
+                    <span th:text="${err}"></span>
+                    <br>
+                </th:block>
+
+                <!--                    Invalid dietary type/types!-->
+            </small>
+
+
+        </div>
+
+        <!--        Add Button  -->
+
+        <div class="d-flex mt-5 justify-content-center">
+            <button type="submit"
+                    class="btn btn-primary w-50 fw-bold text-uppercase"
+                    th:text="#{recipe_edit_form_submit}"
+            >
+                Edit Recipe
+            </button>
+        </div>
+
+    </form>
+    <script th:src="@{/js/ingredients-selector.js}"></script>
+</div>
+
+</body>
+</html>

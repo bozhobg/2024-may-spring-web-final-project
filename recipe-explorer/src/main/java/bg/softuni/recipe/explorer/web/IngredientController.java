@@ -89,4 +89,6 @@ public class IngredientController {
         model.addAttribute("ingredient", this.ingredientService.getDetailsById(id));
         return "ingredient-details";
     }
+
+//    TODO: delete? (due to recipe having ingredients), put/patch functionality
 }

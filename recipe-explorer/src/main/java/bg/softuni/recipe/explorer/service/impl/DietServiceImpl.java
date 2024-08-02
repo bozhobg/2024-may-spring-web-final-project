@@ -36,15 +36,14 @@ public class DietServiceImpl implements DietService {
 
     @Override
     public boolean areIdsValid(List<Long> listIds) {
-        boolean exist = false;
 
         for (Long id : listIds) {
-            exist = this.dietRepository.existsById(id);
-
-            if (!exist) return exist;
+            if (!this.dietRepository.existsById(id)) {
+                return false;
+            }
         }
 
-        return exist;
+        return true;
     }
 
     @Override
