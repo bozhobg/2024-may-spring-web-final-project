@@ -110,7 +110,6 @@ public class RecipeController {
         return "recipe-details";
     }
 
-//    TODO: put/patch, delete? ((comments and) ratings relation) functionality
 
 //    @ResponseStatus(HttpStatus.NO_CONTENT) -> prevents redirect on client side!
     @DeleteMapping("/{id}")
