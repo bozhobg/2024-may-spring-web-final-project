@@ -1,9 +1,9 @@
 spring:
   application:
-    name: recipe-explorer
+    name: recipe-explorer-comments
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:3306/recipe_explorer?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
+    url: "jdbc:mysql://localhost:3306/recipe_explorer_comments?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
     username: root
     password: ${DB_PASSWORD}
   servlet:
@@ -21,26 +21,27 @@ spring:
     # Choose either MySQL 8 or MySQL 5 below
     # For MySQL 8
     #    auto-detected this is default option
-    #    database-platform: org.hibernate.dialect.MySQLDialect
+#    database-platform: org.hibernate.dialect.MySQLDialect
     #For MySQL 5
     #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
         show_sql: true
     defer-datasource-initialization: true # to allow hibernate table definition first, than populate tables script based
-  #Cloudinary Properties
-  #cloudinary:
-  #api-key:
-  #api-secret:
-  #cloud-name:
+
 logging:
   level:
     web: debug
 
 server:
-  port: 8080
+  port: 8081
 
+#Cloudinary Properties
+#cloudinary:
+#api-key:
+#api-secret:
+#cloud-name:
