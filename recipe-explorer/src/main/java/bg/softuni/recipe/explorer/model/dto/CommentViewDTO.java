@@ -8,6 +8,7 @@ public class CommentViewDTO {
     private String username;
     private String message;
     private Instant modifiedOn;
+    private boolean isApproved;
 
     public CommentViewDTO() {}
 
@@ -44,6 +45,15 @@ public class CommentViewDTO {
 
     public CommentViewDTO setModifiedOn(Instant modifiedOn) {
         this.modifiedOn = modifiedOn;
+        return this;
+    }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public CommentViewDTO setApproved(boolean approved) {
+        isApproved = approved;
         return this;
     }
 }

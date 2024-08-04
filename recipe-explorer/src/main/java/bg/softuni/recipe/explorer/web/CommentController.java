@@ -1,5 +1,6 @@
 package bg.softuni.recipe.explorer.web;
 
+import bg.softuni.recipe.explorer.model.dto.CommentRestDTO;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/comments")
@@ -50,6 +52,32 @@ public class CommentController {
             HttpServletRequest request
     ) {
         this.commentService.approve(id);
+
+        return "redirect:" + request.getHeader("Referer");
+    }
+
+    @GetMapping("/{id}")
+    public String loadEdit(
+            @PathVariable Long id,
+            HttpServletRequest request,
+            RedirectAttributes rAttr
+    ) {
+
+        CommentRestDTO commentRestDTO = this.commentService.get(id);
+        rAttr.addFlashAttribute("editComment", commentRestDTO);
+
+        return "redirect:" + request.getHeader("Referer");
+    }
+
+    @PutMapping("/{id}")
+    public String loadEdit(
+            @PathVariable Long id,
+            HttpServletRequest request,
+            @RequestParam String message,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
+    ) {
+
+        this.commentService.edit(id, message, appUserDetails.getId());
 
         return "redirect:" + request.getHeader("Referer");
     }

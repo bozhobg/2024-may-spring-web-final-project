@@ -1,9 +1,6 @@
 package bg.softuni.recipe.explorer.web;
 
-import bg.softuni.recipe.explorer.model.dto.CommentViewDTO;
-import bg.softuni.recipe.explorer.model.dto.DietBasicDTO;
-import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
-import bg.softuni.recipe.explorer.model.dto.RecipeEditDTO;
+import bg.softuni.recipe.explorer.model.dto.*;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import bg.softuni.recipe.explorer.model.enums.RatingEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
@@ -114,6 +111,11 @@ public class RecipeController {
         model.addAttribute("ratings", RatingEnum.values());
 
         model.addAttribute("comments", new ArrayList<CommentViewDTO>());
+
+        if (!model.containsAttribute("editComment")) {
+
+            model.addAttribute("editComment", new CommentRestDTO());
+        }
 
 //        TODO: resolve rest client handling
         try {

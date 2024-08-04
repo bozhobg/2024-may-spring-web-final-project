@@ -202,8 +202,10 @@
         <!--        Comment Post Form   -->
 
         <div class="bg-light rounded-4 p-4 mb-3 container">
-            <form th:action="@{/comments/recipe/{id}(id=*{id})}"
+            <form th:if="${editComment.message == null}"
+                  th:action="@{/comments/recipe/{id}(id=*{id})}"
                   th:method="POST"
+
             >
                 <label for="message"
                        class="mb-3 h5 d-block"
@@ -228,6 +230,34 @@
                 </button>
             </form>
 
+            <form th:if="${editComment.message != null}"
+                  th:action="@{/comments/{id}(id=${editComment.id})}"
+                  th:method="PUT"
+
+            >
+                <label for="editCommentMessage"
+                       class="mb-3 h5 d-block"
+                >
+                    Edit comment:
+                </label>
+
+
+                <textarea id="editCommentMessage"
+                          name="message"
+                          th:field="${editComment.message}"
+                          class="d-block mb-3 form-text fs-5 mw-100"
+                          rows="4"
+                          cols="80"
+                >
+
+                </textarea>
+
+                <button type="submit"
+                        class="btn btn-primary text-uppercase fw-bold"
+                >
+                    Update
+                </button>
+            </form>
         </div>
 
         <!--        Comments -->
@@ -239,59 +269,77 @@
             </h5>
 
             <th:block th:each="c : ${comments}">
-                <figure>
-                    <blockquote class="blockquote mb-4">
-                        <p class="fs-5"
-                           th:text="${c.message}"
-                        >
-                            Lorem ipsum odor amet, consectetuer adipiscing elit. Tempor lacinia ad montes mattis varius
-                            suspendisse class nulla consequat. Justo lacus consequat erat leo feugiat aliquam curabitur.
-                            Lectus sit finibus lectus lorem ac sagittis. Aliquet class primis ridiculus pharetra justo
-                            primis est. Aliquam ac porta metus volutpat tincidunt dignissim.
-                        </p>
 
-                    </blockquote>
-                    <figcaption class="blockquote-footer fs-5"
-                                th:text="|By: ${c.username}, modified on: ${#temporals.format(c.modifiedOn,'dd MMM yyyy HH:mm')}|"
-                    >
-                        username on date
-                    </figcaption>
-                    <div>
-                        <form th:action="@{/comments/{id}/approve(id=${c.id})}"
-                              th:method="PATCH"
-                              class="d-inline-block me-2"
-                              sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
-                        >
-                            <button type="submit"
-                                    class="btn btn-sm btn-outline-success"
+                <div th:if="${c.approved == true
+                            || #authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')')
+                            || #authentication.name == c.username}"
+                >
+
+                    <figure>
+                        <blockquote class="blockquote mb-4">
+                            <p class="fs-5"
+                               th:text="${c.message}"
                             >
-                                Approve
-                            </button>
-                        </form>
-                        <form th:action="@{/comments/{id}(id=${c.id})}"
-                              th:method="PUT"
-                              class="d-inline-block me-2"
-                              th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') || c.username == #authentication.name}"
+                                Lorem ipsum odor amet, consectetuer adipiscing elit. Tempor lacinia ad montes mattis
+                                varius
+                                suspendisse class nulla consequat. Justo lacus consequat erat leo feugiat aliquam
+                                curabitur.
+                                Lectus sit finibus lectus lorem ac sagittis. Aliquet class primis ridiculus pharetra
+                                justo
+                                primis est. Aliquam ac porta metus volutpat tincidunt dignissim.
+                            </p>
+
+                        </blockquote>
+                        <figcaption class="blockquote-footer fs-5"
+                                    th:text="|By: ${c.username}, modified on: ${#temporals.format(c.modifiedOn,'dd MMM yyyy HH:mm')}|"
                         >
-                            <button type="submit"
-                                    class="btn btn-sm btn-outline-primary"
+                            username on date
+                        </figcaption>
+                        <div>
+                            <div th:if="${c.approved == false && c.username == #authentication.name}"
+                                 class="d-inline-block me-2"
                             >
-                                Edit
-                            </button>
-                        </form>
-                        <form th:action="@{/comments/{id}(id=${c.id})}"
-                              th:method="DELETE"
-                              class="d-inline-block me-2"
-                              th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') || c.username == #authentication.name}"
-                        >
-                            <button type="submit"
-                                    class="btn btn-sm btn-outline-danger"
+                                <button class="disabled btn btn-sm btn-outline-dark">Not Approved</button>
+                            </div>
+
+                            <form th:action="@{/comments/{id}/approve(id=${c.id})}"
+                                  th:method="PATCH"
+                                  class="d-inline-block me-2"
+                                  th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') && !c.approved}"
                             >
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </figure>
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-success"
+                                >
+                                    Approve
+                                </button>
+                            </form>
+
+                            <form th:action="@{/comments/{id}(id=${c.id})}"
+                                  th:method="GET"
+                                  class="d-inline-block me-2"
+                                  th:if="${c.username == #authentication.name}"
+                            >
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-primary"
+                                >
+                                    Edit
+                                </button>
+                            </form>
+                            <form th:action="@{/comments/{id}(id=${c.id})}"
+                                  th:method="DELETE"
+                                  class="d-inline-block me-2"
+                                  th:if="${(#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') && !c.approved)
+                                  || c.username == #authentication.name}"
+                            >
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                >
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </figure>
+                </div>
             </th:block>
 
         </div>

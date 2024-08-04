@@ -1,5 +1,6 @@
 package bg.softuni.recipe.explorer.service.impl;
 
+import bg.softuni.recipe.explorer.model.dto.CommentEditDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentRestDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentRestPostDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentViewDTO;
@@ -88,9 +89,31 @@ public class CommentServiceImpl implements CommentService {
                 .retrieve();
     }
 
+    @Override
+    public CommentRestDTO get(Long id) {
+
+        return restClient.get()
+                .uri("/{id}", id)
+                .retrieve()
+                .body(CommentRestDTO.class);
+    }
+
+    @Override
+    public void edit(Long id, String message, Long authorId) {
+
+        restClient.put()
+                .uri("/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new CommentEditDTO()
+                        .setAuthorId(authorId)
+                        .setMessage(message)
+                ).retrieve();
+    }
+
     private CommentViewDTO mapToViewDTO(CommentRestDTO dto) {
 
         return new CommentViewDTO()
+                .setApproved(dto.isApproved())
                 .setUsername(
                         this.userService.getUserById(dto.getAuthorId()).getUsername()
                 ).setModifiedOn(dto.getModifiedOn())
