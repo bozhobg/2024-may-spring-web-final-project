@@ -17,6 +17,8 @@ public class CommentRestDTO {
 
     private boolean isApproved;
 
+    public CommentRestDTO() {}
+
     public Long getId() {
         return id;
     }

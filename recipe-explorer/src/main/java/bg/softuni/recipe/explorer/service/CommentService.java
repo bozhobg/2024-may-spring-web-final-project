@@ -8,4 +8,10 @@ import java.util.List;
 public interface CommentService {
 
     List<CommentViewDTO> getCommentsForRecipe(Long recipeId) throws JsonProcessingException;
+
+    void approve(Long id);
+
+    void delete(Long id);
+
+    void post(String message, Long recipeId, Long authorId);
 }

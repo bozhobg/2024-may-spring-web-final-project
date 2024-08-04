@@ -1,6 +1,7 @@
 package bg.softuni.recipe.explorer.service.impl;
 
 import bg.softuni.recipe.explorer.model.dto.CommentRestDTO;
+import bg.softuni.recipe.explorer.model.dto.CommentRestPostDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentViewDTO;
 import bg.softuni.recipe.explorer.service.CommentService;
 import bg.softuni.recipe.explorer.service.UserService;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -57,6 +59,33 @@ public class CommentServiceImpl implements CommentService {
         return body.stream()
                 .map(this::mapToViewDTO)
                 .toList();
+    }
+
+    @Override
+    public void approve(Long id) {
+        restClient.patch()
+                .uri("/{id}/approve", id)
+                .retrieve();
+    }
+
+    @Override
+    public void delete(Long id) {
+
+        restClient.delete()
+                .uri("/{id}", id)
+                .retrieve();
+    }
+
+    @Override
+    public void post(String message, Long recipeId, Long authorId) {
+
+        restClient.post()
+                .uri("/recipe/{recipeId}", recipeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new CommentRestPostDTO()
+                        .setAuthorId(authorId)
+                        .setMessage(message))
+                .retrieve();
     }
 
     private CommentViewDTO mapToViewDTO(CommentRestDTO dto) {

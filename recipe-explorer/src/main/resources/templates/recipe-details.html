@@ -205,14 +205,15 @@
             <form th:action="@{/comments/recipe/{id}(id=*{id})}"
                   th:method="POST"
             >
-                <label for="commentInputInd"
+                <label for="message"
                        class="mb-3 h5 d-block"
                 >
                     Post comment:
                 </label>
 
 
-                <textarea id="commentInputInd"
+                <textarea id="message"
+                          name="message"
                           class="d-block mb-3 form-text fs-5 mw-100"
                           rows="4"
                           cols="80"
@@ -261,7 +262,9 @@
                               class="d-inline-block me-2"
                               sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
                         >
-                            <button class="btn btn-sm btn-outline-success">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-success"
+                            >
                                 Approve
                             </button>
                         </form>
@@ -270,15 +273,20 @@
                               class="d-inline-block me-2"
                               th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') || c.username == #authentication.name}"
                         >
-                            <button class="btn btn-sm btn-outline-primary">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-primary"
+                            >
                                 Edit
                             </button>
                         </form>
                         <form th:action="@{/comments/{id}(id=${c.id})}"
+                              th:method="DELETE"
                               class="d-inline-block me-2"
                               th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') || c.username == #authentication.name}"
                         >
-                            <button class="btn btn-sm btn-outline-danger">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                            >
                                 Delete
                             </button>
                         </form>
