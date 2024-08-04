@@ -13,8 +13,8 @@ import java.util.Random;
 @Service
 public class CommentServiceInitImpl {
 
-    private final static Long USER_ID_BOUND = 3L;
-    private final static Long RECIPE_ID_BOUND = 5L;
+    private final static Long USER_ID_BOUND = 9L;
+    private final static Long RECIPE_ID_BOUND = 10L;
     private final static Long COMMENT_COUNT_BOUND = 4L;
 
     private final CommentRepository commentRepository;
@@ -27,6 +27,9 @@ public class CommentServiceInitImpl {
     }
 
     public void init() {
+
+        if (this.commentRepository.count() > 0) return;
+
         Random random = new Random();
         List<Comment> newComments = new ArrayList<>();
 
@@ -35,14 +38,15 @@ public class CommentServiceInitImpl {
 
             for (int c = 0; c < commentsCount; c++) {
                 long userId = random.nextLong(USER_ID_BOUND) + 1;
+                Instant now = Instant.now();
 
                 newComments.add(
                         new Comment()
                                 .setMessage(String.format("Comment %d, for recipe %d, by user %d", c + 1, recipeId, userId))
                                 .setAuthorId(userId)
                                 .setRecipeId(recipeId)
-                                .setCreateOn(Instant.now())
-                                .setModifiedOn(Instant.now())
+                                .setCreateOn(now)
+                                .setModifiedOn(now)
                                 .setApproved(random.nextBoolean())
                 );
             }

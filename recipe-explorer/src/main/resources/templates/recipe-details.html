@@ -14,8 +14,10 @@
 <div class="container"
      th:object="${recipe}"
 >
+    <!--        Top container -->
     <div class="container-lg">
         <div class="row">
+            <!--            Image top-left container -->
             <div class="col-xl-7 mb-3 align-content-center">
                 <!--               TODO: Carousel    -->
                 <img th:src="@{/images/default-image.jpg}"
@@ -23,8 +25,13 @@
                      class="img-fluid d-block mx-auto rounded-4"
                 >
             </div>
+
+            <!--            Top-right container -->
+
             <div class="col-xl-5 flex-column align-content-center">
-                <!--                General info    -->
+
+                <!--                Top recipe info    -->
+
                 <div class="bg-light rounded-4 p-3 mb-3">
                     <h5 th:text="*{name}"
                         class="mb-3"
@@ -72,22 +79,28 @@
                                 </button>
                             </form>
 
-<!--                            TODO: approve   -->
-<!--                            <form th:action="@{/recipes/{id}/approve(id=*{id})}"-->
-<!--                                  th:method="PATCH"-->
-<!--                                  class="text-center d-inline-block d-sm-block"-->
-<!--                            >-->
-<!--                                <button type="submit"-->
-<!--                                        class="btn btn-sm btn-outline-success mb-2"-->
-<!--                                        th:text="#{common_approve}"-->
-<!--                                >-->
-<!--                                    Approve-->
-<!--                                </button>-->
-<!--                            </form>-->
+                            <!--                            TODO: approve   -->
+                            <!--                            <form th:action="@{/recipes/{id}/approve(id=*{id})}"-->
+                            <!--                                  th:method="PATCH"-->
+                            <!--                                  class="text-center d-inline-block d-sm-block"-->
+                            <!--                            >-->
+                            <!--                                <button type="submit"-->
+                            <!--                                        class="btn btn-sm btn-outline-success mb-2"-->
+                            <!--                                        th:text="#{common_approve}"-->
+                            <!--                                >-->
+                            <!--                                    Approve-->
+                            <!--                                </button>-->
+                            <!--                            </form>-->
                         </div>
                     </div>
                 </div>
+
+                <!--                Middle: Rating, Meal Type and  Dietary preferences-->
+
                 <div class="bg-light rounded-4 p-3 mb-3">
+
+                    <!--                    Rating Section-->
+
                     <div class="h5 mb-3">
                         <div class="mb-2">
                             <span th:text="#{common_rating}"></span>:
@@ -131,10 +144,16 @@
                             </button>
                         </form>
                     </div>
+
+                    <!--                    Meal Type -->
+
                     <h6 th:text="#{common_meal_type}">
                         Meal type:
                     </h6>
                     <p th:text="*{mealType}"></p>
+
+                    <!--                    Dietary Preferences -->
+
                     <h6 th:text="#{common_dietary_preferences}">
                         Dietary preferences:
                     </h6>
@@ -144,6 +163,9 @@
                         Diets....
                     </p>
                 </div>
+
+                <!--                Bottom Ingredients -->
+
                 <div class="bg-light rounded-4 p-3 mb-3">
                     <h5 class="mb-3"
                         th:text="#{common_ingredients}"
@@ -158,24 +180,116 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <!--            Instructions -->
-            <div class="col-12">
-                <div class="bg-light rounded-4 p-3 mb-3">
-                    <h5 class="mb-3"
-                        th:text="#{common_instructions}">
-                        Instructions:
-                    </h5>
-                    <p th:text="*{instructions}">
-                        Instructions here...
-                    </p>
-                </div>
-            </div>
+
+
+        <!--            Instructions Row -->
+
+        <div class="bg-light rounded-4 p-4 mb-3">
+            <h5 class="mb-3"
+                th:text="#{common_instructions}">
+                Instructions:
+            </h5>
+            <p th:text="*{instructions}"
+               class="fs-5"
+            >
+                Instructions here...
+            </p>
+        </div>
+
+
+        <!--        Comments -->
+
+        <!--        Comment Post Form   -->
+
+        <div class="bg-light rounded-4 p-4 mb-3 container">
+            <form th:action="@{/comments/recipe/{id}(id=*{id})}"
+                  th:method="POST"
+            >
+                <label for="commentInputInd"
+                       class="mb-3 h5 d-block"
+                >
+                    Post comment:
+                </label>
+
+
+                <textarea id="commentInputInd"
+                          class="d-block mb-3 form-text fs-5 mw-100"
+                          rows="4"
+                          cols="80"
+                >
+
+                </textarea>
+
+                <button type="submit"
+                        class="btn btn-primary text-uppercase fw-bold"
+                >
+                    Post
+                </button>
+            </form>
+
+        </div>
+
+        <!--        Comments -->
+
+        <div class="bg-light rounded-4 p-4 mb-3 container">
+
+            <h5 class="mb-3">
+                Comments:
+            </h5>
+
+            <th:block th:each="c : ${comments}">
+                <figure>
+                    <blockquote class="blockquote mb-4">
+                        <p class="fs-5"
+                           th:text="${c.message}"
+                        >
+                            Lorem ipsum odor amet, consectetuer adipiscing elit. Tempor lacinia ad montes mattis varius
+                            suspendisse class nulla consequat. Justo lacus consequat erat leo feugiat aliquam curabitur.
+                            Lectus sit finibus lectus lorem ac sagittis. Aliquet class primis ridiculus pharetra justo
+                            primis est. Aliquam ac porta metus volutpat tincidunt dignissim.
+                        </p>
+
+                    </blockquote>
+                    <figcaption class="blockquote-footer fs-5"
+                                th:text="|By: ${c.username}, modified on: ${#temporals.format(c.modifiedOn,'dd MMM yyyy HH:mm')}|"
+                    >
+                        username on date
+                    </figcaption>
+                    <div>
+                        <form th:action="@{/comments/{id}/approve(id=${c.id})}"
+                              th:method="PATCH"
+                              class="d-inline-block me-2"
+                              sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')"
+                        >
+                            <button class="btn btn-sm btn-outline-success">
+                                Approve
+                            </button>
+                        </form>
+                        <form th:action="@{/comments/{id}(id=${c.id})}"
+                              th:method="PUT"
+                              class="d-inline-block me-2"
+                              th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') || c.username == #authentication.name}"
+                        >
+                            <button class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </button>
+                        </form>
+                        <form th:action="@{/comments/{id}(id=${c.id})}"
+                              class="d-inline-block me-2"
+                              th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MODERATOR'')') || c.username == #authentication.name}"
+                        >
+                            <button class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </figure>
+            </th:block>
+
         </div>
 
     </div>
 
-    <!--    TODO: buttons edit/delete/approve-->
 </div>
 
 </body>

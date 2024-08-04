@@ -33,11 +33,11 @@ public class DbInit implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        TODO: Disable for testing services, Enable to populate DB
 
-//        roleInitService.init();
-//        dietInitService.init();
-//        userInitService.init();
-//        ingredientInitService.init();
-//        recipeInitService.init();
+        roleInitService.init();
+        dietInitService.init();
+        userInitService.init();
+        ingredientInitService.init();
+        recipeInitService.init();
     }
 
 }

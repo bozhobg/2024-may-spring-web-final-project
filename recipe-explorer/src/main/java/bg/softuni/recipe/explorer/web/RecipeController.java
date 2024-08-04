@@ -1,15 +1,18 @@
 package bg.softuni.recipe.explorer.web;
 
+import bg.softuni.recipe.explorer.model.dto.CommentViewDTO;
 import bg.softuni.recipe.explorer.model.dto.DietBasicDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeEditDTO;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import bg.softuni.recipe.explorer.model.enums.RatingEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
+import bg.softuni.recipe.explorer.service.CommentService;
 import bg.softuni.recipe.explorer.service.DietService;
 import bg.softuni.recipe.explorer.service.RatingService;
 import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,8 +20,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,16 +35,19 @@ public class RecipeController {
     private final RecipeService recipeService;
     private final DietService dietService;
     private final RatingService ratingService;
+    private final CommentService commentService;
 
     @Autowired
     public RecipeController(
             RecipeService recipeService,
             DietService dietService,
-            RatingService ratingService
+            RatingService ratingService,
+            CommentService commentService
     ) {
         this.recipeService = recipeService;
         this.dietService = dietService;
         this.ratingService = ratingService;
+        this.commentService = commentService;
     }
 
 
@@ -98,9 +106,21 @@ public class RecipeController {
             @PathVariable Long id,
             Model model,
             @AuthenticationPrincipal AppUserDetails appUserDetails
-    ) {
+
+    ) throws JsonProcessingException {
+
+
         model.addAttribute("recipe", this.recipeService.getDetailsById(id));
         model.addAttribute("ratings", RatingEnum.values());
+
+        model.addAttribute("comments", new ArrayList<CommentViewDTO>());
+
+//        TODO: resolve rest client handling
+        try {
+            model.addAttribute("comments", this.commentService.getCommentsForRecipe(id));
+        } catch (RestClientException rce) {
+            model.addAttribute("comments", new ArrayList<CommentViewDTO>());
+        }
 
         if (!model.containsAttribute("userRating")) {
             model.addAttribute("userRating",

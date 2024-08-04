@@ -1,9 +1,8 @@
-package bg.softuni.recipe.explorer.comments.model.dto;
+package bg.softuni.recipe.explorer.model.dto;
 
 import java.time.Instant;
 
-public class CommentViewDTO {
-
+public class CommentRestDTO {
     private Long id;
 
     private String message;
@@ -18,13 +17,11 @@ public class CommentViewDTO {
 
     private boolean isApproved;
 
-    public CommentViewDTO() {}
-
     public Long getId() {
         return id;
     }
 
-    public CommentViewDTO setId(Long id) {
+    public CommentRestDTO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -33,7 +30,7 @@ public class CommentViewDTO {
         return message;
     }
 
-    public CommentViewDTO setMessage(String message) {
+    public CommentRestDTO setMessage(String message) {
         this.message = message;
         return this;
     }
@@ -42,7 +39,7 @@ public class CommentViewDTO {
         return authorId;
     }
 
-    public CommentViewDTO setAuthorId(Long authorId) {
+    public CommentRestDTO setAuthorId(Long authorId) {
         this.authorId = authorId;
         return this;
     }
@@ -51,7 +48,7 @@ public class CommentViewDTO {
         return recipeId;
     }
 
-    public CommentViewDTO setRecipeId(Long recipeId) {
+    public CommentRestDTO setRecipeId(Long recipeId) {
         this.recipeId = recipeId;
         return this;
     }
@@ -60,7 +57,7 @@ public class CommentViewDTO {
         return createOn;
     }
 
-    public CommentViewDTO setCreateOn(Instant createOn) {
+    public CommentRestDTO setCreateOn(Instant createOn) {
         this.createOn = createOn;
         return this;
     }
@@ -69,7 +66,7 @@ public class CommentViewDTO {
         return modifiedOn;
     }
 
-    public CommentViewDTO setModifiedOn(Instant modifiedOn) {
+    public CommentRestDTO setModifiedOn(Instant modifiedOn) {
         this.modifiedOn = modifiedOn;
         return this;
     }
@@ -78,7 +75,7 @@ public class CommentViewDTO {
         return isApproved;
     }
 
-    public CommentViewDTO setApproved(boolean approved) {
+    public CommentRestDTO setApproved(boolean approved) {
         isApproved = approved;
         return this;
     }

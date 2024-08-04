@@ -3,6 +3,7 @@ package bg.softuni.recipe.explorer.comments.service;
 import bg.softuni.recipe.explorer.comments.exception.CommentNotFound;
 import bg.softuni.recipe.explorer.comments.exception.CommentsNotFoundForRecipe;
 import bg.softuni.recipe.explorer.comments.model.dto.CommentAddDTO;
+import bg.softuni.recipe.explorer.comments.model.dto.CommentEditDTO;
 import bg.softuni.recipe.explorer.comments.model.dto.CommentViewDTO;
 import bg.softuni.recipe.explorer.comments.model.entity.Comment;
 import bg.softuni.recipe.explorer.comments.repository.CommentRepository;
@@ -64,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentViewDTO add(CommentAddDTO addDTO, Long recipeId) {
 //        TODO: errs and handling?
 
-        Comment newComment = mapToEntity(addDTO, recipeId);
+        Comment newComment = mapToNewEntity(addDTO, recipeId);
 
         this.commentRepository.save(newComment);
 
@@ -86,6 +87,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public CommentViewDTO edit(CommentEditDTO editDTO, Long commentId) {
+        Comment comment = this.commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFound(
+                        String.format(COMMENT_NOT_FOUND_FORMAT, commentId), commentId));
+
+        mapToEditedEntity(editDTO, comment);
+
+        this.commentRepository.save(comment);
+
+        return mapToViewDTO(comment);
+    }
+
+    @Override
     public void delete(Long id) {
 //        TODO: should it throw for not existing?
 
@@ -97,7 +111,7 @@ public class CommentServiceImpl implements CommentService {
         return modelMapper.map(entity, CommentViewDTO.class);
     }
 
-    private Comment mapToEntity(CommentAddDTO addDTO, Long recipeId) {
+    private Comment mapToNewEntity(CommentAddDTO addDTO, Long recipeId) {
 
         return modelMapper.map(addDTO, Comment.class)
                 .setId(null)
@@ -105,5 +119,14 @@ public class CommentServiceImpl implements CommentService {
                 .setCreateOn(Instant.now())
                 .setModifiedOn(Instant.now())
                 .setRecipeId(recipeId);
+    }
+
+    private Comment mapToEditedEntity(CommentEditDTO editDTO, Comment entity) {
+
+        return entity
+                .setAuthorId(editDTO.getAuthorId())
+                .setMessage(editDTO.getMessage())
+                .setModifiedOn(Instant.now())
+                .setApproved(false);
     }
 }

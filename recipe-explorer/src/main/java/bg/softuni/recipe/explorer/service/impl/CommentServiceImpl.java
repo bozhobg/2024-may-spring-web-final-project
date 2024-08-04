@@ -1,0 +1,71 @@
+package bg.softuni.recipe.explorer.service.impl;
+
+import bg.softuni.recipe.explorer.model.dto.CommentRestDTO;
+import bg.softuni.recipe.explorer.model.dto.CommentViewDTO;
+import bg.softuni.recipe.explorer.service.CommentService;
+import bg.softuni.recipe.explorer.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.xml.stream.events.Comment;
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Service
+public class CommentServiceImpl implements CommentService {
+
+    private final RestClient restClient;
+    private final UserService userService;
+    private final ObjectMapper jacksonObjectMapper;
+
+    @Autowired
+    public CommentServiceImpl(
+            RestClient restClient,
+            UserService userService,
+            ObjectMapper jacksonObjectMapper) {
+        this.restClient = restClient;
+        this.userService = userService;
+        this.jacksonObjectMapper = jacksonObjectMapper;
+    }
+
+    @Override
+    public List<CommentViewDTO> getCommentsForRecipe(Long recipeId) {
+
+//        TODO: handle error return from comments service?
+
+        List<CommentRestDTO> body = restClient.get()
+                .uri("/recipe/{id}", recipeId)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+
+        if (body == null) return List.of();
+
+//        TODO: what if user or recipe doesn't exist on client side?
+//        TODO: scheduled/on event clean up of comments for users and recipes data on comments service
+
+        return body.stream()
+                .map(this::mapToViewDTO)
+                .toList();
+    }
+
+    private CommentViewDTO mapToViewDTO(CommentRestDTO dto) {
+
+        return new CommentViewDTO()
+                .setUsername(
+                        this.userService.getUserById(dto.getAuthorId()).getUsername()
+                ).setModifiedOn(dto.getModifiedOn())
+                .setMessage(dto.getMessage())
+                .setId(dto.getId());
+    }
+}

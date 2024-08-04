@@ -3,6 +3,7 @@ package bg.softuni.recipe.explorer.comments.web;
 import bg.softuni.recipe.explorer.comments.exception.CommentNotFound;
 import bg.softuni.recipe.explorer.comments.exception.CommentsNotFoundForRecipe;
 import bg.softuni.recipe.explorer.comments.model.dto.CommentAddDTO;
+import bg.softuni.recipe.explorer.comments.model.dto.CommentEditDTO;
 import bg.softuni.recipe.explorer.comments.model.dto.CommentViewDTO;
 import bg.softuni.recipe.explorer.comments.model.dto.ErrorNotFoundResult;
 import bg.softuni.recipe.explorer.comments.service.CommentService;
@@ -71,7 +72,15 @@ public class CommentController {
         return ResponseEntity.ok(view);
     }
 
-//    TODO: Edit comment!
+    @PutMapping("/{id}")
+    public ResponseEntity<CommentViewDTO> editComment(
+            @PathVariable("id") Long id,
+            @RequestBody CommentEditDTO bindingModel
+    ) {
+        CommentViewDTO view = this.commentService.edit(bindingModel, id);
+
+        return ResponseEntity.ok(view);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CommentViewDTO> deleteComment(
