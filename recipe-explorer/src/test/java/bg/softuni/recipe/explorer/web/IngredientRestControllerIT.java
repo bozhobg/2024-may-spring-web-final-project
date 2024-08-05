@@ -60,6 +60,8 @@ public class IngredientRestControllerIT {
 
     @BeforeEach
     void init() {
+//        TODO: Disable DbInit
+
         roleInitService.init();
 
         TEST_USER = this.userRepository.save(new User()
@@ -94,6 +96,8 @@ public class IngredientRestControllerIT {
 
     @AfterEach
     void tearDown() {
+//        TODO: Disable DbInit
+
         List<Long> userIds = this.userRepository.findAll()
                 .stream()
                 .map(User::getId)

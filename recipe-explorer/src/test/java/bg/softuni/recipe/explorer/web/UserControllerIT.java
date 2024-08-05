@@ -57,6 +57,8 @@ public class UserControllerIT {
 
     @BeforeEach
     void init() {
+//        TODO: Disable DbInit
+
         this.roleInitService.init();
 
         this.userRepository.save(
@@ -73,6 +75,8 @@ public class UserControllerIT {
 
     @AfterEach
     void tearDown() {
+//        TODO: Disable DbInit
+
         this.userRepository.deleteAll();
     }
 

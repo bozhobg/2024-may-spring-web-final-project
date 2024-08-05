@@ -2,10 +2,7 @@ package bg.softuni.recipe.explorer.service.impl;
 
 import bg.softuni.recipe.explorer.constants.ExceptionMessages;
 import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
-import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
-import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
-import bg.softuni.recipe.explorer.model.dto.RecipeEditDTO;
-import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
+import bg.softuni.recipe.explorer.model.dto.*;
 import bg.softuni.recipe.explorer.model.entity.*;
 import bg.softuni.recipe.explorer.repository.RecipeRepository;
 import bg.softuni.recipe.explorer.service.DietService;
@@ -69,6 +66,15 @@ public class RecipeServiceImpl implements RecipeService {
                 .toList();
 
         return allShort;
+    }
+
+    @Override
+    public List
+            <RecipeBasicDTO> getAllBasicByUser(Long userId) {
+        return this.recipeRepository.findAllByAuthor_Id(userId)
+                .stream()
+                .map(r -> modelMapper.map(r, RecipeBasicDTO.class))
+                .toList();
     }
 
     @Override

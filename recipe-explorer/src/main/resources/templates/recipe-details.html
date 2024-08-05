@@ -200,7 +200,7 @@
         <!--        Comments -->
 
         <!--        Comment Post Form   -->
-
+<!--        TODO: better way to render which form, checks by comment.message == null -->
         <div class="bg-light rounded-4 p-4 mb-3 container">
             <form th:if="${editComment.message == null}"
                   th:action="@{/comments/recipe/{id}(id=*{id})}"
@@ -219,9 +219,7 @@
                           class="d-block mb-3 form-text fs-5 mw-100"
                           rows="4"
                           cols="80"
-                >
-
-                </textarea>
+                ></textarea>
 
                 <button type="submit"
                         class="btn btn-primary text-uppercase fw-bold"
@@ -248,9 +246,7 @@
                           class="d-block mb-3 form-text fs-5 mw-100"
                           rows="4"
                           cols="80"
-                >
-
-                </textarea>
+                ></textarea>
 
                 <button type="submit"
                         class="btn btn-primary text-uppercase fw-bold"

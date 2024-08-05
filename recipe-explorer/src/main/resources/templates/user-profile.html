@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head th:replace="~{fragments/commons::head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<header th:replace="~{fragments/commons::header-nav}"></header>
+
+<div class="container max-width-600"
+     th:object="${userData}"
+>
+    <div class="row g-3 ">
+        <div class="mb-3 align-content-center">
+            <img th:src="@{/images/default-image.jpg}"
+                 alt="Recipe Image"
+                 class="img-fluid d-block mx-auto rounded-4"
+            >
+        </div>
+        <div class="bg-light rounded-4 p-3 mb-3">
+            <h5 class="mb-3"
+            >
+                <span>Username: </span><span th:text="*{username}">username</span>
+            </h5>
+            <p>
+                <span>Full Name: </span><span th:text="*{getFullName()}">Full Name</span>
+            </p>
+            <p>
+                <span>Email: </span><span th:text="*{email}">email</span>
+            </p>
+        </div>
+
+        <div class="bg-light rounded-4 p-3 mb-3">
+            <h5 th:text="${userRecipes.isEmpty()} ? 'User has not posted any recipes.' : 'User Recipes:'">
+                User Recipes:
+
+            </h5>
+
+            <th:block th:each="r : ${userRecipes}"
+                      th:object="${r}"
+            >
+                <div class="row mb-3">
+                    <div class="col-10">
+                        <span th:text="*{name}"
+                              class="align-text-top"
+                        >
+                            Recipe name
+                        </span>
+                    </div>
+                    <div class="col-2 text-center">
+                        <a th:href="@{/recipes/{id}(id=*{id})}"
+                           class="btn btn-primary btn-sm"
+                        >
+                            Details
+                        </a>
+                    </div>
+                </div>
+
+            </th:block>
+        </div>
+    </div>
+    <!--    TODO: buttons edit/delete/approve-->
+</div>
+
+
+</body>
+</html>

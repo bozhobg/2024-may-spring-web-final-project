@@ -33,6 +33,7 @@ public class HomeControllerIT {
 
     @BeforeEach
     void init() {
+//        TODO: Disable DbInit
 
         this.userRepository.save(
                 new User()
@@ -46,6 +47,8 @@ public class HomeControllerIT {
 
     @AfterEach
     void tearDown() {
+//        TODO: Disable DbInit
+
         this.userRepository.deleteAll();
     }
 

@@ -1,20 +1,20 @@
 package bg.softuni.recipe.explorer.web;
 
 import bg.softuni.recipe.explorer.exceptions.UserRegisterPasswordsConfirmationMismatch;
+import bg.softuni.recipe.explorer.model.dto.UserInfoDTO;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
+import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.service.UserService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -24,12 +24,15 @@ public class UserController {
     private final static String REGISTER_ATTR = "registerData";
 
     private final UserService userService;
+    private final RecipeService recipeService;
 
     @Autowired
     public UserController(
-            UserService userService
+            UserService userService,
+            RecipeService recipeService
     ) {
         this.userService = userService;
+        this.recipeService = recipeService;
     }
 
     @ModelAttribute(REGISTER_ATTR)
@@ -89,5 +92,29 @@ public class UserController {
 
 
         return "redirect:/users/login";
+    }
+
+    @GetMapping("/profile")
+    public String getProfile(
+            Model model,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
+    ) {
+
+        model.addAttribute("userData", this.userService.getUserData(appUserDetails.getId()));
+        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUser(appUserDetails.getId()));
+
+        return "user-profile";
+    }
+
+    @GetMapping("/profile/{id}")
+    public String getUserProfile(
+            Model model,
+            @PathVariable Long id
+    ) {
+
+        model.addAttribute("userData", this.userService.getUserData(id));
+        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUser(id));
+
+        return "user-profile";
     }
 }
