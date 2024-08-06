@@ -69,8 +69,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDTO getUserData(Long id) {
-        User user = this.userRepository.findById(id)
+    public UserInfoDTO getProfileDataByUsername(String username) {
+        User user = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.USER_NOT_FOUND));
 
         UserInfoDTO userData = modelMapper.map(user, UserInfoDTO.class);

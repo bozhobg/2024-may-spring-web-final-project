@@ -40,7 +40,18 @@
                     </h5>
                     <div class="row">
                         <div class="col-sm-8 mb-3">
-                            <p><span th:text="#{common_added_by}"></span>: <span th:text="*{authorUsername}"></span></p>
+                            <p>
+                                <span th:text="#{common_added_by}">
+                                    added by
+                                </span>
+                                <span> : </span>
+                                <a th:href="@{/users/{u}(u=*{authorUsername})}"
+                                   th:text="*{authorUsername}"
+                                   class="link-dark"
+                                >
+                                    username
+                                </a>
+                            </p>
                             <p>
                                 <span th:text="#{common_created_on}"></span>:
                                 <span th:text="${#temporals.format(recipe.createdOn, 'dd MMM yyyy HH:mm')}">
@@ -200,7 +211,7 @@
         <!--        Comments -->
 
         <!--        Comment Post Form   -->
-<!--        TODO: better way to render which form, checks by comment.message == null -->
+        <!--        TODO: better way to render which form, checks by comment.message == null -->
         <div class="bg-light rounded-4 p-4 mb-3 container">
             <form th:if="${editComment.message == null}"
                   th:action="@{/comments/recipe/{id}(id=*{id})}"

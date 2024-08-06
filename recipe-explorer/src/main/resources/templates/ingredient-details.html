@@ -36,7 +36,16 @@
                     <span th:text="#{common_ingredient_type}"></span>: <span th:text="*{type}"></span>
                 </p>
                 <p class="mb-0">
-                    <span th:text="#{common_added_by}"></span>: <span th:text="*{addedByUsername}"></span>
+                    <span th:text="#{common_added_by}">
+                        added by
+                    </span>
+                    <span> : </span>
+                    <a th:href="@{/users/{u}(u=*{addedByUsername})}"
+                       th:text="*{addedByUsername}"
+                       class="link-dark"
+                    >
+                        username
+                    </a>
                 </p>
             </div>
             <div class="bg-light rounded-4 p-3 mb-3">

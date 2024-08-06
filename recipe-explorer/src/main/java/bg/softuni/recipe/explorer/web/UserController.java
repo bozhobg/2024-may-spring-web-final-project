@@ -99,22 +99,30 @@ public class UserController {
             @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
 
-        model.addAttribute("userData", this.userService.getUserData(appUserDetails.getId()));
-        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
+        model.addAttribute(
+                "userData",
+                this.userService.getProfileDataByUsername(appUserDetails.getUsername()));
+        model.addAttribute(
+                "userRecipes",
+                this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
 
         return "user-profile";
     }
 
-    @GetMapping("/profile/{id}")
+    @GetMapping("/{username}")
     public String getUserProfile(
             Model model,
-            @PathVariable Long id,
+            @PathVariable String username,
             @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
-        if (appUserDetails.getId().equals(id)) return "redirect:/users/profile";
+        if (appUserDetails.getUsername().equals(username)) return "redirect:/users/profile";
 
-        model.addAttribute("userData", this.userService.getUserData(id));
-        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUserId(id));
+        model.addAttribute(
+                "userData",
+                this.userService.getProfileDataByUsername(username));
+        model.addAttribute(
+                "userRecipes",
+                this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
 
         return "user-profile";
     }

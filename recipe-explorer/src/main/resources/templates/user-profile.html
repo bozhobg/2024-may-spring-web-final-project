@@ -30,8 +30,18 @@
                 <span>Full Name: </span><span th:text="*{getFullName()}">Full Name</span>
             </p>
             <p>
-                <span>Email: </span><span th:text="*{email}">email</span>
+                <span>Email: </span>
+                <a th:href="@{mailto:{email}(email=*{email})}"
+                   th:text="*{email}"
+                   class="link-dark"
+                >
+                    email
+                </a>
             </p>
+<!--            TODO: show user roles and allow admins to set roles for users   -->
+<!--            <p>-->
+<!--                <span>Roles: </span>-->
+<!--            </p>-->
         </div>
 
         <div class="bg-light rounded-4 p-3 mb-3">

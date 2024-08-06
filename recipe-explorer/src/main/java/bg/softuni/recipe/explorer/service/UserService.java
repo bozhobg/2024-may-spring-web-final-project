@@ -16,5 +16,5 @@ public interface UserService {
 
     User getUserById(Long id);
 
-    UserInfoDTO getUserData(Long id);
+    UserInfoDTO getProfileDataByUsername(String username);
 }
