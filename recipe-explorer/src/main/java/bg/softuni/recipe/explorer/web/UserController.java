@@ -109,8 +109,10 @@ public class UserController {
     @GetMapping("/profile/{id}")
     public String getUserProfile(
             Model model,
-            @PathVariable Long id
+            @PathVariable Long id,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
+        if (appUserDetails.getId().equals(id)) return "redirect:/users/profile";
 
         model.addAttribute("userData", this.userService.getUserData(id));
         model.addAttribute("userRecipes", this.recipeService.getAllBasicByUser(id));

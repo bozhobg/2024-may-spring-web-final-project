@@ -12,8 +12,114 @@
 <header th:replace="~{fragments/commons::header-nav}"></header>
 
 <main class="container-md">
+
+    <!--    Search Bar -->
+
+    <form th:action="@{/recipes/filter}"
+          th:method="GET"
+          class="row bg-white p-2 mb-5 rounded-3 border border-dark-subtle text-center text-lg-start"
+    >
+
+<!--        <div class="col-lg-3 mb-lg-1 mb-2">-->
+<!--            <label for="inputName"-->
+<!--                   class="form-label"-->
+<!--            >-->
+<!--                Name:-->
+<!--            </label>-->
+<!--            <br>-->
+<!--            <input id="inputName"-->
+<!--                   name="names"-->
+<!--                   type="text"-->
+<!--                   class="form-control-sm"-->
+<!--            />-->
+<!--        </div>-->
+
+
+<!--        <div class="col-lg-3 mb-lg-1 mb-2">-->
+<!--            <label for="inputIngredients"-->
+<!--                   class="form-label"-->
+<!--            >-->
+<!--                Ingredients:-->
+<!--            </label>-->
+<!--            <br>-->
+<!--            <input id="inputIngredients"-->
+<!--                   name="ingredients"-->
+<!--                   type="text"-->
+<!--                   class="form-control-sm"-->
+<!--            />-->
+<!--        </div>-->
+
+        <div class="col-lg mb-lg-1 my-2 text-center">
+            <label for="selectMealType"
+                   class="form-label"
+            >
+                Meal:
+            </label>
+            <select name="mealType" id="selectMealType"
+                    class="form-select-sm"
+            >
+                <option value="" selected>Select meal:</option>
+                <option th:each="m : ${mealTypes}"
+                        th:value="${m}"
+                        th:text="${#strings.capitalize(#strings.toLowerCase(m))}">
+                    Meal
+                </option>
+            </select>
+        </div>
+
+        <div class="col-lg mb-lg-1 mb-3 text-center">
+            <label for="selectDiet"
+                   class="form-label"
+            >
+                Diet:
+            </label>
+            <select name="dietId" id="selectDiet"
+                    class="form-control-sm"
+            >
+                <option value="" selected>Select diet:</option>
+                <option th:each="d : ${dietsData}"
+                        th:value="${d.id}"
+                        th:text="${d.type}"
+                >
+                    Diet
+                </option>
+
+            </select>
+        </div>
+
+        <div class="col-lg mb-lg-1 mb-3 text-center">
+            <label for="ratingSortId"
+                   class="form-label"
+            >
+                Rating:
+            </label>
+            <select name="ratingSort" id="ratingSortId"
+                    class="form-control-sm"
+            >
+                <option value="" selected>Sort</option>
+                <option th:each="s : ${sortType}"
+                        th:value="${s}"
+                        th:text="${s}"
+                >
+                    ASC/DESC
+                </option>
+            </select>
+        </div>
+
+        <div class="col-lg-2 mb-lg-1 mb-2 d-flex justify-content-center align-items-end">
+            <button type="submit"
+                    class="btn btn-primary"
+            >
+                Search
+            </button>
+        </div>
+    </form>
+
     <!--    Cards    -->
+
     <div class="row row-gap-3 ">
+
+
         <div class="card card-width mx-auto p-1"
              th:each="rec : ${all}"
              th:object="${rec}"
@@ -35,6 +141,11 @@
                         N/A
                     </div>
                 </div>
+                <small th:text="*{mealType}"
+                       class="mb-2"
+                >
+                    Meal type
+                </small>
                 <h6 th:text="#{common_ingredients}">
                     Ingredients
                 </h6>

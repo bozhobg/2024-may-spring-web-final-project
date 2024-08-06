@@ -1,22 +1,25 @@
 package bg.softuni.recipe.explorer.service.impl;
 
 import bg.softuni.recipe.explorer.constants.ExceptionMessages;
+import bg.softuni.recipe.explorer.constants.SortingEnum;
 import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
 import bg.softuni.recipe.explorer.model.dto.*;
 import bg.softuni.recipe.explorer.model.entity.*;
+import bg.softuni.recipe.explorer.model.enums.MealType;
 import bg.softuni.recipe.explorer.repository.RecipeRepository;
 import bg.softuni.recipe.explorer.service.DietService;
 import bg.softuni.recipe.explorer.service.IngredientService;
 import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.service.UserService;
+import bg.softuni.recipe.explorer.utils.AverageRatingComparator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -133,6 +136,49 @@ public class RecipeServiceImpl implements RecipeService {
                 .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
         recipe.setAverageRating(averageRating);
         this.recipeRepository.save(recipe);
+    }
+
+    @Override
+    public List<RecipeShortInfoDTO> filter(MealType mealType, Long dietId, SortingEnum ratingSort) {
+        boolean hasMealType = mealType != null;
+        boolean hasDietId = dietId != null;
+        Diet diet = hasDietId ? this.dietService.getById(dietId) : null;
+        boolean hasSort= ratingSort != null;
+
+        List<Recipe> filterList = new ArrayList<>();
+
+//        TODO: research criteria queries to make custom queries
+//        current approach get by meal and diet and sort in service layer
+
+        if (hasMealType && hasDietId) {
+            filterList = this.recipeRepository.findAllByMealTypeAndDietsContaining(mealType, diet);
+        }
+
+        if (!hasMealType && hasDietId) {
+            filterList = this.recipeRepository.findAllByDietsContaining(diet);
+        }
+
+        if (hasMealType && !hasDietId) {
+            filterList = this.recipeRepository.findAllByMealType(mealType);
+        }
+
+        if (!hasMealType && !hasDietId) {
+            filterList = this.recipeRepository.findAll();
+        }
+
+        if (hasSort) {
+//            filterList operation
+            AverageRatingComparator c = new AverageRatingComparator();
+            filterList.sort(c);
+
+            if (ratingSort == SortingEnum.DESC) {
+                filterList = filterList.reversed();
+            }
+        }
+
+        return filterList.stream()
+                .map(this::mapToShort)
+                .toList();
     }
 
 

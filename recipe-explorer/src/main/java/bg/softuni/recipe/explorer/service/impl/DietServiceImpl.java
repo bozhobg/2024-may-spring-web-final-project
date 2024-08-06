@@ -1,7 +1,10 @@
 package bg.softuni.recipe.explorer.service.impl;
 
+import bg.softuni.recipe.explorer.constants.ExceptionMessages;
+import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
 import bg.softuni.recipe.explorer.model.dto.DietBasicDTO;
 import bg.softuni.recipe.explorer.model.entity.Diet;
+import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.repository.DietRepository;
 import bg.softuni.recipe.explorer.service.DietService;
 import bg.softuni.recipe.explorer.utils.StringFormatter;
@@ -51,6 +54,18 @@ public class DietServiceImpl implements DietService {
         List<Diet> allById = this.dietRepository.findAllById(listIds);
 
         return new HashSet<>(allById);
+    }
+
+    @Override
+    public Diet getByType(DietaryType dietType) {
+        return this.dietRepository.findByDietaryType(dietType)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.DIET_NOT_FOUND));
+    }
+
+    @Override
+    public Diet getById(Long id) {
+        return this.dietRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.DIET_NOT_FOUND));
     }
 
     private DietBasicDTO mapToBasic(Diet entity) {

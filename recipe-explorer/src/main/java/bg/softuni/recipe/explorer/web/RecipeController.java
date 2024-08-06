@@ -1,6 +1,9 @@
 package bg.softuni.recipe.explorer.web;
 
+import bg.softuni.recipe.explorer.constants.SortingEnum;
 import bg.softuni.recipe.explorer.model.dto.*;
+import bg.softuni.recipe.explorer.model.entity.Diet;
+import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import bg.softuni.recipe.explorer.model.enums.RatingEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
@@ -63,13 +66,18 @@ public class RecipeController {
         return this.dietService.getBasicDTOs();
     }
 
+    @ModelAttribute("sortType")
+    public SortingEnum[] sortType() {
+        return SortingEnum.values();
+    }
+
     @GetMapping("/add")
     public String getAdd() {
 
         return "recipe-add";
     }
 
-//    TODO: status code created 201
+    //    TODO: status code created 201
     @PostMapping("/add")
     public String postAdd(
             @Valid RecipeAddDTO bindingModel,
@@ -94,6 +102,33 @@ public class RecipeController {
             Model model
     ) {
         model.addAttribute("all", this.recipeService.getAllShort());
+
+        return "recipes-all";
+    }
+
+    //    TODO:
+//    @GetMapping("/search")
+    public String searchRecipes(
+            @RequestParam String names,
+            @RequestParam String ingredients,
+            @RequestParam(required = false) MealType mealType,
+            @RequestParam(required = false) DietaryType dietType,
+            Model model
+    ) {
+
+//        this.recipeService.search(names, ingredients, mealType, dietType);
+
+        return "recipes-all";
+    }
+
+    @GetMapping("/filter")
+    public String getFilter(
+            @RequestParam(required = false) MealType mealType,
+            @RequestParam(required = false) Long dietId,
+            @RequestParam(required = false) SortingEnum ratingSort,
+            Model model
+    ) {
+        model.addAttribute("all", this.recipeService.filter(mealType, dietId, ratingSort));
 
         return "recipes-all";
     }
@@ -133,7 +168,7 @@ public class RecipeController {
     }
 
 
-//    @ResponseStatus(HttpStatus.NO_CONTENT) -> prevents redirect on client side!
+    //    @ResponseStatus(HttpStatus.NO_CONTENT) -> prevents redirect on client side!
     @DeleteMapping("/{id}")
     public String delete(
             @PathVariable Long id

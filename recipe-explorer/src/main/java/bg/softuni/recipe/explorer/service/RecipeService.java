@@ -1,7 +1,10 @@
 package bg.softuni.recipe.explorer.service;
 
+import bg.softuni.recipe.explorer.constants.SortingEnum;
 import bg.softuni.recipe.explorer.model.dto.*;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
+import bg.softuni.recipe.explorer.model.enums.DietaryType;
+import bg.softuni.recipe.explorer.model.enums.MealType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -36,4 +39,9 @@ public interface RecipeService {
 
     void updateAvgRating(Long recipeId, BigDecimal averageRating);
 
+    @Transactional
+    List<RecipeShortInfoDTO> filter(MealType mealType, Long dietId, SortingEnum ratingSort);
+
+//    TODO:
+//    List<RecipeShortInfoDTO> search(String recipeNameSearch, String ingredientNameSearch, MealType mealType, DietaryType dietType);
 }
