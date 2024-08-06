@@ -2,6 +2,7 @@ package bg.softuni.recipe.explorer.repository;
 
 import bg.softuni.recipe.explorer.RecipeExplorerApplication;
 import bg.softuni.recipe.explorer.model.entity.Diet;
+import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
 import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.model.enums.MealType;
@@ -23,6 +24,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAllByDietsContaining(Diet diet);
 
     List<Recipe> findAllByMealType(MealType mealType);
+
+    List<Recipe> findAllByIngredientsContaining(Ingredient ingredient);
 
 
 

@@ -1,7 +1,6 @@
 package bg.softuni.recipe.explorer.web;
 
 import bg.softuni.recipe.explorer.exceptions.UserRegisterPasswordsConfirmationMismatch;
-import bg.softuni.recipe.explorer.model.dto.UserInfoDTO;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.RecipeService;
@@ -101,7 +100,7 @@ public class UserController {
     ) {
 
         model.addAttribute("userData", this.userService.getUserData(appUserDetails.getId()));
-        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUser(appUserDetails.getId()));
+        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
 
         return "user-profile";
     }
@@ -115,7 +114,7 @@ public class UserController {
         if (appUserDetails.getId().equals(id)) return "redirect:/users/profile";
 
         model.addAttribute("userData", this.userService.getUserData(id));
-        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUser(id));
+        model.addAttribute("userRecipes", this.recipeService.getAllBasicByUserId(id));
 
         return "user-profile";
     }

@@ -5,6 +5,7 @@ import bg.softuni.recipe.explorer.model.enums.IngredientType;
 import bg.softuni.recipe.explorer.model.enums.UnitEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.IngredientService;
+import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,15 @@ public class IngredientController {
     private final static String ADD_ATTR = "ingredientAddData";
 
     private final IngredientService ingredientService;
+    private final RecipeService recipeService;
 
     @Autowired
     public IngredientController(
-            IngredientService ingredientService
+            IngredientService ingredientService,
+            RecipeService recipeService
     ) {
         this.ingredientService = ingredientService;
+        this.recipeService = recipeService;
     }
 
     @ModelAttribute(ADD_ATTR)
@@ -87,7 +91,19 @@ public class IngredientController {
             Model model
     ) {
         model.addAttribute("ingredient", this.ingredientService.getDetailsById(id));
+        model.addAttribute("ingRecipes", this.recipeService.getAllBasicByIngredientId(id));
+        
         return "ingredient-details";
+    }
+
+    @GetMapping("/filter")
+    public String getFilter(
+            @RequestParam(required = false) IngredientType ingType,
+            Model model
+    ) {
+        model.addAttribute("all", this.ingredientService.filter(ingType));
+
+        return "ingredients-all";
     }
 
 //    TODO: delete? (due to recipe having ingredients), put/patch functionality

@@ -3,7 +3,6 @@ package bg.softuni.recipe.explorer.service;
 import bg.softuni.recipe.explorer.constants.SortingEnum;
 import bg.softuni.recipe.explorer.model.dto.*;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
-import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,7 @@ public interface RecipeService {
     @Transactional
     List<RecipeShortInfoDTO> getAllShort();
 
-    List<RecipeBasicDTO> getAllBasicByUser(Long userId);
+    List<RecipeBasicDTO> getAllBasicByUserId(Long userId);
 
     @Transactional
     RecipeDetailsDTO getDetailsById(Long id);
@@ -41,6 +40,8 @@ public interface RecipeService {
 
     @Transactional
     List<RecipeShortInfoDTO> filter(MealType mealType, Long dietId, SortingEnum ratingSort);
+
+    List<RecipeBasicDTO> getAllBasicByIngredientId(Long id);
 
 //    TODO:
 //    List<RecipeShortInfoDTO> search(String recipeNameSearch, String ingredientNameSearch, MealType mealType, DietaryType dietType);

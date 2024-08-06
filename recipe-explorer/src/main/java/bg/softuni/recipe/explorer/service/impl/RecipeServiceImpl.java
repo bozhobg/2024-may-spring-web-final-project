@@ -73,7 +73,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List
-            <RecipeBasicDTO> getAllBasicByUser(Long userId) {
+            <RecipeBasicDTO> getAllBasicByUserId(Long userId) {
         return this.recipeRepository.findAllByAuthor_Id(userId)
                 .stream()
                 .map(r -> modelMapper.map(r, RecipeBasicDTO.class))
@@ -178,6 +178,16 @@ public class RecipeServiceImpl implements RecipeService {
 
         return filterList.stream()
                 .map(this::mapToShort)
+                .toList();
+    }
+
+    @Override
+    public List<RecipeBasicDTO> getAllBasicByIngredientId(Long id) {
+        Ingredient ing = this.ingredientService.getById(id);
+
+        return this.recipeRepository.findAllByIngredientsContaining(ing)
+                .stream()
+                .map(r -> modelMapper.map(r, RecipeBasicDTO.class))
                 .toList();
     }
 

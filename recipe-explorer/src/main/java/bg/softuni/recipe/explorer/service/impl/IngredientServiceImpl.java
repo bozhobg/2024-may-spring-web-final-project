@@ -74,7 +74,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public IngredientDetailsDTO getDetailsById(Long id) {
         IngredientDetailsDTO map = mapToIngredientDetailsDTO(this.ingredientRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Ingredient not found!")));
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.INGREDIENT_NOT_FOUND)));
 
         return map;
     }
@@ -104,6 +104,12 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public Ingredient getById(Long id) {
+        return this.ingredientRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.INGREDIENT_NOT_FOUND));
+    }
+
+    @Override
     public Set<Ingredient> getAllByIds(List<Long> listIds) {
         List<Ingredient> allById = this.ingredientRepository.findAllById(listIds);
 
@@ -127,6 +133,16 @@ public class IngredientServiceImpl implements IngredientService {
                 .getIngredients()
                 .stream()
                 .map(this::mapToBasic)
+                .toList();
+    }
+
+    @Override
+    public List<IngredientShortInfoDTO> filter(IngredientType ingType) {
+        if (ingType == null) throw new ObjectNotFoundException(ExceptionMessages.INGREDIENT_TYPE_NOT_FOUND);
+
+        return this.ingredientRepository.findAllByIngredientType(ingType)
+                .stream()
+                .map(this::mapToShort)
                 .toList();
     }
 

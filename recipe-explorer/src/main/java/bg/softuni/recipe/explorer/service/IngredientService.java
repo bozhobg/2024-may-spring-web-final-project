@@ -26,10 +26,14 @@ public interface IngredientService {
 
     boolean areIdsValid(List<Long> listIds);
 
+    Ingredient getById(Long id);
+
     Set<Ingredient> getAllByIds(List<Long> listIds);
 
     Long add(IngredientAddDTO dto, Long userId);
 
     @Transactional
     List<IngredientBasicDTO> getAllBasicForRecipeId(Long recipeId);
+
+    List<IngredientShortInfoDTO> filter(IngredientType ingType);
 }

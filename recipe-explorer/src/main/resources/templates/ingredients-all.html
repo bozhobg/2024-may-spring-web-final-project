@@ -12,6 +12,36 @@
 <header th:replace="~{fragments/commons::header-nav}"></header>
 
 <div class="container-md">
+
+    <form th:action="@{/ingredients/filter}"
+          th:method="GET"
+          class="row bg-white p-2 mb-5 rounded-3 border border-dark-subtle text-center text-lg-start"
+    >
+        <div class="text-center d-inline-block col">
+            <label for="selectIngType"
+                   class="form-label"
+            >
+                Type:
+            </label>
+            <select name="ingType" id="selectIngType"
+                    class="form-select-sm"
+            >
+                <option value="" selected>Select type:</option>
+                <option th:each="type : ${ingredientTypes}"
+                        th:value="${type.getKey()}"
+                        th:text="${type.getValue()}">
+                    Type
+                </option>
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary ms-5"
+            >
+                Filter
+            </button>
+        </div>
+    </form>
+
     <!--    Ing Details    -->
     <div class="row row-gap-3 ">
         <div class="card card-width mx-auto p-1"
@@ -21,9 +51,16 @@
             <img src="/images/default-image.jpg" class="card-img-top" alt="ingredient image">
             <div class="card-body">
                 <div th:text="*{name}"
-                    class="card-title h5 d-inline-block"
+                     class="card-title h5 d-inline-block"
                 >
                     Ingredient name
+                </div>
+                <div class="mb-2">
+                    <small th:text="*{#strings.replace(type, '_', ' ')}"
+                           class="mb-2"
+                    >
+                        Ingredient type
+                    </small>
                 </div>
                 <p th:text="*{description}"
                    class="card-text card-text-improved overflow-hidden"

@@ -11,18 +11,18 @@
 
 <header th:replace="~{fragments/commons::header-nav}"></header>
 
-<div class="container-md"
+<div class="container-md max-width-600"
      th:object="${ingredient}"
 >
     <div class="row g-3 ">
-        <div class="col-xl-6 mb-3 align-content-center">
+        <div class="mb-3 align-content-center">
             <!--                TODO: Carousel    -->
             <img th:src="@{/images/default-image.jpg}"
                  alt="Recipe Image"
                  class="img-fluid d-block mx-auto rounded-4"
             >
         </div>
-        <div class="col-xl-6 flex-column align-content-center">
+        <div class=" flex-column align-content-center">
             <div class="bg-light rounded-4 p-3 mb-3">
                 <h5 th:text="*{name}"
                     class="mb-3"
@@ -39,7 +39,7 @@
                     <span th:text="#{common_added_by}"></span>: <span th:text="*{addedByUsername}"></span>
                 </p>
             </div>
-            <div class="bg-light rounded-4 p-3">
+            <div class="bg-light rounded-4 p-3 mb-3">
                 <h5 class="mb-3"
                     th:text="#{common_description}"
                 >
@@ -54,6 +54,35 @@
         </div>
     </div>
     <!--    TODO: buttons edit/delete/approve-->
+
+    <div class="bg-light rounded-4 p-3 mb-3">
+        <h5 th:text="${ingRecipes.isEmpty()} ? 'There are no recipes with this ingredient.' : 'Recipes with ingredient:'">
+            Ingredient Recipes:
+        </h5>
+
+        <th:block th:each="r : ${ingRecipes}"
+                  th:object="${r}"
+        >
+            <div class="row mb-3">
+                <div class="col-10">
+                        <span th:text="*{name}"
+                              class="align-text-top"
+                        >
+                            Recipe name
+                        </span>
+                </div>
+                <div class="col-2 text-center">
+                    <a th:href="@{/recipes/{id}(id=*{id})}"
+                       class="btn btn-primary btn-sm"
+                    >
+                        Details
+                    </a>
+                </div>
+            </div>
+
+        </th:block>
+    </div>
+
 </div>
 
 </body>
