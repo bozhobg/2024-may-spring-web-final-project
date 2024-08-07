@@ -27,7 +27,14 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     List<Recipe> findAllByIngredientsContaining(Ingredient ingredient);
 
+     Recipe findFirstByOrderByAverageRatingDesc();
 
+     @Query("""
+             select r from Recipe r order by rand() limit 1
+             """)
+     Recipe getRandomRecipe();
+
+     Recipe findTopByOrderByCreatedOnDesc();
 
 //    TODO: how to make custom queries with bunch of params for DB search based on strings for recipe name, ingredient name
 //    TODO: types of diet, meal

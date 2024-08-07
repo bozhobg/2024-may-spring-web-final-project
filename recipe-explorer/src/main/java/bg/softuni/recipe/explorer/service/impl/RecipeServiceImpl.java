@@ -14,6 +14,7 @@ import bg.softuni.recipe.explorer.service.UserService;
 import bg.softuni.recipe.explorer.utils.AverageRatingComparator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,8 @@ import java.util.*;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
+
+    private RecipeShortInfoDTO randomForTheDay;
 
     private final RecipeRepository recipeRepository;
     private final IngredientService ingredientService;
@@ -69,6 +72,28 @@ public class RecipeServiceImpl implements RecipeService {
                 .toList();
 
         return allShort;
+    }
+
+    @Override
+    public RecipeShortInfoDTO getHighestRated() {
+        Recipe recipeTopRating = this.recipeRepository
+                .findFirstByOrderByAverageRatingDesc();
+
+        if (recipeTopRating == null) throw new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND);
+
+        return mapToShort(recipeTopRating);
+    }
+
+    @Override
+    public RecipeShortInfoDTO getRandomForTheDay() {
+
+        if (randomForTheDay == null) setRandomForTheDay();
+        return randomForTheDay;
+    }
+
+    @Override
+    public RecipeShortInfoDTO getLastAdded() {
+        return mapToShort(this.recipeRepository.findTopByOrderByCreatedOnDesc());
     }
 
     @Override
@@ -143,7 +168,7 @@ public class RecipeServiceImpl implements RecipeService {
         boolean hasMealType = mealType != null;
         boolean hasDietId = dietId != null;
         Diet diet = hasDietId ? this.dietService.getById(dietId) : null;
-        boolean hasSort= ratingSort != null;
+        boolean hasSort = ratingSort != null;
 
         List<Recipe> filterList = new ArrayList<>();
 
@@ -191,6 +216,12 @@ public class RecipeServiceImpl implements RecipeService {
                 .toList();
     }
 
+//    test for shorter intervalw
+//    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 0 0 * * *")
+    private void setRandomForTheDay() {
+        this.randomForTheDay = mapToShort(this.recipeRepository.getRandomRecipe());
+    }
 
     private Recipe mapAddToEntity(RecipeAddDTO dto, Long userId) {
         Recipe map = modelMapper.map(dto, Recipe.class);

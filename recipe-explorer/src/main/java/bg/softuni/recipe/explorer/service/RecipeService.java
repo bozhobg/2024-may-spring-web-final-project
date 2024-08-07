@@ -20,6 +20,15 @@ public interface RecipeService {
     @Transactional
     List<RecipeShortInfoDTO> getAllShort();
 
+    @Transactional
+    RecipeShortInfoDTO getHighestRated();
+
+    @Transactional
+    RecipeShortInfoDTO getRandomForTheDay();
+
+    @Transactional
+    RecipeShortInfoDTO getLastAdded();
+
     List<RecipeBasicDTO> getAllBasicByUserId(Long userId);
 
     @Transactional
