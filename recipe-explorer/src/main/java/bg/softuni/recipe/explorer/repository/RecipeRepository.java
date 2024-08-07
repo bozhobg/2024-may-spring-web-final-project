@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
@@ -35,6 +36,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
      Recipe getRandomRecipe();
 
      Recipe findTopByOrderByCreatedOnDesc();
+
+     Optional<Recipe> findByName(String name);
 
 //    TODO: how to make custom queries with bunch of params for DB search based on strings for recipe name, ingredient name
 //    TODO: types of diet, meal

@@ -138,7 +138,6 @@ public class RecipeController {
             @PathVariable Long id,
             Model model,
             @AuthenticationPrincipal AppUserDetails appUserDetails
-
     ) throws JsonProcessingException {
 
 

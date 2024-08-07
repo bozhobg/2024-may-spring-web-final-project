@@ -191,7 +191,7 @@ public class IngredientControllerIT {
             userDetailsServiceBeanName = "userDetailsService",
             setupBefore = TestExecutionEvent.TEST_EXECUTION
     )
-    void getAllIsOkdGetsAllIngredientsAsShortInfoDTOs() throws Exception {
+    void getAllIsOkGetsAllIngredientsAsShortInfoDTOs() throws Exception {
 //        Arrange
         Ingredient ingTest1 = new Ingredient()
                 .setName("ingredientTest1")

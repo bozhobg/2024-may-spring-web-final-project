@@ -43,16 +43,12 @@ public class IngredientRestControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private RoleInitServiceImpl roleInitService;
-
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private IngredientRepository ingredientRepository;
     @Autowired
