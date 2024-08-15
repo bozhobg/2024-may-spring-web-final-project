@@ -38,6 +38,7 @@ public class SecurityConfig {
                                         ).permitAll()
                                 .requestMatchers("/comments/*/approve"
                                 ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")
+                                .requestMatchers("/users/*/grant", "/users/*/revoke").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers(
                                         PathRequest.toStaticResources().atCommonLocations()
                                 ).permitAll()

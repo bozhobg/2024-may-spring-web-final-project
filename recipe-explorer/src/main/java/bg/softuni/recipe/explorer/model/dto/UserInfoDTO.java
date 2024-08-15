@@ -1,5 +1,7 @@
 package bg.softuni.recipe.explorer.model.dto;
 
+import bg.softuni.recipe.explorer.model.enums.RoleEnum;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class UserInfoDTO {
 
     private String email;
 
+    private List<RoleEnum> roleNames;
 
     public UserInfoDTO() {
     }
@@ -61,6 +64,15 @@ public class UserInfoDTO {
 
     public UserInfoDTO setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public List<RoleEnum> getRoleNames() {
+        return roleNames;
+    }
+
+    public UserInfoDTO setRoleNames(List<RoleEnum> roleNames) {
+        this.roleNames = roleNames;
         return this;
     }
 

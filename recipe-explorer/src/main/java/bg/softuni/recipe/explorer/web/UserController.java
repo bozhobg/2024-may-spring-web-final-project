@@ -1,8 +1,10 @@
 package bg.softuni.recipe.explorer.web;
 
 import bg.softuni.recipe.explorer.exceptions.UserRegisterPasswordsConfirmationMismatch;
+import bg.softuni.recipe.explorer.model.dto.RoleDTO;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
 import bg.softuni.recipe.explorer.model.dto.UserUsernameDTO;
+import bg.softuni.recipe.explorer.model.enums.RoleEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.service.UserService;
@@ -10,6 +12,7 @@ import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
@@ -109,6 +112,7 @@ public class UserController {
             Model model,
             @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
+//        TODO: create separate profile view -> user can't change own privileges, not to overload with attrs
 
         model.addAttribute(
                 "userData",
@@ -120,6 +124,8 @@ public class UserController {
         if (!model.containsAttribute("usernameData")) {
             model.addAttribute("usernameData", new UserUsernameDTO());
         }
+
+        model.addAttribute("selectedRole", new RoleDTO());
 
         return "user-profile";
     }
@@ -138,6 +144,14 @@ public class UserController {
         model.addAttribute(
                 "userRecipes",
                 this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
+
+//        TODO: separate views for profile and /users/profile
+        model.addAttribute("usernameData", new UserUsernameDTO());
+        model.addAttribute("roles", RoleEnum.values());
+
+        if (!model.containsAttribute("selectedRole")) {
+            model.addAttribute("selectedRole", new RoleDTO());
+        }
 
         return "user-profile";
     }
@@ -164,5 +178,55 @@ public class UserController {
         rAttrs.addFlashAttribute("isUsernameChanged", true);
 
         return "redirect:/users/login";
+    }
+
+    @PatchMapping("/{username}/grant")
+    public String grantRole(
+            @PathVariable String username,
+            @Valid RoleDTO selectedRole,
+            BindingResult bindingResult,
+            RedirectAttributes rAttrs
+            ) {
+        if (bindingResult.hasErrors()) {
+            RedirectUtil.setRedirectAttrs(rAttrs, selectedRole, bindingResult, "selectedRole");
+
+            return "redirect:/users/" + username;
+        }
+
+        boolean success = this.userService.grantRole(username, selectedRole.getName());
+
+        if (!success) {
+            bindingResult.addError(new FieldError("selectedRole", "name", "Granted/invalid role!"));
+            RedirectUtil.setRedirectAttrs(rAttrs, selectedRole, bindingResult, "selectedRole");
+
+            return "redirect:/users/" + username;
+        }
+
+        return "redirect:/users/" + username;
+    }
+
+    @PatchMapping("/{username}/revoke")
+    public String revokeRole(
+            @PathVariable String username,
+            @Valid RoleDTO selectedRole,
+            BindingResult bindingResult,
+            RedirectAttributes rAttrs
+    ) {
+        if (bindingResult.hasErrors()) {
+            RedirectUtil.setRedirectAttrs(rAttrs, selectedRole, bindingResult, "selectedRole");
+
+            return "redirect:/users/" + username;
+        }
+
+        boolean success = this.userService.revokeRole(username, selectedRole.getName());
+
+        if (!success) {
+            bindingResult.addError(new FieldError("selectedRole", "name", "Not granted/invalid role!"));
+            RedirectUtil.setRedirectAttrs(rAttrs, selectedRole, bindingResult, "selectedRole");
+
+            return "redirect:/users/" + username;
+        }
+
+        return "redirect:/users/" + username;
     }
 }

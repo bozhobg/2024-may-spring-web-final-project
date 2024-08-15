@@ -31,7 +31,7 @@
                     <span th:if="${#authentication.getName() != userData.getUsername()}"
                           th:text="*{username}"
                           class="align-middle">
-                    username
+                        username
                     </span>
                 </div>
                 <form th:if="${#authentication.getName() == userData.getUsername()}"
@@ -77,9 +77,47 @@
                 </a>
             </p>
             <!--            TODO: show user roles and allow admins to set roles for users   -->
-            <!--            <p>-->
-            <!--                <span>Roles: </span>-->
-            <!--            </p>-->
+            <p>
+                <span>Roles : </span>
+                <span th:text="${#strings.listJoin(userData.roleNames, ', ')}">roles</span>
+            </p>
+            <form th:action="@{/users/{username}/grant(username = *{username})}"
+                  th:method="PATCH"
+                  th:if="${#authorization.expression('hasAnyRole(''ADMIN'')') && #authentication.getName() != userData.username} "
+
+            >
+                <label for="roleSelect" class="visually-hidden"></label>
+                <select id="roleSelect"
+                        class="form-select-sm"
+                        th:field="${selectedRole.name}"
+                        name="selectedRole"
+                        th:errorclass="'bg-danger is-invalid bg-opacity-75'"
+                >
+                    <option value="">Select role:</option>
+                    <option th:each="r : ${roles}"
+                            th:text="${r}"
+                            th:value="${r}"
+                            th:if="${r.name()} != 'USER'"
+                    >
+
+                    </option>
+                </select>
+                <button type="submit"
+                        class="btn btn-sm btn-outline-success ms-2"
+                >
+                    Grant
+                </button>
+                <button type="submit"
+                        th:formaction="@{/users/{username}/revoke(username=*{username})}"
+                        class="btn btn-sm btn-outline-danger ms-2">
+                    Revoke
+                </button>
+                <small th:errors="${selectedRole.name}"
+                     class="invalid-feedback text-danger"
+                >
+                    errors
+                </small>
+            </form>
         </div>
 
         <div class="bg-light rounded-4 p-3 mb-3">

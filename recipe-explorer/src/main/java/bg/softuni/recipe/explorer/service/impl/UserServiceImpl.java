@@ -6,6 +6,7 @@ import bg.softuni.recipe.explorer.exceptions.PersistenceException;
 import bg.softuni.recipe.explorer.exceptions.UserRegisterPasswordsConfirmationMismatch;
 import bg.softuni.recipe.explorer.model.dto.UserInfoDTO;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
+import bg.softuni.recipe.explorer.model.entity.Role;
 import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.model.enums.RoleEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -73,9 +76,9 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.USER_NOT_FOUND));
 
-        UserInfoDTO userData = modelMapper.map(user, UserInfoDTO.class);
+        UserInfoDTO userInfoDTO = mapToUserInfo(user);
 
-        return userData;
+        return userInfoDTO;
     }
 
     @Override
@@ -85,7 +88,50 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.USER_NOT_FOUND));
 
         this.userRepository.save(user.setUsername(username));
-        
+    }
+
+    @Override
+    public boolean grantRole(String username, RoleEnum roleName) {
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.USER_NOT_FOUND));
+
+        boolean containsRole = user.getRoles().stream()
+                .anyMatch(r -> r.getName().equals(roleName));
+
+        if (containsRole) return false;
+
+        Optional<Role> roleByName = this.roleRepository.findByName(roleName);
+        if (roleByName.isEmpty()) {
+            return false;
+        }
+
+        user.getRoles().add(roleByName.get());
+
+        this.userRepository.save(user);
+
+        return true;
+    }
+
+    @Override
+    public boolean revokeRole(String username, RoleEnum roleName) {
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.USER_NOT_FOUND));
+
+        boolean containsRole = user.getRoles().stream()
+                .anyMatch(r -> r.getName().equals(roleName));
+
+        if (!containsRole) return false;
+
+        Optional<Role> roleByName = this.roleRepository.findByName(roleName);
+        if (roleByName.isEmpty()) {
+            return false;
+        }
+
+        user.getRoles().remove(roleByName.get());
+
+        this.userRepository.save(user);
+
+        return true;
     }
 
     private User mapRegisterDataToEntity(UserRegisterDTO dto) {
@@ -98,6 +144,17 @@ public class UserServiceImpl implements UserService {
         ));
 
         return map;
+    }
+
+    private UserInfoDTO mapToUserInfo(User entity) {
+
+        List<RoleEnum> roleNames = entity.getRoles().stream()
+                .map(Role::getName)
+                .toList();
+
+        UserInfoDTO map = modelMapper.map(entity, UserInfoDTO.class);
+
+        return map.setRoleNames(roleNames);
     }
 
     private static boolean arePasswordsMatching(UserRegisterDTO dto) {
