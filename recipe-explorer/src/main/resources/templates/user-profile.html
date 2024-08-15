@@ -22,10 +22,48 @@
             >
         </div>
         <div class="bg-light rounded-4 p-3 mb-3">
-            <h5 class="mb-3"
+            <div class="mb-3 d-flex"
             >
-                <span>Username: </span><span th:text="*{username}">username</span>
-            </h5>
+                <div class="d-inline-block align-items h5">
+                    <span class="ali">
+                        Username:
+                    </span>
+                    <span th:if="${#authentication.getName() != userData.getUsername()}"
+                          th:text="*{username}"
+                          class="align-middle">
+                    username
+                    </span>
+                </div>
+                <form th:if="${#authentication.getName() == userData.getUsername()}"
+                      th:action="@{/users/profile/username}"
+                      th:method="PATCH"
+                      class="d-inline-block ms-4"
+                >
+                    <div class="input-group input-group-sm">
+                        <input type="text"
+                               th:field="${usernameData.username}"
+                               th:placeholder="${userData.getUsername()}"
+                               aria-label="username"
+                               aria-describedby="button-addon2"
+                               class="form-control"
+                               th:errorclass="is-invalid"
+                        >
+                        <button class="btn btn-outline-danger"
+                                type="submit"
+                                id="button-addon2">
+                            Change
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <p>
+                <small th:errors="${usernameData.username}"
+                       class="text-danger"
+                >
+                    Username errors!
+                </small>
+            </p>
+
             <p>
                 <span>Full Name: </span><span th:text="*{getFullName()}">Full Name</span>
             </p>
@@ -38,10 +76,10 @@
                     email
                 </a>
             </p>
-<!--            TODO: show user roles and allow admins to set roles for users   -->
-<!--            <p>-->
-<!--                <span>Roles: </span>-->
-<!--            </p>-->
+            <!--            TODO: show user roles and allow admins to set roles for users   -->
+            <!--            <p>-->
+            <!--                <span>Roles: </span>-->
+            <!--            </p>-->
         </div>
 
         <div class="bg-light rounded-4 p-3 mb-3">

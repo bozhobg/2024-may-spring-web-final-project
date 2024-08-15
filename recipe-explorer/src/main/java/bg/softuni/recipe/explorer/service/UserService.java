@@ -3,6 +3,7 @@ package bg.softuni.recipe.explorer.service;
 import bg.softuni.recipe.explorer.model.dto.UserInfoDTO;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
 import bg.softuni.recipe.explorer.model.entity.User;
+import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface UserService {
@@ -17,4 +18,6 @@ public interface UserService {
     User getUserById(Long id);
 
     UserInfoDTO getProfileDataByUsername(String username);
+
+    void patchUsername(String username, AppUserDetails appUserDetails);
 }

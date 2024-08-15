@@ -25,6 +25,12 @@
           th:method="POST"
     >
         <div class="mb-3">
+            <div th:if="${isUsernameChanged}"
+                 class="fw-bold text-danger text-center mb-2"
+                 th:text="#{user_login_form_username_changed}"
+            >
+                Username has been changed!
+            </div>
             <label for="username"
                    class="form-label h5"
                    th:text="#{user_login_form_label_username}"

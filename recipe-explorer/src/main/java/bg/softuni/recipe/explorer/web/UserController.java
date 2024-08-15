@@ -2,13 +2,17 @@ package bg.softuni.recipe.explorer.web;
 
 import bg.softuni.recipe.explorer.exceptions.UserRegisterPasswordsConfirmationMismatch;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
+import bg.softuni.recipe.explorer.model.dto.UserUsernameDTO;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.service.UserService;
 import bg.softuni.recipe.explorer.utils.RedirectUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,6 +54,9 @@ public class UserController {
             return "redirect:/home";
         }
 
+        if (!model.containsAttribute("isUsernameChanged")) {
+            model.addAttribute("isUsernameChanged", false);
+        }
         if (error) {
             model.addAttribute("error", true);
         }
@@ -110,6 +117,10 @@ public class UserController {
                 "userRecipes",
                 this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
 
+        if (!model.containsAttribute("usernameData")) {
+            model.addAttribute("usernameData", new UserUsernameDTO());
+        }
+
         return "user-profile";
     }
 
@@ -129,5 +140,29 @@ public class UserController {
                 this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
 
         return "user-profile";
+    }
+
+    @PatchMapping("/profile/username")
+    public String changeUsername(
+            @Valid UserUsernameDTO bindingModel,
+            BindingResult bindingResult,
+            RedirectAttributes rAttrs,
+            @AuthenticationPrincipal AppUserDetails appUserDetails,
+            HttpServletRequest request
+    ) throws ServletException {
+        if (bindingResult.hasErrors()) {
+            RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, "usernameData");
+            return "redirect:/users/profile";
+        }
+
+        this.userService.patchUsername(bindingModel.getUsername(), appUserDetails);
+
+//        manually logging out user, user details not updated after change of username
+//        TODO: how to reload user details with new username
+        request.logout();
+
+        rAttrs.addFlashAttribute("isUsernameChanged", true);
+
+        return "redirect:/users/login";
     }
 }

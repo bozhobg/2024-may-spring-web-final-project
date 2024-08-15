@@ -8,9 +8,9 @@ import bg.softuni.recipe.explorer.model.dto.UserInfoDTO;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
 import bg.softuni.recipe.explorer.model.entity.User;
 import bg.softuni.recipe.explorer.model.enums.RoleEnum;
+import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.repository.RoleRepository;
 import bg.softuni.recipe.explorer.repository.UserRepository;
-import bg.softuni.recipe.explorer.service.RecipeService;
 import bg.softuni.recipe.explorer.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +76,16 @@ public class UserServiceImpl implements UserService {
         UserInfoDTO userData = modelMapper.map(user, UserInfoDTO.class);
 
         return userData;
+    }
+
+    @Override
+    public void patchUsername(String username, AppUserDetails appUserDetails) {
+
+        User user = this.userRepository.findByUsername(appUserDetails.getUsername())
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.USER_NOT_FOUND));
+
+        this.userRepository.save(user.setUsername(username));
+        
     }
 
     private User mapRegisterDataToEntity(UserRegisterDTO dto) {
