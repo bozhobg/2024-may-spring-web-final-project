@@ -2,8 +2,6 @@ package bg.softuni.recipe.explorer.model.dto;
 
 import bg.softuni.recipe.explorer.model.enums.RatingEnum;
 import bg.softuni.recipe.explorer.validation.RecipeIdValid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class RatingDTO {

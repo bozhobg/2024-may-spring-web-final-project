@@ -1,26 +1,21 @@
 package bg.softuni.recipe.explorer.service.impl;
 
+import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
 import bg.softuni.recipe.explorer.model.dto.CommentEditDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentRestDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentRestPostDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentViewDTO;
 import bg.softuni.recipe.explorer.service.CommentService;
 import bg.softuni.recipe.explorer.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.xml.stream.events.Comment;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,16 +24,16 @@ public class CommentServiceImpl implements CommentService {
 
     private final RestClient restClient;
     private final UserService userService;
-    private final ObjectMapper jacksonObjectMapper;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public CommentServiceImpl(
             RestClient restClient,
             UserService userService,
-            ObjectMapper jacksonObjectMapper) {
+            ObjectMapper objectMapper) {
         this.restClient = restClient;
         this.userService = userService;
-        this.jacksonObjectMapper = jacksonObjectMapper;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -95,6 +90,11 @@ public class CommentServiceImpl implements CommentService {
         return restClient.get()
                 .uri("/{id}", id)
                 .retrieve()
+//                .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
+//                    JsonNode jsonNode = objectMapper.readTree(response.getBody());
+//                    String message = jsonNode.get("message").asText();
+//                    throw new ObjectNotFoundException(message);
+//                }))
                 .body(CommentRestDTO.class);
     }
 

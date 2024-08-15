@@ -41,11 +41,17 @@ public class UserController {
 
     @GetMapping("/login")
     public String getLogin(
-            @AuthenticationPrincipal AppUserDetails userDetails
+            @AuthenticationPrincipal AppUserDetails userDetails,
+            Model model,
+            @RequestParam(required = false) boolean error
     ) {
 //        TODO: add invalid username/password How with Spr Sec?
         if (userDetails instanceof AppUserDetails) {
             return "redirect:/home";
+        }
+
+        if (error) {
+            model.addAttribute("error", true);
         }
 
         return "auth-login";
@@ -67,8 +73,6 @@ public class UserController {
             BindingResult bindingResult,
             RedirectAttributes rAttrs
     ) {
-
-
         if (bindingResult.hasErrors()) {
             RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, REGISTER_ATTR);
 

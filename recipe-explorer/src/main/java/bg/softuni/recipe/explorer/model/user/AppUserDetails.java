@@ -47,4 +47,14 @@ public class AppUserDetails extends User {
     public String getFullName() {
         return this.firstName + " " + this.lastName;
     }
+
+    public boolean isAdmin() {
+        return super.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+    }
+
+    public boolean isModerator() {
+        return super.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_MODERATOR".equals(a.getAuthority()));
+    }
 }

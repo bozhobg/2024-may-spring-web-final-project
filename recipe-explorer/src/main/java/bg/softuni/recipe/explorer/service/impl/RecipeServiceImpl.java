@@ -3,9 +3,11 @@ package bg.softuni.recipe.explorer.service.impl;
 import bg.softuni.recipe.explorer.constants.ExceptionMessages;
 import bg.softuni.recipe.explorer.constants.SortingEnum;
 import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
+import bg.softuni.recipe.explorer.exceptions.UnauthorizedOperation;
 import bg.softuni.recipe.explorer.model.dto.*;
 import bg.softuni.recipe.explorer.model.entity.*;
 import bg.softuni.recipe.explorer.model.enums.MealType;
+import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.repository.RecipeRepository;
 import bg.softuni.recipe.explorer.service.DietService;
 import bg.softuni.recipe.explorer.service.IngredientService;
@@ -16,7 +18,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -124,9 +125,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeEditDTO getEditDTO(Long id) {
+    public RecipeEditDTO getEditDTO(Long id, AppUserDetails appUserDetails) {
         Recipe recipe = this.recipeRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
+
+        verifyIfAdminModeratorOrOwner(appUserDetails, recipe);
 
         RecipeEditDTO map = modelMapper.map(recipe, RecipeEditDTO.class);
 
@@ -134,14 +137,20 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void put(Long recipeId, RecipeEditDTO dto) {
+    public void put(Long recipeId, RecipeEditDTO dto, AppUserDetails appUserDetails) {
+
+        Recipe recipe = this.recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
+
+        verifyIfAdminModeratorOrOwner(appUserDetails, recipe);
+
         Recipe updated = mapEditToEntity(dto, recipeId);
 
         this.recipeRepository.save(updated);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id, AppUserDetails appUserDetails) {
         if (id == null) {
 //            TODO: invalid Long value
             throw new ObjectNotFoundException("Recipe id invalid!");
@@ -150,6 +159,8 @@ public class RecipeServiceImpl implements RecipeService {
         // ratings clean up
         Recipe recipe = this.recipeRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(ExceptionMessages.RECIPE_NOT_FOUND));
+
+        verifyIfAdminModeratorOrOwner(appUserDetails, recipe);
 
         this.recipeRepository.delete(recipe);
     }
@@ -165,6 +176,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<RecipeShortInfoDTO> filter(MealType mealType, Long dietId, SortingEnum ratingSort) {
+
         boolean hasMealType = mealType != null;
         boolean hasDietId = dietId != null;
         Diet diet = hasDietId ? this.dietService.getById(dietId) : null;
@@ -216,7 +228,7 @@ public class RecipeServiceImpl implements RecipeService {
                 .toList();
     }
 
-//    test for shorter intervalw
+    //    test for shorter intervalw
 //    @Scheduled(fixedRate = 5000)
     @Scheduled(cron = "0 0 0 * * *")
     private void setRandomForTheDay() {
@@ -254,7 +266,8 @@ public class RecipeServiceImpl implements RecipeService {
                 .setModifiedOn(Instant.now())
                 .setInstructions(dto.getInstructions())
                 .setIngredients(ingredients)
-                .setDiets(diets);
+                .setDiets(diets)
+                .setMealType(dto.getMealType());
     }
 
     private RecipeShortInfoDTO mapToShort(Recipe entity) {
@@ -265,5 +278,13 @@ public class RecipeServiceImpl implements RecipeService {
     private RecipeDetailsDTO mapToDetails(Recipe entity) {
         RecipeDetailsDTO map = modelMapper.map(entity, RecipeDetailsDTO.class);
         return map;
+    }
+
+    private static void verifyIfAdminModeratorOrOwner(AppUserDetails appUserDetails, Recipe recipe) {
+        if (!recipe.getAuthor().getId().equals(appUserDetails.getId())
+                && !appUserDetails.isAdmin() && !appUserDetails.isModerator()
+        ) {
+            throw new UnauthorizedOperation(ExceptionMessages.UNAUTHORIZED_REQUEST);
+        }
     }
 }

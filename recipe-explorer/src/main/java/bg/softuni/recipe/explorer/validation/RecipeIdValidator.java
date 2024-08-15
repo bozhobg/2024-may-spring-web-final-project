@@ -17,6 +17,6 @@ public class RecipeIdValidator implements ConstraintValidator<RecipeIdValid, Lon
 
     @Override
     public boolean isValid(Long recipeId, ConstraintValidatorContext context) {
-        return this.recipeService.isIdValid(recipeId);
+        return recipeId != null && this.recipeService.isIdValid(recipeId);
     }
 }

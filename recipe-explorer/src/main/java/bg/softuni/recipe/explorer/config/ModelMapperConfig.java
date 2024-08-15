@@ -2,6 +2,7 @@ package bg.softuni.recipe.explorer.config;
 
 import bg.softuni.recipe.explorer.model.dto.RecipeAddDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeDetailsDTO;
+import bg.softuni.recipe.explorer.model.dto.RecipeEditDTO;
 import bg.softuni.recipe.explorer.model.dto.RecipeShortInfoDTO;
 import bg.softuni.recipe.explorer.model.entity.Diet;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
@@ -38,7 +39,7 @@ public class ModelMapperConfig {
         typeMapToRecipeShort.addMappings(mapper -> mapper.using(ingredientToNameListConverter)
                         .map(Recipe::getIngredients, RecipeShortInfoDTO::setIngredientNames))
                 .addMappings(mapper -> mapper.using(dietToNameListConverter)
-                        .map(Recipe::getDiets, RecipeShortInfoDTO::setDietaryTypes));
+                        .map(Recipe::getDiets, RecipeShortInfoDTO::setDietTypes));
 
 //        TypeMap Recipe -> RecipeDetailsDTO
         TypeMap<Recipe, RecipeDetailsDTO> typeMapToRecipeDetails =
@@ -49,12 +50,20 @@ public class ModelMapperConfig {
                 .addMappings(mapper -> mapper.using(dietToNameListConverter)
                         .map(Recipe::getDiets, RecipeDetailsDTO::setDietaryTypes));
 
-//        TypeMap Recipe -> RecipeAddEditDTO
-        TypeMap<Recipe, RecipeAddDTO> typeMapToRecipeAddEdit =
+//        TypeMap Recipe -> RecipeAddDTO
+        TypeMap<Recipe, RecipeAddDTO> typeMapToRecipeAdd =
                 modelMapper.typeMap(Recipe.class, RecipeAddDTO.class);
 
-        typeMapToRecipeAddEdit.addMappings(mapper -> mapper.using(dietToIdListConverter)
+        typeMapToRecipeAdd.addMappings(mapper -> mapper.using(dietToIdListConverter)
                 .map(Recipe::getDiets, RecipeAddDTO::setDietIds));
+
+//        TypeMap Recipe -> RecipeEditDTO
+        TypeMap<Recipe, RecipeEditDTO> typeMapToRecipeEdit =
+                modelMapper.typeMap(Recipe.class, RecipeEditDTO.class);
+
+        typeMapToRecipeEdit.addMappings(mapper -> mapper.using(dietToIdListConverter)
+                .map(Recipe::getDiets, RecipeEditDTO::setDietIds));
+
 
         return modelMapper;
     }

@@ -2,8 +2,6 @@ package bg.softuni.recipe.explorer.web;
 
 import bg.softuni.recipe.explorer.constants.SortingEnum;
 import bg.softuni.recipe.explorer.model.dto.*;
-import bg.softuni.recipe.explorer.model.entity.Diet;
-import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import bg.softuni.recipe.explorer.model.enums.RatingEnum;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
@@ -108,18 +106,18 @@ public class RecipeController {
 
     //    TODO:
 //    @GetMapping("/search")
-    public String searchRecipes(
-            @RequestParam String names,
-            @RequestParam String ingredients,
-            @RequestParam(required = false) MealType mealType,
-            @RequestParam(required = false) DietaryType dietType,
-            Model model
-    ) {
-
+//    public String searchRecipes(
+//            @RequestParam String names,
+//            @RequestParam String ingredients,
+//            @RequestParam(required = false) MealType mealType,
+//            @RequestParam(required = false) DietaryType dietType,
+//            Model model
+//    ) {
+//
 //        this.recipeService.search(names, ingredients, mealType, dietType);
-
-        return "recipes-all";
-    }
+//
+//        return "recipes-all";
+//    }
 
     @GetMapping("/filter")
     public String getFilter(
@@ -143,8 +141,6 @@ public class RecipeController {
 
         model.addAttribute("recipe", this.recipeService.getDetailsById(id));
         model.addAttribute("ratings", RatingEnum.values());
-
-        model.addAttribute("comments", new ArrayList<CommentViewDTO>());
 
         if (!model.containsAttribute("editComment")) {
 
@@ -170,9 +166,10 @@ public class RecipeController {
     //    @ResponseStatus(HttpStatus.NO_CONTENT) -> prevents redirect on client side!
     @DeleteMapping("/{id}")
     public String delete(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
-        this.recipeService.delete(id);
+        this.recipeService.delete(id, appUserDetails);
 
         return "redirect:/recipes/all";
     }
@@ -180,10 +177,11 @@ public class RecipeController {
     @GetMapping("/{id}/edit")
     public String getEdit(
             @PathVariable Long id,
-            Model model
+            Model model,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
         if (!model.containsAttribute("recipeEditData")) {
-            model.addAttribute("recipeEditData", this.recipeService.getEditDTO(id));
+            model.addAttribute("recipeEditData", this.recipeService.getEditDTO(id, appUserDetails));
         }
         model.addAttribute("recipeId", id);
 
@@ -209,7 +207,7 @@ public class RecipeController {
             return "redirect:/recipes/" + recipeId + "/edit";
         }
 
-        this.recipeService.put(recipeId, bindingModel);
+        this.recipeService.put(recipeId, bindingModel, appUserDetails);
 
         return "redirect:/recipes/" + recipeId;
     }

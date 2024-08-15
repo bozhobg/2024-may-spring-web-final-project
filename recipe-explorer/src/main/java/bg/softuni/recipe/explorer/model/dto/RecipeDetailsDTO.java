@@ -28,7 +28,7 @@ public class RecipeDetailsDTO {
 
     private List<String> ingredientNames;
 
-    private List<DietaryType> dietaryTypes;
+    private List<String> dietaryTypes;
 
     private BigDecimal averageRating;
 
@@ -109,11 +109,11 @@ public class RecipeDetailsDTO {
         return this;
     }
 
-    public List<DietaryType> getDietaryTypes() {
+    public List<String> getDietaryTypes() {
         return dietaryTypes;
     }
 
-    public RecipeDetailsDTO setDietaryTypes(List<DietaryType> dietaryTypes) {
+    public RecipeDetailsDTO setDietaryTypes(List<String> dietaryTypes) {
         this.dietaryTypes = dietaryTypes;
         return this;
     }

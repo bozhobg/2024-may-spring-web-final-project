@@ -17,6 +17,9 @@ spring:
     init:
       mode: never
 
+comments:
+  api:
+    baseUrl: "http://localhost:8081/api/comments/"
 
 #  spring:
 #  application:

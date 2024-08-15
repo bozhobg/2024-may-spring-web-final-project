@@ -32,14 +32,15 @@
                 Username
             </label>
 
-<!--            required minlength="3" maxlength="15"-->
             <input id="username"
                    name="username"
+                   required minlength="3" maxlength="15"
                    type="text"
                    class="form-control"
+                   th:classappend="${error} ? 'bg-danger is-invalid bg-opacity-50'"
             >
         </div>
-        <div class="mb-4">
+        <div class="mb-3">
             <label for="password"
                    class="form-label h5"
                    th:text="#{user_login_form_label_password}"
@@ -47,13 +48,20 @@
                 Password
             </label>
 
-<!--            required minlength="3" maxlength="20"   -->
             <input id="password"
                    name="password"
-
+                   required minlength="5" maxlength="20"
                    type="password"
                    class="form-control"
+                   th:classappend="${error} ? 'bg-danger is-invalid bg-opacity-50'"
             >
+        </div>
+        <div th:if="${error}" class="text-center mb-3">
+            <small th:text="#{user_login_form_error}"
+                   class="text-danger"
+            >
+                Error message!
+            </small>
         </div>
         <div class="mb-auto">
             <button type="submit"
@@ -63,6 +71,7 @@
                 Login
             </button>
         </div>
+
     </form>
 </div>
 

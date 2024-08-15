@@ -17,7 +17,8 @@ public class RecipeShortInfoDTO {
 
     private List<String> ingredientNames;
 
-    private List<DietaryType> dietTypes;
+//    BUG: prev field List<DietaryType> contains <Strings> when using ModelMapper with Converter, generics compile deletions, prevent appropriate List type
+    private List<String> dietTypes;
 
     private BigDecimal averageRating;
 
@@ -62,11 +63,11 @@ public class RecipeShortInfoDTO {
         return this;
     }
 
-    public List<DietaryType> getDietTypes() {
+    public List<String> getDietTypes() {
         return dietTypes;
     }
 
-    public RecipeShortInfoDTO setDietaryTypes(List<DietaryType> dietTypes) {
+    public RecipeShortInfoDTO setDietTypes(List<String> dietTypes) {
         this.dietTypes = dietTypes;
         return this;
     }

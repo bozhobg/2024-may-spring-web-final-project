@@ -48,7 +48,7 @@ public class SecurityConfig {
                                 .passwordParameter("password")
                                 // TODO: after login /login?continue ->  404 error page?
                                 .defaultSuccessUrl("/home", true)
-                                .failureUrl("/users/login")
+                                .failureUrl("/users/login?error=true")
                 )
                 .logout(
                         logout -> logout

@@ -4,6 +4,7 @@ import bg.softuni.recipe.explorer.constants.SortingEnum;
 import bg.softuni.recipe.explorer.model.dto.*;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
 import bg.softuni.recipe.explorer.model.enums.MealType;
+import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -38,12 +39,12 @@ public interface RecipeService {
     Long add(RecipeAddDTO dto, Long userId);
 
     @Transactional
-    RecipeEditDTO getEditDTO(Long id);
+    RecipeEditDTO getEditDTO(Long id, AppUserDetails appUserDetails);
 
-    void put(Long recipeId, RecipeEditDTO dto);
+    void put(Long recipeId, RecipeEditDTO dto, AppUserDetails appUserDetails);
 
     @Transactional
-    void delete(Long id);
+    void delete(Long id, AppUserDetails appUserDetails);
 
     void updateAvgRating(Long recipeId, BigDecimal averageRating);
 
