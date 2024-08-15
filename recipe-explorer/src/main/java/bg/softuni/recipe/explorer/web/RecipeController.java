@@ -142,9 +142,8 @@ public class RecipeController {
         model.addAttribute("recipe", this.recipeService.getDetailsById(id));
         model.addAttribute("ratings", RatingEnum.values());
 
-        if (!model.containsAttribute("editComment")) {
-
-            model.addAttribute("editComment", new CommentRestDTO());
+        if (!model.containsAttribute("commentPutData")) {
+            model.addAttribute("commentPutData", new CommentPutDTO());
         }
 
 //        TODO: resolve rest client handling

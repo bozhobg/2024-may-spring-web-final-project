@@ -92,15 +92,11 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public boolean areIdsValid(List<Long> listIds) {
 
-        boolean exist = false;
-
         for (Long id : listIds) {
-            exist = this.ingredientRepository.existsById(id);
-
-            if (!exist) return exist;
+            if (id == null || !this.ingredientRepository.existsById(id)) return false;
         }
 
-        return exist;
+        return true;
     }
 
     @Override

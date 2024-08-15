@@ -1,17 +1,14 @@
 package bg.softuni.recipe.explorer.service.impl;
 
-import bg.softuni.recipe.explorer.exceptions.ObjectNotFoundException;
-import bg.softuni.recipe.explorer.model.dto.CommentEditDTO;
-import bg.softuni.recipe.explorer.model.dto.CommentRestDTO;
-import bg.softuni.recipe.explorer.model.dto.CommentRestPostDTO;
-import bg.softuni.recipe.explorer.model.dto.CommentViewDTO;
+import bg.softuni.recipe.explorer.constants.ExceptionMessages;
+import bg.softuni.recipe.explorer.exceptions.UnauthorizedOperation;
+import bg.softuni.recipe.explorer.model.dto.*;
+import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.CommentService;
 import bg.softuni.recipe.explorer.service.UserService;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -36,6 +33,8 @@ public class CommentServiceImpl implements CommentService {
         this.objectMapper = objectMapper;
     }
 
+//  TODO: scheduled/on event clean up of comments for users and recipes data on comments service
+
     @Override
     public List<CommentViewDTO> getCommentsForRecipe(Long recipeId) {
 
@@ -49,9 +48,6 @@ public class CommentServiceImpl implements CommentService {
 
         if (body == null) return List.of();
 
-//        TODO: what if user or recipe doesn't exist on client side?
-//        TODO: scheduled/on event clean up of comments for users and recipes data on comments service
-
         return body.stream()
                 .map(this::mapToViewDTO)
                 .toList();
@@ -59,13 +55,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void approve(Long id) {
+//        role requirement through spring security config
+
         restClient.patch()
                 .uri("/{id}/approve", id)
                 .retrieve();
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id, AppUserDetails appUserDetails) {
+        verifyAuthorModeratorOrAdmin(id, appUserDetails);
 
         restClient.delete()
                 .uri("/{id}", id)
@@ -85,9 +84,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentRestDTO get(Long id) {
+    public CommentPutDTO get(Long id, AppUserDetails appUserDetails) {
+        verifyAuthor(id, appUserDetails);
 
-        return restClient.get()
+        CommentRestDTO commentData = restClient.get()
                 .uri("/{id}", id)
                 .retrieve()
 //                .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
@@ -96,17 +96,24 @@ public class CommentServiceImpl implements CommentService {
 //                    throw new ObjectNotFoundException(message);
 //                }))
                 .body(CommentRestDTO.class);
+
+        return new CommentPutDTO()
+                .setId(commentData.getId())
+                .setMessage(commentData.getMessage());
     }
 
     @Override
-    public void edit(Long id, String message, Long authorId) {
+    public void edit(CommentPutDTO dto, AppUserDetails appUserDetails) {
+
+        if (dto.getId() == null) throw new IllegalArgumentException("Comment id should not be null");
+        verifyAuthor(dto.getId(), appUserDetails);
 
         restClient.put()
-                .uri("/{id}", id)
+                .uri("/{id}", dto.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new CommentEditDTO()
-                        .setAuthorId(authorId)
-                        .setMessage(message)
+                        .setAuthorId(appUserDetails.getId())
+                        .setMessage(dto.getMessage())
                 ).retrieve();
     }
 
@@ -119,5 +126,29 @@ public class CommentServiceImpl implements CommentService {
                 ).setModifiedOn(dto.getModifiedOn())
                 .setMessage(dto.getMessage())
                 .setId(dto.getId());
+    }
+
+    private void verifyModeratorOrAdmin(AppUserDetails appUserDetails) {
+
+        if (!appUserDetails.isModerator() || !appUserDetails.isAdmin()) {
+            throw new UnauthorizedOperation(ExceptionMessages.UNAUTHORIZED_REQUEST);
+        }
+    }
+
+    private void verifyAuthor(Long commentId, AppUserDetails appUserDetails) {
+        Long authorId = appUserDetails.getId();
+        CommentRestDTO dto = restClient.get()
+                .uri("/{id}", commentId)
+                .retrieve()
+                .body(CommentRestDTO.class);
+
+        if (dto == null || !dto.getAuthorId().equals(authorId)) {
+            throw new UnauthorizedOperation(ExceptionMessages.UNAUTHORIZED_REQUEST);
+        }
+    }
+
+    private void verifyAuthorModeratorOrAdmin(Long commentId, AppUserDetails appUserDetails) {
+        verifyModeratorOrAdmin(appUserDetails);
+        verifyAuthor(commentId, appUserDetails);
     }
 }

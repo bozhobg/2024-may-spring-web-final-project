@@ -1,12 +1,5 @@
 package bg.softuni.recipe.explorer.comments.model.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-import java.time.Instant;
-
 public class CommentAddDTO {
 
     private String message;

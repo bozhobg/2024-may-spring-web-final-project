@@ -36,6 +36,8 @@ public class SecurityConfig {
                                         ("/", "/users/login", "/users/register", "/about", "/error"
 //                                                "/api/ingredients/short" // -> how is it secured?
                                         ).permitAll()
+                                .requestMatchers("/comments/*/approve"
+                                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")
                                 .requestMatchers(
                                         PathRequest.toStaticResources().atCommonLocations()
                                 ).permitAll()

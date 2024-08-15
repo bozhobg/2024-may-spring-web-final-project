@@ -33,10 +33,10 @@
             >
                 Name
             </label>
-            <!--            required minlength="5" maxlength="30"   -->
             <input th:field="*{name}"
                    name="name"
                    type="text"
+                   required minlength="5" maxlength="30"
                    id="name"
                    class="form-control"
                    th:errorclass="'bg-danger is-invalid bg-opacity-50'"
@@ -59,10 +59,10 @@
                 Meal Type
             </label>
 
-            <!--            required    -->
             <select th:field="*{mealType}"
                     name="mealType"
                     id="mealType"
+                    required
                     class="form-select"
                     th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
@@ -84,7 +84,7 @@
         </div>
 
         <!--        Ingredient Ids  -->
-        <!--        TODO: ingredients: use js for selection and adding   -->
+
         <div class="mb-3">
             <label for="ingredientIds"
                    class="form-label h5"
@@ -136,6 +136,7 @@
                         <select th:field="*{ingredientIds}"
                                 name="ingredientIds"
                                 id="ingredientIds"
+                                required
                                 size="4"
                                 multiple
                                 class="form-select-sm w-100 m-2"
@@ -189,12 +190,11 @@
                 Instructions
             </label>
 
-            <!--            required minlength="50"     -->
             <textarea th:field="*{instructions}"
                       name="instructions"
-
                       rows="6"
                       type="textarea"
+                      required minlength="50"
                       id="instructions"
                       class="form-control"
                       th:errorclass="'bg-danger is-invalid bg-opacity-50'"

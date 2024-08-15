@@ -31,10 +31,10 @@
                 Name
             </label>
 
-            <!--            required minlength="3" maxlength="20"-->
             <input th:field="*{name}"
                    name="name"
                    type="text"
+                   required minlength="3" maxlength="20"
                    id="name"
                    class="form-control"
                    th:errorclass="'bg-danger is-invalid bg-opacity-50'"
@@ -55,11 +55,10 @@
                 Ingredient Type
             </label>
 
-            <!--            required-->
-
             <select th:field="*{type}"
                     name="type"
                     id="type"
+                    required
                     class="form-select"
                     th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
@@ -88,11 +87,11 @@
                 Unit
             </label>
 
-<!--            required    -->
 
             <select th:field="*{unit}"
                     name="unit"
                     id="unit"
+                    required
                     class="form-select"
                     th:errorclass="'bg-danger is-invalid bg-opacity-50'"
             >
@@ -121,15 +120,11 @@
                 Description
             </label>
 
-            <!--
-                    minlength="30"
-                      required
-
-            -->
             <textarea th:field="*{description}"
                       name="description"
                       rows="6"
                       type="textarea"
+                      required minlength="30"
                       id="description"
                       class="form-control"
                       th:errorclass="'bg-danger is-invalid bg-opacity-50'"

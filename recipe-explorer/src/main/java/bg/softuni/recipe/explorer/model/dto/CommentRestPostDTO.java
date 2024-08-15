@@ -1,8 +1,14 @@
 package bg.softuni.recipe.explorer.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class CommentRestPostDTO {
 
+    @NotBlank
+    @Size(min = 10)
     private String message;
+
     private Long authorId;
 
     public CommentRestPostDTO() {}

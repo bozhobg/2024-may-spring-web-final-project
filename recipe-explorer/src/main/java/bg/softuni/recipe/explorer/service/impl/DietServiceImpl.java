@@ -41,7 +41,7 @@ public class DietServiceImpl implements DietService {
     public boolean areIdsValid(List<Long> listIds) {
 
         for (Long id : listIds) {
-            if (!this.dietRepository.existsById(id)) {
+            if (id == null || !this.dietRepository.existsById(id)) {
                 return false;
             }
         }

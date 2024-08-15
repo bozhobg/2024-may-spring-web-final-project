@@ -1,11 +1,15 @@
 package bg.softuni.recipe.explorer.web;
 
+import bg.softuni.recipe.explorer.model.dto.CommentPutDTO;
 import bg.softuni.recipe.explorer.model.dto.CommentRestDTO;
 import bg.softuni.recipe.explorer.model.user.AppUserDetails;
 import bg.softuni.recipe.explorer.service.CommentService;
+import bg.softuni.recipe.explorer.utils.RedirectUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,11 +30,20 @@ public class CommentController {
     @PostMapping("/recipe/{recipeId}")
     public String post(
             @PathVariable Long recipeId,
-            @RequestParam String message,
+            @Valid CommentPutDTO bindingModel,
+            BindingResult bindingResult,
+            RedirectAttributes rAttrs,
             HttpServletRequest request,
             @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
-        this.commentService.post(message, recipeId, appUserDetails.getId());
+
+        if (bindingResult.hasErrors()) {
+            RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, "commentPutData");
+
+            return "redirect:" + request.getHeader("Referer");
+        }
+
+        this.commentService.post(bindingModel.getMessage(), recipeId, appUserDetails.getId());
 
         return "redirect:" + request.getHeader("Referer");
     }
@@ -38,9 +51,10 @@ public class CommentController {
     @DeleteMapping("/{id}")
     public String delete(
             @PathVariable Long id,
-            HttpServletRequest request
+            HttpServletRequest request,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
-        this.commentService.delete(id);
+        this.commentService.delete(id, appUserDetails);
 
 //        redirect:/ on host path, redirect: to address
         return "redirect:" + request.getHeader("Referer");
@@ -60,24 +74,32 @@ public class CommentController {
     public String loadEdit(
             @PathVariable Long id,
             HttpServletRequest request,
-            RedirectAttributes rAttr
+            RedirectAttributes rAttr,
+            @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
 
-        CommentRestDTO commentRestDTO = this.commentService.get(id);
-        rAttr.addFlashAttribute("editComment", commentRestDTO);
+        CommentPutDTO commentPutDTO = this.commentService.get(id, appUserDetails);
+        rAttr.addFlashAttribute("commentPutData", commentPutDTO);
 
         return "redirect:" + request.getHeader("Referer");
     }
 
     @PutMapping("/{id}")
-    public String loadEdit(
+    public String putEdit(
             @PathVariable Long id,
+            @Valid CommentPutDTO bindingModel,
+            BindingResult bindingResult,
+            RedirectAttributes rAttrs,
             HttpServletRequest request,
-            @RequestParam String message,
             @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
+        if (bindingResult.hasErrors()) {
+            RedirectUtil.setRedirectAttrs(rAttrs, bindingModel, bindingResult, "commentPutData");
 
-        this.commentService.edit(id, message, appUserDetails.getId());
+            return "redirect:" + request.getHeader("Referer");
+        }
+
+        this.commentService.edit(bindingModel, appUserDetails);
 
         return "redirect:" + request.getHeader("Referer");
     }
