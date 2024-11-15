@@ -1,10 +1,8 @@
 package bg.softuni.recipe.explorer.repository;
 
-import bg.softuni.recipe.explorer.RecipeExplorerApplication;
 import bg.softuni.recipe.explorer.model.entity.Diet;
 import bg.softuni.recipe.explorer.model.entity.Ingredient;
 import bg.softuni.recipe.explorer.model.entity.Recipe;
-import bg.softuni.recipe.explorer.model.enums.DietaryType;
 import bg.softuni.recipe.explorer.model.enums.MealType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

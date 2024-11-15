@@ -21,7 +21,7 @@ spring:
     # Choose either MySQL 8 or MySQL 5 below
     # For MySQL 8
     #    auto-detected this is default option
-    #    database-platform: org.hibernate.dialect.MySQLDialect
+#    database-platform: org.hibernate.dialect.MySQLDialect
     #For MySQL 5
     #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:

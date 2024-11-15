@@ -65,6 +65,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void delete(Long id, AppUserDetails appUserDetails) {
         verifyAuthorModeratorOrAdmin(id, appUserDetails);
+//        TODO: clean conditional verification broken for author
 
         restClient.delete()
                 .uri("/{id}", id)
@@ -148,7 +149,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void verifyAuthorModeratorOrAdmin(Long commentId, AppUserDetails appUserDetails) {
-        verifyModeratorOrAdmin(appUserDetails);
-        verifyAuthor(commentId, appUserDetails);
+        boolean isModeratorOrAdmin = true;
+        try {
+            verifyModeratorOrAdmin(appUserDetails);
+        } catch (UnauthorizedOperation uo) {
+            isModeratorOrAdmin = false;
+        }
+
+        boolean isAuthor = true;
+        try {
+            verifyAuthor(commentId, appUserDetails);
+        } catch (UnauthorizedOperation uo) {
+            isAuthor = false;
+        }
+
+        if (!isModeratorOrAdmin && !isAuthor) {
+            throw new UnauthorizedOperation(ExceptionMessages.UNAUTHORIZED_REQUEST);
+        }
     }
 }

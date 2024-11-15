@@ -98,8 +98,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List
-            <RecipeBasicDTO> getAllBasicByUserId(Long userId) {
+    public List<RecipeBasicDTO> getAllBasicByUserId(Long userId) {
+
         return this.recipeRepository.findAllByAuthor_Id(userId)
                 .stream()
                 .map(r -> modelMapper.map(r, RecipeBasicDTO.class))

@@ -2,7 +2,6 @@ package bg.softuni.recipe.explorer.model.dto;
 
 import bg.softuni.recipe.explorer.validation.UsernameValid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 public class UserUsernameDTO {

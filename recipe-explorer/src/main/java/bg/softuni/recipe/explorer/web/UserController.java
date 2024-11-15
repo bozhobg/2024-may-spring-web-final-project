@@ -2,6 +2,7 @@ package bg.softuni.recipe.explorer.web;
 
 import bg.softuni.recipe.explorer.exceptions.UserRegisterPasswordsConfirmationMismatch;
 import bg.softuni.recipe.explorer.model.dto.RoleDTO;
+import bg.softuni.recipe.explorer.model.dto.UserInfoDTO;
 import bg.softuni.recipe.explorer.model.dto.UserRegisterDTO;
 import bg.softuni.recipe.explorer.model.dto.UserUsernameDTO;
 import bg.softuni.recipe.explorer.model.enums.RoleEnum;
@@ -138,12 +139,11 @@ public class UserController {
     ) {
         if (appUserDetails.getUsername().equals(username)) return "redirect:/users/profile";
 
-        model.addAttribute(
-                "userData",
-                this.userService.getProfileDataByUsername(username));
+        UserInfoDTO userData = this.userService.getProfileDataByUsername(username);
+        model.addAttribute("userData",userData);
         model.addAttribute(
                 "userRecipes",
-                this.recipeService.getAllBasicByUserId(appUserDetails.getId()));
+                this.recipeService.getAllBasicByUserId(userData.getId()));
 
 //        TODO: separate views for profile and /users/profile
         model.addAttribute("usernameData", new UserUsernameDTO());
